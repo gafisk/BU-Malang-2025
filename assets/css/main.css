@@ -1571,9 +1571,9 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Pricing Section
+# contents Section
 --------------------------------------------------------------*/
-.pricing .pricing-item {
+.contents .contents-item {
   background-color: var(--surface-color);
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -1583,7 +1583,7 @@ section,
   overflow: hidden;
 }
 
-.pricing .pricing-item h3 {
+.contents .contents-item h3 {
   font-weight: 400;
   margin: -20px -20px 20px -20px;
   padding: 20px 15px;
@@ -1593,25 +1593,25 @@ section,
   background: color-mix(in srgb, var(--default-color), transparent 95%);
 }
 
-.pricing .pricing-item h4 {
+.contents .contents-item h4 {
   font-size: 36px;
   font-weight: 600;
   font-family: var(--heading-font);
 }
 
-.pricing .pricing-item h4 sup {
+.contents .contents-item h4 sup {
   font-size: 20px;
   top: -15px;
   left: -3px;
 }
 
-.pricing .pricing-item h4 span {
+.contents .contents-item h4 span {
   color: color-mix(in srgb, var(--default-color), transparent 40%);
   font-size: 16px;
   font-weight: 300;
 }
 
-.pricing .pricing-item ul {
+.contents .contents-item ul {
   padding: 15px 0;
   list-style: none;
   text-align: center;
@@ -1619,33 +1619,33 @@ section,
   font-size: 14px;
 }
 
-.pricing .pricing-item ul li {
+.contents .contents-item ul li {
   padding-bottom: 16px;
 }
 
-.pricing .pricing-item ul i {
+.contents .contents-item ul i {
   color: var(--accent-color);
   font-size: 18px;
   padding-right: 4px;
 }
 
-.pricing .pricing-item ul .na {
+.contents .contents-item ul .na {
   color: color-mix(in srgb, var(--default-color), transparent 40%);
   text-decoration: line-through;
 }
 
-.pricing .btn-wrap {
+.contents .btn-wrap {
   background: color-mix(in srgb, var(--default-color), transparent 95%);
   margin: 0 -20px -20px -20px;
-  padding: 20px 15px;
+  padding: 10px 15px;
   text-align: center;
 }
 
-.pricing .btn-buy {
+.contents .btn-buy {
   background: var(--accent-color);
   color: var(--contrast-color);
   display: inline-block;
-  padding: 8px 35px 10px 35px;
+  padding: 8px 25px 10px 25px;
   border-radius: 4px;
   transition: none;
   font-size: 14px;
@@ -1655,16 +1655,16 @@ section,
   transition: 0.3s;
 }
 
-.pricing .btn-buy:hover {
+.contents .btn-buy:hover {
   background: color-mix(in srgb, var(--accent-color), transparent 20%);
 }
 
-.pricing .featured h3 {
+.contents .featured h3 {
   background: var(--accent-color);
   color: var(--contrast-color);
 }
 
-.pricing .advanced {
+.contents .advanced {
   background: var(--accent-color);
   color: var(--contrast-color);
   width: 200px;
