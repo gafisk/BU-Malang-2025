@@ -4,6 +4,19 @@
 <?php include 'components/head.php' ?>
 
 <body class="index-page">
+  <audio id="bg-music" muted loop>
+    <source src="assets/music/mars.mp3" type="audio/mp3">
+    Browser tidak mendukung audio.
+  </audio>
+
+  <script>
+    document.addEventListener("click", function() {
+      var audio = document.getElementById("bg-music");
+      audio.muted = false; // Matikan mute setelah klik
+      audio.play();
+    });
+  </script>
+
 
   <header id="header" class="header sticky-top">
 
@@ -21,6 +34,7 @@
         </div>
       </div>
     </div><!-- End Top Bar -->
+
 
     <div class="branding d-flex align-items-cente">
 

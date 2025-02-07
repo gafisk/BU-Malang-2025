@@ -1,21 +1,17 @@
 <?php
-
-include '../../connections/conn.php';
 // Data konten
-$contents = [];
-
-$query = "SELECT id_berita, waktu, judul_berita, isi_berita, gambar FROM berita ORDER BY waktu DESC";
-$result = $conn->query($query);
-
-while ($row = $result->fetch_assoc()) {
-    $contents[] = [
-        "id_berita" => $row['id_berita'],
-        "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
-        "judul_berita" => $row['judul_berita'],
-        "isi_berita" => $row['isi_berita'],
-        "gambar" => $row['gambar']
-    ];
-}
+$contents = [
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
+];
 
 // Pagination
 $perPage = 6; // Konten per halaman
@@ -36,7 +32,7 @@ $displayContents = array_slice($contents, $start, $perPage);
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include '../../components/head.php' ?>
+<?php include '../../../components/head.php' ?>
 
 <body class="index-page">
 
@@ -60,7 +56,7 @@ $displayContents = array_slice($contents, $start, $perPage);
         <div class="branding d-flex align-items-cente">
 
             <div class="container position-relative d-flex align-items-center justify-content-between">
-                <?php include '../../components/navbar.php' ?>
+                <?php include '../../../components/navbar.php' ?>
             </div>
 
         </div>
@@ -75,7 +71,7 @@ $displayContents = array_slice($contents, $start, $perPage);
             <div class="container">
                 <div class="row gy-4">
                     <div class="col-lg-8 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-                        <h1>Berita</h1>
+                        <h1>Laporan Keuangan</h1>
                         <p>Insan Cerdas dan Kompetitif</p>
                     </div>
                 </div>
@@ -86,26 +82,21 @@ $displayContents = array_slice($contents, $start, $perPage);
         <!-- contents Section -->
         <section id="contents" class="contents section">
             <div class="container section-title" data-aos="fade-up">
-                <p><span>Cek Berita</span> <span class="description-title">BU Malang</span></p>
+                <p><span>Cek Laporan Keuangan</span> <span class="description-title">BU Malang</span></p>
             </div>
 
             <div class="container">
                 <div class="row gy-3">
                     <div class="row gy-3">
                         <?php foreach ($displayContents as $content): ?>
-                            <div class="col-md-4">
-                                <div class="card mb-4">
-                                    <?php if (!empty($content['gambar'])): ?>
-                                        <img src="/BU-Malang-2025/adminbu/assets/assets/berita/<?= htmlspecialchars($content['gambar']); ?>"
-                                            class="card-img-top" alt="Gambar Berita" style="width: 100%; height: 200px; object-fit: cover; padding: 15px">
-                                    <?php else: ?>
-                                        <div class="text-center p-4 text-muted">Tidak ada gambar</div>
-                                    <?php endif; ?>
-
-                                    <div class="card-body">
-                                        <h5 class="card-title"><?= htmlspecialchars($content['judul_berita']); ?></h5>
-                                        <p class="card-text"><small class="text-muted"><?= $content['waktu']; ?></small></p>
-                                        <a href="pages/berita/pages-berita.php?id=<?= $content['id_berita']; ?>" class="btn btn-primary">Baca Selengkapnya</a>
+                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
+                                <div class="contents-item">
+                                    <h3><?= $content['title']; ?></h3>
+                                    <ul>
+                                        <h5><?= $content['items']; ?></h5>
+                                    </ul>
+                                    <div class="btn-wrap">
+                                        <a href="#" class="btn-buy">Check it</a>
                                     </div>
                                 </div>
                             </div>
@@ -165,7 +156,7 @@ $displayContents = array_slice($contents, $start, $perPage);
 
         <div class="container footer-top">
 
-            <?php include '../../components/footer.php' ?>
+            <?php include '../../../components/footer.php' ?>
         </div>
 
         <div class="container copyright text-center mt-4">

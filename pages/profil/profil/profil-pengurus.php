@@ -53,7 +53,113 @@
 
             <div class="swiper">
                 <div class="swiper-wrapper">
-                    <!-- Slide 1: Divisi Riset dan Keilmuan -->
+                    <!-- Slide 1: Divisi BPHI -->
+                    <div class="swiper-slide">
+                        <div class="container section-title" data-aos="fade-up">
+                            <p><span class="description-title">Badan Pengurus</span> <span>Harian Inti</span></p>
+                        </div>
+                        <div class="container">
+                            <div class="row gy-4 d-flex justify-content-center align-items-center mb-3">
+                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                                    <div class="team-member">
+                                        <div class="member-img">
+                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
+                                            <div class="social">
+                                                <a href=""><i class="bi bi-twitter-x"></i></a>
+                                                <a href=""><i class="bi bi-facebook"></i></a>
+                                                <a href=""><i class="bi bi-instagram"></i></a>
+                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="member-info">
+                                            <span>Ketua Umum</span>
+                                            <h4>Seto Ferdiantoro, S.H</h4>
+                                            <span>Universitas Brawijaya</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row gy-4">
+                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                                    <div class="team-member">
+                                        <div class="member-img">
+                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
+                                            <div class="social">
+                                                <a href=""><i class="bi bi-twitter-x"></i></a>
+                                                <a href=""><i class="bi bi-facebook"></i></a>
+                                                <a href=""><i class="bi bi-instagram"></i></a>
+                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="member-info">
+                                            <span>Wakil Ketua I</span>
+                                            <h4>Shallya Yudha Tama</h4>
+                                            <span>Universitas Merdeka Malang</span>
+                                        </div>
+                                    </div>
+                                </div><!-- End Team Member -->
+
+                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+                                    <div class="team-member">
+                                        <div class="member-img">
+                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
+                                            <div class="social">
+                                                <a href=""><i class="bi bi-twitter-x"></i></a>
+                                                <a href=""><i class="bi bi-facebook"></i></a>
+                                                <a href=""><i class="bi bi-instagram"></i></a>
+                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="member-info">
+                                            <span>Wakil Ketua II</span>
+                                            <h4>Surya Aditya</h4>
+                                            <span>Universitas Islam Malang</span>
+                                        </div>
+                                    </div>
+                                </div><!-- End Team Member -->
+
+                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
+                                    <div class="team-member">
+                                        <div class="member-img">
+                                            <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
+                                            <div class="social">
+                                                <a href=""><i class="bi bi-twitter-x"></i></a>
+                                                <a href=""><i class="bi bi-facebook"></i></a>
+                                                <a href=""><i class="bi bi-instagram"></i></a>
+                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="member-info">
+                                            <span>Sekretaris</span>
+                                            <h4>Nursyahbani Putri Parahdiba, S.Tr.T</h4>
+                                            <span>Universitas Brawijaya</span>
+                                        </div>
+                                    </div>
+                                </div><!-- End Team Member -->
+
+                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+                                    <div class="team-member">
+                                        <div class="member-img">
+                                            <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
+                                            <div class="social">
+                                                <a href=""><i class="bi bi-twitter-x"></i></a>
+                                                <a href=""><i class="bi bi-facebook"></i></a>
+                                                <a href=""><i class="bi bi-instagram"></i></a>
+                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="member-info">
+                                            <span>Bendahara</span>
+                                            <h4>Halimatus Sa’diyah, S.Pd</h4>
+                                            <span>Universitas Negeri Malang</span>
+                                        </div>
+                                    </div>
+                                </div><!-- End Team Member -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: Divisi Riset dan Keilmuan -->
                     <div class="swiper-slide">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Divisi</span> <span>Riset dan Keilmuan</span></p>
@@ -156,7 +262,7 @@
                         </div>
                     </div>
 
-                    <!-- Slide 2: Divisi Internal dan Advokasi -->
+                    <!-- Slide 3: Divisi Internal dan Advokasi -->
                     <div class="swiper-slide">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Divisi</span> <span>Internal dan Advokasi</span> </p>
@@ -240,7 +346,7 @@
                         </div>
                     </div>
 
-                    <!-- Slide 3: Divisi Minat dan Bakat -->
+                    <!-- Slide 4: Divisi Minat dan Bakat -->
                     <div class="swiper-slide">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Divisi</span> <span>Minat dan Bakat</span> </p>
@@ -306,7 +412,7 @@
                         </div>
                     </div>
 
-                    <!-- Slide 4: Divisi Hubungan Luar -->
+                    <!-- Slide 5: Divisi Hubungan Luar -->
                     <div class="swiper-slide">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Divisi</span> <span>Hubungan Luar</span> </p>
@@ -390,7 +496,7 @@
                         </div>
                     </div>
 
-                    <!-- Slide 5: Divisi Komunikasi, Media dan Desain -->
+                    <!-- Slide 6: Divisi Komunikasi, Media dan Desain -->
                     <div class="swiper-slide">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Divisi</span> <span>Komunikasi, Media dan Desain</span></p>
