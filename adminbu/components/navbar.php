@@ -53,13 +53,13 @@
                             <li class="nav-item">
                                 <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Tambah Data Program Kerja</p>
+                                    <p>Tambah Data Proker</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="pages/kelola-profil/daftar-proker.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Daftar Program Kerja</p>
+                                    <p>Daftar Proker</p>
                                 </a>
                             </li>
                         </ul>
@@ -81,10 +81,27 @@
 
             <!-- Bagian Kelola Berita -->
             <li class="nav-item">
-                <a href="pages/berita/kelola-berita.php" class="nav-link">
+                <a href="#" class="nav-link">
                     <i class="nav-icon bi bi-newspaper"></i>
-                    <p>Berita</p>
+                    <p>
+                        Kelola Berita
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                    </p>
                 </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="pages/berita/kelola-berita.php" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Tambah Data Berita</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="pages/berita/daftar-berita.php" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Daftar Berita</p>
+                        </a>
+                    </li>
+                </ul>
             </li>
 
             <!-- Bagian Kelola Aktivitas -->
