@@ -2,38 +2,63 @@
 session_start();
 include '../../../connections/conn.php';
 
-// Periksa apakah tombol submit ditekan
-if (isset($_POST['simpan'])) {
-  // Ambil dan bersihkan data dari form
+// Ambil ID jika ada (untuk edit)
+$id_proker = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$judul_proker = "";
+$isi_berita = "";
+$judul_link = "";
+$link = "";
+
+// Jika ID ada, ambil data dari database untuk diedit
+if ($id_proker > 0) {
+  $stmt = $conn->prepare("SELECT judul_proker, isi_berita, judul_link, link FROM proker WHERE id_proker = ?");
+  $stmt->bind_param("i", $id_proker);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($row = $result->fetch_assoc()) {
+    $judul_proker = $row['judul_proker'];
+    $isi_berita = $row['isi_berita'];
+    $judul_link = $row['judul_link'];
+    $link = $row['link'];
+  }
+  $stmt->close();
+}
+
+// Proses Simpan / Edit
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $judul_proker = trim($_POST['judul_proker']);
   $isi_berita = trim($_POST['isi_berita']);
   $judul_link = trim($_POST['judul_link']);
   $link = trim($_POST['link']);
 
-  // Validasi input agar tidak kosong
   if (!empty($judul_proker) && !empty($isi_berita)) {
-    // Query untuk menyimpan data ke database
-    $sql = "INSERT INTO proker (waktu, judul_proker, isi_berita, judul_link, link) 
-              VALUES (NOW(), ?, ?, ?, ?)";
-
-    // Gunakan prepared statement untuk keamanan
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ssss", $judul_proker, $isi_berita, $judul_link, $link);
-
-    // Eksekusi query dan cek hasilnya
-    if ($stmt->execute()) {
-      $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
+    if ($id_proker > 0) {
+      // Mode Edit
+      $stmt = $conn->prepare("UPDATE proker SET judul_proker = ?, isi_berita = ?, judul_link = ?, link = ?, waktu = NOW() WHERE id_proker = ?");
+      $stmt->bind_param("ssssi", $judul_proker, $isi_berita, $judul_link, $link, $id_proker);
+      if ($stmt->execute()) {
+        $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
+      } else {
+        $_SESSION['notif_gagal'] = "Gagal memperbarui data.";
+      }
+      $stmt->close();
     } else {
-      $_SESSION['notif_gagal'] = "Data Gagal Disimpan.";
-    }
+      // Mode Tambah Baru
+      $stmt = $conn->prepare("INSERT INTO proker (waktu, judul_proker, isi_berita, judul_link, link) VALUES (NOW(), ?, ?, ?, ?)");
+      $stmt->bind_param("ssss", $judul_proker, $isi_berita, $judul_link, $link);
 
-    // Tutup statement
-    $stmt->close();
+      if ($stmt->execute()) {
+        $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
+      } else {
+        $_SESSION['notif_gagal'] = "Data Gagal Disimpan.";
+      }
+      $stmt->close();
+    }
   } else {
     $_SESSION['notif_gagal'] = "Judul Program Kerja dan Isi Berita wajib diisi.";
   }
 
-  // Redirect kembali ke halaman form setelah proses selesai
   header("Location: daftar-proker.php");
   exit();
 }
@@ -111,36 +136,33 @@ $conn->close();
               <!--end::Header-->
               <!--begin::Form-->
               <form method="POST" action="">
-                <!--begin::Body-->
                 <div class="card-body">
                   <div class="mb-3">
                     <label for="inputjudul" class="form-label">Judul Program Kerja</label>
-                    <input type="text" class="form-control" name="judul_proker" id="inputjudul" />
+                    <input type="text" class="form-control" name="judul_proker" id="inputjudul" value="<?= htmlspecialchars($judul_proker); ?>" />
                   </div>
                   <div class="mb-3">
                     <label for="inputberita" class="form-label">Isi Berita</label>
-                    <textarea class="form-control" name="isi_berita" id="inputberita"></textarea>
+                    <textarea class="form-control" name="isi_berita" id="inputberita"><?= htmlspecialchars($isi_berita); ?></textarea>
                   </div>
                   <div class="mb-3">
                     <div class="row">
                       <div class="col-md-6">
                         <label for="judullink" class="form-label">Judul Link</label>
-                        <input type="text" class="form-control" name="judul_link" id="judullink" />
+                        <input type="text" class="form-control" name="judul_link" id="judullink" value="<?= htmlspecialchars($judul_link); ?>" />
                       </div>
                       <div class="col-md-6">
                         <label for="linkdrive" class="form-label">Link Google Drive</label>
-                        <input type="link" class="form-control" name="link" id="linkdrive" />
+                        <input type="text" class="form-control" name="link" id="linkdrive" value="<?= htmlspecialchars($link); ?>" />
                       </div>
                     </div>
                   </div>
                 </div>
-                <!--end::Body-->
-                <!--begin::Footer-->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary" name="simpan">Simpan</button>
+                  <button type="submit" class="btn btn-primary"><?= ($id_proker > 0) ? "Update" : "Simpan"; ?></button>
                 </div>
-                <!--end::Footer-->
               </form>
+
               <!--end::Form-->
             </div>
             <!--end::Quick Example-->

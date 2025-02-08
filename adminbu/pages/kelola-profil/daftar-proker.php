@@ -2,10 +2,34 @@
 session_start();
 include '../../../connections/conn.php';
 
+// Proses hapus jika ada request POST dengan ID yang dikirim
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_POST['id_proker'])) {
+  $id_proker = intval($_POST['id_proker']);
+
+  // Hapus data dari database
+  $stmt = $conn->prepare("DELETE FROM proker WHERE id_proker = ?");
+  $stmt->bind_param("i", $id_proker);
+  $stmt->execute();
+
+  if ($stmt->affected_rows > 0) {
+    $_SESSION['notif_sukses'] = "Data berhasil dihapus!";
+  } else {
+    $_SESSION['notif_gagal'] = "Gagal menghapus data!";
+  }
+
+  $stmt->close();
+
+  // Redirect kembali ke halaman daftar-proker.php
+  header("Location: daftar-proker.php");
+  exit();
+}
+
+// Ambil data untuk ditampilkan di tabel
 $query = "SELECT * FROM proker ORDER BY waktu DESC";
 $result = $conn->query($query);
 $no = 1;
 ?>
+
 <!doctype html>
 <html lang="en">
 <?php include '../../components/head.php'; ?>
@@ -119,12 +143,15 @@ $no = 1;
                     </td>
                     <td><?= date('d-m-Y H:i', strtotime($row['waktu'])); ?></td>
                     <td>
-                      <a href="edit.php?id=<?= $row['id_proker']; ?>" class="btn btn-warning btn-sm">
+                      <a href="/BU-MALANG-2025/adminbu/pages/kelola-profil/kelola-proker.php?id=<?= $row['id_proker']; ?>" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil-square"></i>
                       </a>
-                      <a href="hapus.php?id=<?= $row['id_proker']; ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus data ini?');">
-                        <i class="bi bi-trash"></i>
-                      </a>
+                      <form method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+                        <input type="hidden" name="id_proker" value="<?= $row['id_proker']; ?>">
+                        <button type="submit" name="hapus" class="btn btn-danger btn-sm">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </form>
                     </td>
                   </tr>
                 <?php endforeach; ?>
@@ -216,6 +243,13 @@ $no = 1;
     });
   </script>
   <!--end::OverlayScrollbars Configure-->
+  <!-- confirm delete -->
+  <script>
+    function confirmDelete() {
+      return confirm('Yakin ingin menghapus data ini?');
+    }
+  </script>
+  <!-- end::confirm delete -->
   <!--end::Script-->
 </body>
 <!--end::Body-->
