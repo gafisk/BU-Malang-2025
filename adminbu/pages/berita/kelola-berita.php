@@ -138,7 +138,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card card-primary card-outline mb-4">
               <!--begin::Header-->
               <div class="card-header">
-                <div class="card-title">Tambah Berita</div>
+                <div class="card-title"><?= ($id_berita > 0) ? "Edit Berita" : "Tambah Berita"; ?></div>
               </div>
               <!--end::Header-->
               <!--begin::Form-->
