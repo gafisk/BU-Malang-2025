@@ -131,7 +131,7 @@ $conn->close();
             <div class="card card-primary card-outline mb-4">
               <!--begin::Header-->
               <div class="card-header">
-                <div class="card-title">Tambah Data</div>
+                <div class="card-title"><?= ($id_proker > 0) ? "Edit Data" : "Tambah Data"; ?></div>
               </div>
               <!--end::Header-->
               <!--begin::Form-->
