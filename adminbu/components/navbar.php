@@ -42,10 +42,27 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p>Program Kerja</p>
+                            <p>
+                                Kelola Program Kerja
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data Program Kerja</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/daftar-proker.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Program Kerja</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
