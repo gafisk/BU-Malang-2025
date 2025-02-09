@@ -3,17 +3,19 @@ include '../../../connections/conn.php';
 // Data konten
 $contents = [];
 
-$query = "SELECT * FROM prestasi ORDER BY waktu DESC";
+$query = "SELECT * FROM publikasi ORDER BY waktu DESC";
 $result = $conn->query($query);
 
 while ($row = $result->fetch_assoc()) {
     $contents[] = [
-        "id_prestasi" => $row['id_prestasi'],
+        "id_publikasi" => $row['id_publikasi'],
         "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
-        "nama_prestasi" => $row['nama_prestasi'],
-        "tingkat_prestasi" => $row['tingkat_prestasi'],
-        "nama_peraih" => $row['nama_peraih'],
+        "judul_publikasi" => $row['judul_publikasi'],
+        "kategori_publikasi" => $row['kategori_publikasi'],
+        "penulis" => $row['penulis'],
         "asal_univ" => $row['asal_univ'],
+        "tahun_awardee" => $row['tahun_awardee'],
+        "link" => $row['link'],
     ];
 }
 
@@ -93,33 +95,38 @@ $displayContents = array_slice($contents, $start, $perPage);
                 <div class="row gy-3">
                     <div class="row gy-3">
                         <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
+                            <div class="col-xl-12 col-lg-12" data-aos="fade-up">
                                 <div class="contents-item">
                                     <h3><?= $content['waktu']; ?></h3>
                                     <table class="table">
                                         <tr>
-                                            <th class="text-start">Nama Prestasi</th>
+                                            <th class="text-start">Judul Publikasi</th>
                                             <td>:</td>
-                                            <td class="text-start"><?= $content['nama_prestasi']; ?></td>
+                                            <td class="text-start text-capitalize"><?= $content['judul_publikasi']; ?></td>
                                         </tr>
                                         <tr>
-                                            <th class="text-start">Tingkat</th>
+                                            <th class="text-start">Kategori Publikasi</th>
                                             <td>:</td>
-                                            <td class="text-start"><?= $content['tingkat_prestasi']; ?></td>
+                                            <td class="text-start"><?= $content['kategori_publikasi']; ?></td>
                                         </tr>
                                         <tr>
-                                            <th class="text-start">Peraih</th>
+                                            <th class="text-start">Penulis</th>
                                             <td>:</td>
-                                            <td class="text-start"><?= $content['nama_peraih']; ?></td>
+                                            <td class="text-start"><?= $content['penulis']; ?></td>
                                         </tr>
                                         <tr>
                                             <th class="text-start">Asal Universitas</th>
                                             <td>:</td>
                                             <td class="text-start"><?= $content['asal_univ']; ?></td>
                                         </tr>
+                                        <tr>
+                                            <th class="text-start">Awardee BU</th>
+                                            <td>:</td>
+                                            <td class="text-start">Tahun <?= $content['tahun_awardee']; ?></td>
+                                        </tr>
                                     </table>
                                     <div class="btn-wrap">
-                                        <a href="pages/aktivitas/prestasi/pages-prestasi.php?id=<?= $content['id_prestasi']; ?>" class="btn btn-primary">Check it</a>
+                                        <a href="<?= $content['link']; ?>" class="btn btn-primary" target="_blank">Check it</a>
                                     </div>
                                 </div>
                             </div>

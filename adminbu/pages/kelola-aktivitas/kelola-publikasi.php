@@ -3,43 +3,46 @@ session_start();
 include '../../../connections/conn.php';
 
 // Cek apakah ini mode edit
-$id_prestasi = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$nama_prestasi = "";
-$tingkat_prestasi = "";
-$nama_peraih = "";
+$id_publikasi = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$judul_publikasi = "";
+$kategori_publikasi = "";
+$penulis = "";
 $asal_univ = "";
 $tahun_awardee = "";
+$link_publikasi = "";
 
-if ($id_prestasi > 0) {
+if ($id_publikasi > 0) {
   // Ambil data berita untuk ditampilkan di form jika sedang edit
-  $stmt = $conn->prepare("SELECT nama_prestasi, tingkat_prestasi, nama_peraih, asal_univ, tahun_awardee FROM prestasi WHERE id_prestasi = ?");
-  $stmt->bind_param("i", $id_prestasi);
+  $stmt = $conn->prepare("SELECT judul_publikasi, kategori_publikasi, penulis, asal_univ, tahun_awardee, link FROM publikasi WHERE id_publikasi = ?");
+  $stmt->bind_param("i", $id_publikasi);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($row = $result->fetch_assoc()) {
-    $nama_prestasi = $row['nama_prestasi'];
-    $tingkat_prestasi = $row['tingkat_prestasi'];
-    $nama_peraih = $row['nama_peraih'];
+    $judul_publikasi = $row['judul_publikasi'];
+    $kategori_publikasi = $row['kategori_publikasi'];
+    $penulis = $row['penulis'];
     $asal_univ = $row['asal_univ'];
     $tahun_awardee = $row['tahun_awardee'];
+    $link = $row['link'];
   }
   $stmt->close();
 }
 
 // Proses Simpan / Edit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $nama_prestasi = trim($_POST['nama_prestasi']);
-  $tingkat_prestasi = trim($_POST['tingkat_prestasi']);
-  $nama_peraih = trim($_POST['nama_peraih']);
+  $judul_publikasi = trim($_POST['judul_publikasi']);
+  $kategori_publikasi = trim($_POST['kategori_publikasi']);
+  $penulis = trim($_POST['penulis']);
   $asal_univ = trim($_POST['asal_univ']);
   $tahun_awardee = trim($_POST['tahun_awardee']);
+  $link = trim($_POST['link']);
 
-  if (!empty($nama_prestasi) && !empty($tingkat_prestasi) && !empty($nama_peraih) && !empty($asal_univ) && !empty($tahun_awardee)) {
-    if ($id_prestasi > 0) {
-      // Mode Edit (Hanya update judul dan isi, waktu tetap)
-      $stmt = $conn->prepare("UPDATE prestasi SET nama_prestasi = ?, tingkat_prestasi = ?, nama_peraih = ?, asal_univ = ?, tahun_awardee = ?, waktu = NOW() WHERE id_prestasi = ?");
-      $stmt->bind_param("sssssi", $nama_prestasi, $tingkat_prestasi, $nama_peraih, $asal_univ, $tahun_awardee, $id_prestasi);
+  if (!empty($judul_publikasi) && !empty($kategori_publikasi) && !empty($penulis) && !empty($asal_univ) && !empty($tahun_awardee) && !empty($link)) {
+    if ($id_publikasi > 0) {
+      // Mode Edit
+      $stmt = $conn->prepare("UPDATE publikasi SET judul_publikasi = ?, kategori_publikasi = ?, penulis = ?, asal_univ = ?, tahun_awardee = ?, link = ?, waktu = NOW() WHERE id_publikasi = ?");
+      $stmt->bind_param("ssssssi", $judul_publikasi, $kategori_publikasi, $penulis, $asal_univ, $tahun_awardee, $link, $id_publikasi);
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
       } else {
@@ -47,23 +50,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       }
       $stmt->close();
     } else {
-      // Mode Tambah Baru (waktu otomatis NOW())
-      $gambar_nama = "";
-      if (!empty($_FILES['gambar']['name'])) {
-        $target_dir = "../../assets/assets/prestasi/";
-        $file_extension = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-        $gambar_nama = time() . "." . $file_extension;
-        $target_file = $target_dir . $gambar_nama;
-
-        if (!move_uploaded_file($_FILES['gambar']['tmp_name'], $target_file)) {
-          $_SESSION['notif_gagal'] = "Gagal mengupload gambar.";
-          header("Location: daftar-prestasi.php");
-          exit();
-        }
-      }
-
-      $stmt = $conn->prepare("INSERT INTO prestasi (waktu, nama_prestasi, tingkat_prestasi, nama_peraih, asal_univ, tahun_awardee, gambar) VALUES (NOW(), ?, ?, ?, ?, ?, ?)");
-      $stmt->bind_param("ssssss", $nama_prestasi, $tingkat_prestasi, $nama_peraih, $asal_univ, $tahun_awardee, $gambar_nama);
+      // Mode Tambah Baru
+      $stmt = $conn->prepare("INSERT INTO publikasi (waktu, judul_publikasi, kategori_publikasi, penulis, asal_univ, tahun_awardee, link) VALUES (NOW(), ?, ?, ?, ?, ?, ?)");
+      $stmt->bind_param("ssssss", $judul_publikasi, $kategori_publikasi, $penulis, $asal_univ, $tahun_awardee, $link);
 
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
@@ -73,13 +62,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt->close();
     }
   } else {
-    $_SESSION['notif_gagal'] = "Judul dan Isi Berita wajib diisi.";
+    $_SESSION['notif_gagal'] = "Semua field wajib diisi.";
   }
 
-  header("Location: daftar-prestasi.php");
+  header("Location: daftar-publikasi.php");
   exit();
 }
 ?>
+
 
 
 <!doctype html>
@@ -122,13 +112,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
           <!--begin::Row-->
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Kelola Prestasi</h3>
+              <h3 class="mb-0">Kelola Publikasi</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Kelola Prestasi
+                  Kelola Publikasi
                 </li>
               </ol>
             </div>
@@ -148,45 +138,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="card card-primary card-outline mb-4">
               <!--begin::Header-->
               <div class="card-header">
-                <div class="card-title"><?= ($id_prestasi > 0) ? "Edit Prestasi" : "Tambah Prestasi"; ?></div>
+                <div class="card-title"><?= ($id_publikasi > 0) ? "Edit Prestasi" : "Tambah Prestasi"; ?></div>
               </div>
               <!--end::Header-->
               <!--begin::Form-->
               <!-- Form Input & Edit -->
-              <form method="POST" action="" enctype="multipart/form-data">
+              <form method="POST" action="">
                 <div class="card-body">
-                  <?php if ($id_prestasi == 0) : ?>
-                    <div class="mb-3">
-                      <label for="inputgambar" class="form-label">Input Gambar</label>
-                      <input type="file" class="form-control" name="gambar" id="inputgambar" accept="image/*" />
-                    </div>
-                  <?php endif; ?>
 
                   <div class="mb-3">
-                    <label for="input_nama_prestasi" class="form-label">Nama Prestasi</label>
-                    <input type="text" class="form-control" name="nama_prestasi" id="input_nama_prestasi" value="<?= htmlspecialchars($nama_prestasi); ?>" placeholder="Juara 1 ...." required />
+                    <label for="input_judul_publikasi" class="form-label">Judul Publikasi</label>
+                    <input type="text" class="form-control" name="judul_publikasi" id="input_judul_publikasi" value="<?= htmlspecialchars($judul_publikasi); ?>" placeholder="Judul Publikasi" required />
                   </div>
 
                   <div class="mb-3">
-                    <label for="input_tingkat" class="form-label">Tingkat Prestasi</label>
-                    <select class="form-control" name="tingkat_prestasi" id="input_tingkat" required>
-                      <option value="" disabled selected>Pilih Tingkat Prestasi</option>
-                      <option value="Internasional" <?= ($tingkat_prestasi == "Internasional") ? 'selected' : ''; ?>>Internasional</option>
-                      <option value="Nasional" <?= ($tingkat_prestasi == "Nasional") ? 'selected' : ''; ?>>Nasional</option>
-                      <option value="Provinsi" <?= ($tingkat_prestasi == "Provinsi") ? 'selected' : ''; ?>>Provinsi</option>
-                      <option value="Kabupaten" <?= ($tingkat_prestasi == "Kabupaten") ? 'selected' : ''; ?>>Kabupaten</option>
-                      <option value="Universitas" <?= ($tingkat_prestasi == "Universitas") ? 'selected' : ''; ?>>Universitas</option>
-                    </select>
+                    <label for="input_kategori_publikasi" class="form-label">Kategori Publikasi</label>
+                    <input type="text" class="form-control" name="kategori_publikasi" id="input_kategori_publikasi" value="<?= htmlspecialchars($kategori_publikasi); ?>" placeholder="Pendidikan, Sosial, Ilmu Komputer dll" required />
                   </div>
 
                   <div class="mb-3">
-                    <label for="input_nama" class="form-label">Nama Peraih</label>
-                    <input type="text" class="form-control" name="nama_peraih" id="input_nama" value="<?= htmlspecialchars($nama_peraih); ?>" placeholder="Masukkan dengan gelar (jika ada)" required />
+                    <label for="input_penulis" class="form-label">Penulis</label>
+                    <input type="text" class="form-control" name="penulis" id="input_penulis" value="<?= htmlspecialchars($penulis); ?>" placeholder="Nama Penulis ...." required />
                   </div>
 
                   <div class="mb-3">
                     <label for="input_universitas" class="form-label">Asal Universitas</label>
-                    <input type="text" class="form-control" name="asal_univ" id="input_universitas" value="<?= htmlspecialchars($asal_univ); ?>" placeholder="Tambahkan Kata Universitas" required />
+                    <input type="text" class="form-control" name="asal_univ" id="input_universitas" value="<?= htmlspecialchars($asal_univ); ?>" placeholder="Tulis Kata Universitas (Universitas Brawijaya)" required />
                   </div>
 
                   <div class="mb-3">
@@ -194,11 +171,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <input type="text" class="form-control" name="tahun_awardee" id="input_tahun" value="<?= htmlspecialchars($tahun_awardee); ?>" required />
                   </div>
 
+                  <div class="mb-3">
+                    <label for="input_link" class="form-label">Link Publikasi</label>
+                    <input type="url" class="form-control" name="link" id="input_link" value="<?= htmlspecialchars($link ?? ''); ?>" placeholder="Link dari Publikasi atau Doi" />
+                  </div>
 
                 </div>
 
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary"><?= ($id_prestasi > 0) ? "Update" : "Simpan"; ?></button>
+                  <button type="submit" class="btn btn-primary"><?= ($id_publikasi > 0) ? "Update" : "Simpan"; ?></button>
                 </div>
               </form>
               <!--end::Form-->
