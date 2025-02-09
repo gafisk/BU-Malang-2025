@@ -4,37 +4,52 @@ include '../../../connections/conn.php';
 
 // Periksa apakah 'id' ada di URL
 if (isset($_GET['id'])) {
-    $id_prestasi = $_GET['id'];
+    $id_event = $_GET['id'];
 
     // Validasi ID harus berupa angka
-    if (!filter_var($id_prestasi, FILTER_VALIDATE_INT)) {
+    if (!filter_var($id_event, FILTER_VALIDATE_INT)) {
         die("ID tidak valid!");
     }
 
     // Query untuk mengambil data berita berdasarkan id_proker
-    $stmt = $conn->prepare("SELECT * FROM prestasi WHERE id_prestasi = ?");
-    $stmt->bind_param("i", $id_prestasi);
+    $stmt = $conn->prepare("SELECT * FROM event WHERE id_event = ?");
+    $stmt->bind_param("i", $id_event);
     $stmt->execute();
     $result = $stmt->get_result();
 
     // Periksa apakah data ditemukan
     if ($row = $result->fetch_assoc()) {
-        $nama_prestasi = htmlspecialchars($row['nama_prestasi']);
-        $tingkat_prestasi = htmlspecialchars($row['tingkat_prestasi']);
-        $nama_peraih = htmlspecialchars($row['nama_peraih']);
-        $asal_univ = htmlspecialchars($row['asal_univ']);
-        $tahun_awardee = htmlspecialchars($row['tahun_awardee']);
+        $nama_event = htmlspecialchars($row['nama_event']);
+        $pemateri = htmlspecialchars($row['pemateri']);
+        $lokasi = htmlspecialchars($row['lokasi']);
+        $link_pendaftaran = htmlspecialchars($row['link_pendaftaran']);
+        $link_meet = htmlspecialchars($row['link_meet']);
+        $isi_berita = htmlspecialchars($row['isi_berita']);
+        $tanggal_event = date('l, d F Y - h:i A', strtotime($row['tanggal_event'])); // Format tanggal
         $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
-        $gambar = !empty($row['gambar']) ? htmlspecialchars($row['gambar']) : null; // Cek gambar
+        $narahubung = htmlspecialchars($row['narahubung']);
     } else {
-        echo "<script>alert('Prestasi tidak ditemukan!'); window.location='prestasi.php';</script>";
+        echo "<script>alert('Berita tidak ditemukan!'); window.location='berita.php';</script>";
         exit;
     }
 
     $stmt->close();
 } else {
-    echo "<script>alert('ID tidak ditemukan!'); window.location='prestasi.php';</script>";
+    echo "<script>alert('ID tidak ditemukan!'); window.location='berita.php';</script>";
     exit;
+}
+
+function formatNomorWA($nomor)
+{
+    // Hapus semua karakter selain angka
+    $nomor = preg_replace('/[^0-9]/', '', $nomor);
+
+    // Jika nomor diawali dengan 0, ubah menjadi 62
+    if (substr($nomor, 0, 1) === '0') {
+        $nomor = '62' . substr($nomor, 1);
+    }
+
+    return $nomor;
 }
 
 ?>
@@ -77,36 +92,35 @@ if (isset($_GET['id'])) {
     <main class="main">
         <section id="contents" class="contents section">
             <div class="container mt-4">
-                <h1 class="mb-3">Prestasi Awardee Beasiswa Unggulan Malang</h1>
+                <h1 class="mb-3"><?= $nama_event; ?></h1>
                 <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
                 <div class="card p-4 shadow-sm">
-                    <!-- Tampilkan Gambar -->
-                    <?php if (!empty($gambar)) : ?>
-                        <img src="/BU-Malang-2025/adminbu/assets/assets/prestasi/<?= $gambar; ?>"
-                            alt="Gambar Berita" class="img-fluid mb-3" style="max-width: 30%; height: auto;">
-                    <?php endif; ?>
+                    <p>🌟 Halo, Sobat Event! 🌟 </p>
+                    <p>
 
-                    <p><strong>Selamat dan Sukses! 🎉🏆</strong></p>
+                        Apa kabar? Semoga kalian semua dalam keadaan baik dan penuh semangat! Kami punya kabar gembira nih—sebuah acara menarik yang sayang banget kalau dilewatkan! dengan senang hati mengundang kalian untuk ikut serta dalam "<strong><?= $nama_event; ?></strong>" 🎉.
+                        <br>
+                        <br>
+                        Acara ini akan berlangsung pada <strong><?= $tanggal_event ?></strong>, dan pastinya bakal jadi momen yang seru dan bermanfaat. Jadi, siapkan diri kalian untuk pengalaman yang menginspirasi dan penuh wawasan!
+                        <br>
+                        <br>
+                        📌 Detail Event: <br>
+                        🗓 Tanggal & Waktu: <?= $tanggal_event ?> <br>
+                        📍 Lokasi: <?= $lokasi ?> <br>
+                        👨‍🏫 Pemateri: <?= !empty($pemateri) ? $pemateri : 'Akan Diumumkan'; ?> <br>
+                        🔗 Link Pendaftaran: <?= ($link_pendaftaran == '-') ? '-' : '<a href="' . htmlspecialchars($link_pendaftaran) . '" target="_blank">Klik di sini untuk daftar</a>'; ?>
+                        <br>
+                        🎥 Link Meet: <?= ($link_meet == '-') ? '-' : '<a href="' . htmlspecialchars($link_meet) . '" target="_blank">Gabung di sini</a>'; ?>
+                        <br>
+                        <br>
+                        Kami berharap acara ini bisa menjadi wadah bagi kita semua untuk bertemu, berdiskusi, dan belajar bersama. Baik kamu yang ingin menambah wawasan, mencari inspirasi baru, atau sekadar ingin menikmati suasana acara yang menyenangkan ini adalah tempat yang tepat!
 
-                    <p>Kami dengan bangga mengucapkan selamat kepada <strong><?= $nama_peraih ?></strong> dari <strong><?= $asal_univ ?></strong> atas prestasi luar biasa sebagai <strong><?= $nama_prestasi ?></strong> pada tingkat <strong><?= $tingkat_prestasi ?></strong>.</p>
-
-                    <p>Keberhasilan ini menjadi bukti nyata dari dedikasi, kerja keras, dan bakat luar biasa yang telah diasah dengan penuh ketekunan. Lebih dari itu, pencapaian ini semakin istimewa karena <strong><?= $nama_peraih ?></strong> juga merupakan bagian dari <strong>Awardee Beasiswa Unggulan Malang Tahun <?= $tahun_awardee ?></strong>, komunitas unggul yang terdiri dari individu-individu berprestasi dengan semangat tinggi dalam mengembangkan diri dan berkontribusi bagi masyarakat.</p>
-
-                    <p>Prestasi ini bukan hanya kebanggaan pribadi, tetapi juga kebanggaan bagi almamater dan seluruh awardee Beasiswa Unggulan. Semoga pencapaian ini menjadi inspirasi bagi banyak orang untuk terus berusaha, berkarya, dan mengukir lebih banyak prestasi di masa depan.</p>
-
-                    <p>Sekali lagi, selamat atas keberhasilan ini! Teruslah menginspirasi, mengukir prestasi, dan membawa perubahan positif bagi lingkungan sekitar. 🚀✨👏</p>
-
-                    <!-- Tambahan Link -->
-                    <?php if (!empty($link)) : ?>
-                        <p class="mt-3">
-                            Baca berita terkait:
-                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
-                                <?= $judul_link ?: "Klik di sini"; ?>
-                            </a>
-                        </p>
-                    <?php endif; ?>
-
+                        <br>
+                        <br>
+                        📞 Narahubung:
+                        <?= ($narahubung == '-' || empty($narahubung)) ? '-' : '<a href="https://wa.me/' . formatNomorWA($narahubung) . '" target="_blank">Hubungi via WhatsApp</a>'; ?>
+                    </p>
                     <!-- Tombol Kembali -->
                     <a href="javascript:history.back()" class="btn btn-secondary mt-3">
                         <i class="bi bi-arrow-left"></i> Kembali
@@ -138,7 +152,7 @@ if (isset($_GET['id'])) {
 
         <div class="container footer-top">
 
-            <?php include '../../components/footer.php' ?>
+            <?php include '../../../components/footer.php' ?>
         </div>
 
         <div class="container copyright text-center mt-4">

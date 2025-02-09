@@ -174,8 +174,25 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p>Events</p>
+                            <p>
+                                Events
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-aktivitas/kelola-events.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-aktivitas/daftar-events.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Events</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">

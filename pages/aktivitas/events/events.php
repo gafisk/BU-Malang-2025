@@ -1,17 +1,26 @@
 <?php
+include '../../../connections/conn.php';
 // Data konten
-$contents = [
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-];
+$contents = [];
+
+$query = "SELECT * FROM event ORDER BY waktu DESC";
+$result = $conn->query($query);
+
+while ($row = $result->fetch_assoc()) {
+    $contents[] = [
+        "id_event" => $row['id_event'],
+        "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
+        "jenis" => $row['jenis'],
+        "nama_event" => $row['nama_event'],
+        "tanggal_event" => date('l, d F Y - h:i A', strtotime($row['tanggal_event'])), // Format tanggal: Senin, 29 Juli 2001
+        "pemateri" => $row['pemateri'],
+        "lokasi" => $row['lokasi'],
+        "link_pendaftaran" => $row['link_pendaftaran'],
+        "link_meet" => $row['link_meet'],
+        "isi_berita" => $row['isi_berita'],
+        "status" => $row['status'],
+    ];
+}
 
 // Pagination
 $perPage = 6; // Konten per halaman
@@ -89,14 +98,43 @@ $displayContents = array_slice($contents, $start, $perPage);
                 <div class="row gy-3">
                     <div class="row gy-3">
                         <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
+                            <div class="col-xl-12 col-lg-12" data-aos="fade-up">
                                 <div class="contents-item">
-                                    <h3><?= $content['title']; ?></h3>
-                                    <ul>
-                                        <h5><?= $content['items']; ?></h5>
-                                    </ul>
+                                    <h3 class="d-flex justify-content-between">
+                                        <span><?= $content['waktu']; ?></span>
+                                        <span class="btn btn-sm 
+        <?php
+                            if ($content['status'] == 'Upcoming') echo 'btn-warning';
+                            elseif ($content['status'] == 'Canceled') echo 'btn-danger';
+                            elseif ($content['status'] == 'Completed') echo 'btn-success';
+        ?>">
+                                            <?= $content['status']; ?>
+                                        </span>
+                                    </h3>
+                                    <table class="table">
+                                        <tr>
+                                            <th class="text-start">Nama Event</th>
+                                            <td>:</td>
+                                            <td class="text-start text-capitalize"><?= $content['nama_event']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-start">Tanggal & Waktu Event</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['tanggal_event']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-start">Pemateri</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['pemateri']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-start">Jenis Event</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['jenis']; ?></td>
+                                        </tr>
+                                    </table>
                                     <div class="btn-wrap">
-                                        <a href="#" class="btn-buy">Check it</a>
+                                        <a href="pages/aktivitas/events/pages-events.php?id=<?= $content['id_event']; ?>" class="btn btn-primary">Check it</a>
                                     </div>
                                 </div>
                             </div>
