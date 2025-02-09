@@ -1,7 +1,76 @@
+<?php
+include '../../../connections/conn.php';
+
+// Data Koordinator
+// Ambil daftar divisi kecuali BPHI dan Kesekretariatan
+$divisi_query = $conn->query("SELECT * FROM divisi WHERE nama_divisi NOT IN ('BPHI', 'Kesekretariatan') ORDER BY id_divisi ASC");
+
+$divisi_data = [];
+
+// Ambil data divisi dan buat struktur array awal
+while ($divisi = $divisi_query->fetch_assoc()) {
+    $nama_divisi = $divisi['nama_divisi'];
+
+    // Gunakan nama_divisi sebagai kunci utama array
+    $divisi_data[$nama_divisi] = [
+        'Koordinator' => [],
+        'Anggota' => []
+    ];
+}
+
+// Ambil anggota yang termasuk dalam divisi yang sudah dipilih
+$anggota_query = $conn->query("SELECT a.*, d.nama_divisi 
+                               FROM anggota_divisi a 
+                               INNER JOIN divisi d ON a.id_divisi = d.id_divisi 
+                               WHERE d.nama_divisi NOT IN ('BPHI', 'Kesekretariatan') 
+                               ORDER BY d.nama_divisi, a.status");
+
+// Masukkan anggota ke dalam divisi yang sesuai
+while ($anggota = $anggota_query->fetch_assoc()) {
+    $nama_divisi = $anggota['nama_divisi'];
+    $status = $anggota['status']; // Bisa 'Koordinator' atau 'Anggota'
+
+    // Pastikan divisi ada sebelum menambahkan anggota
+    if (isset($divisi_data[$nama_divisi])) {
+        $divisi_data[$nama_divisi][$status][] = $anggota;
+    }
+}
+
+// Bagian BPHI
+$bphi_query = $conn->query("SELECT * FROM anggota_divisi 
+                            INNER JOIN divisi USING(id_divisi) 
+                            WHERE nama_divisi = 'BPHI' 
+                            AND status IN ('Ketua', 'Wake1', 'Wake2', 'Sekretaris', 'Bendahara')");
+
+// Inisialisasi array untuk menyimpan hasil
+$bphi_data = [];
+
+// Masukkan data ke dalam array sesuai statusnya
+while ($row = $bphi_query->fetch_assoc()) {
+    $status = $row['status'];
+    $bphi_data[$status] = $row;
+}
+
+// Bagian divisi kesekretariatan
+$ang_sekret = $conn->query("SELECT * FROM anggota_divisi INNER JOIN divisi USING(id_divisi) WHERE nama_divisi = 'Kesekretariatan' AND status = 'Anggota'");
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <?php include '../../../components/head.php' ?>
+
+<style>
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.5);
+        /* Warna latar belakang */
+        border-radius: 50%;
+        /* Membuat ikon berbentuk lingkaran */
+        width: 50px;
+        height: 50px;
+    }
+</style>
 
 <body class="index-page">
 
@@ -51,656 +120,183 @@
         <!-- Team Section -->
         <section id="team" class="team section light-background">
 
-            <div class="swiper">
-                <div class="swiper-wrapper">
+            <!-- Bootstrap 5 Carousel -->
+            <div id="teamCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="0" class="active"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="1"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="2"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="3"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="4"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="5"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="6"></button>
+                    <button type="button" data-bs-target="#teamCarousel" data-bs-slide-to="7"></button>
+                </div>
+
+                <div class="carousel-inner">
                     <!-- Slide 1: Divisi BPHI -->
-                    <div class="swiper-slide">
+                    <div class="carousel-item active">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Badan Pengurus</span> <span>Harian Inti</span></p>
                         </div>
                         <div class="container">
-                            <div class="row gy-4 d-flex justify-content-center align-items-center mb-3">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                            <!-- Ketua di baris sendiri -->
+                            <div class="row gy-4 justify-content-center mb-3">
+                                <?php if (isset($bphi_data['Ketua'])): ?>
+                                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                                        <div class="team-member">
+                                            <div class="member-img">
+                                                <img src="adminbu/assets/assets/pengurus/<?= $bphi_data['Ketua']['gambar']; ?>" class="img-fluid" alt="BPHI" style="width: 300px; height:300px">
+                                                <div class="social">
+                                                    <a href="<?= $bphi_data['Ketua']['instagram'] ?>"><i class="bi bi-instagram"></i></a>
+                                                    <a href="<?= $bphi_data['Ketua']['linkedin'] ?>"><i class="bi bi-linkedin"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="member-info">
+                                                <span>Ketua Umum</span>
+                                                <h4><?= $bphi_data['Ketua']['nama_anggota'] ?></h4>
+                                                <span><?= $bphi_data['Ketua']['univ_anggota'] ?></span>
                                             </div>
                                         </div>
-                                        <div class="member-info">
-                                            <span>Ketua Umum</span>
-                                            <h4>Seto Ferdiantoro, S.H</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
-                            <div class="row gy-4">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Wakil Ketua I</span>
-                                            <h4>Shallya Yudha Tama</h4>
-                                            <span>Universitas Merdeka Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
 
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Wakil Ketua II</span>
-                                            <h4>Surya Aditya</h4>
-                                            <span>Universitas Islam Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
+                            <!-- Baris Anggota (Wakil Ketua, Sekretaris, Bendahara) -->
+                            <div class="row gy-4 justify-content-center">
+                                <?php
+                                $positions = [
+                                    'Wake1' => 'Wakil Ketua I',
+                                    'Wake2' => 'Wakil Ketua II',
+                                    'Sekretaris' => 'Sekretaris',
+                                    'Bendahara' => 'Bendahara'
+                                ];
 
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                                foreach ($positions as $key => $title):
+                                    if (isset($bphi_data[$key])):
+                                ?>
+                                        <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+                                            <div class="team-member">
+                                                <div class="member-img">
+                                                    <img src="adminbu/assets/assets/pengurus/<?= $bphi_data[$key]['gambar']; ?>" class="img-fluid" alt="BPHI" style="width: 300px; height:300px">
+                                                    <div class="social">
+                                                        <?php if (!empty($bphi_data[$key]['instagram'])): ?>
+                                                            <a href="<?= $bphi_data[$key]['instagram'] ?>"><i class="bi bi-instagram"></i></a>
+                                                        <?php endif; ?>
+                                                        <?php if (!empty($bphi_data[$key]['linkedin'])): ?>
+                                                            <a href="<?= $bphi_data[$key]['linkedin'] ?>"><i class="bi bi-linkedin"></i></a>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="member-info">
+                                                    <span><?= $title ?></span>
+                                                    <h4><?= $bphi_data[$key]['nama_anggota'] ?></h4>
+                                                    <span><?= $bphi_data[$key]['univ_anggota'] ?></span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="member-info">
-                                            <span>Sekretaris</span>
-                                            <h4>Nursyahbani Putri Parahdiba, S.Tr.T</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Bendahara</span>
-                                            <h4>Halimatus Sa’diyah, S.Pd</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
+                                <?php
+                                    endif;
+                                endforeach;
+                                ?>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Slide 2: Divisi Riset dan Keilmuan -->
-                    <div class="swiper-slide">
-                        <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Divisi</span> <span>Riset dan Keilmuan</span></p>
-                        </div>
-                        <div class="container">
-                            <div class="row gy-4 d-flex justify-content-center align-items-center mb-3">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                    <!-- Bagian Divisi Dengan Koordinator -->
+                    <?php foreach ($divisi_data as $nama_divisi => $data) {
+                    ?>
+                        <div class="carousel-item">
+                            <div class="container section-title" data-aos="fade-up">
+                                <p><span class="description-title">Divisi</span> <span><?php echo $nama_divisi; ?></span></p>
+                            </div>
+                            <div class="container">
+                                <!-- Baris Koordinator -->
+                                <div class="row gy-4 justify-content-center mb-3">
+                                    <?php foreach ($data['Koordinator'] as $koor) { ?>
+                                        <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                                            <div class="team-member">
+                                                <div class="member-img">
+                                                    <img src="adminbu/assets/assets/pengurus/<?php echo $koor['gambar']; ?>" class="img-fluid" alt="Koordinator" style="width: 300px; height:300px">
+                                                    <div class="social">
+                                                        <a href="<?php echo $koor['instagram']; ?>"><i class="bi bi-instagram"></i></a>
+                                                        <a href="<?php echo $koor['linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="member-info">
+                                                    <span>Koordinator</span>
+                                                    <h4><?php echo $koor['nama_anggota']; ?></h4>
+                                                    <span><?php echo $koor['univ_anggota']; ?></span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="member-info">
-                                            <span>Koordinator</span>
-                                            <h4>Nafisatul Izza R.U., S.Pd</h4>
-                                            <span>Universitas Negeri Malang</span>
+                                    <?php } ?>
+                                </div>
+                                <!-- Baris Anggota -->
+                                <div class="row gy-4 justify-content-center">
+                                    <?php foreach ($data['Anggota'] as $anggota) { ?>
+                                        <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                                            <div class="team-member">
+                                                <div class="member-img">
+                                                    <img src="adminbu/assets/assets/pengurus/<?php echo $anggota['gambar']; ?>" class="img-fluid" alt="Anggota" style="width: 300px; height:300px">
+                                                    <div class="social">
+                                                        <a href="<?php echo $anggota['instagram']; ?>"><i class="bi bi-instagram"></i></a>
+                                                        <a href="<?php echo $anggota['linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
+                                                    </div>
+                                                </div>
+                                                <div class="member-info">
+                                                    <h4><?php echo $anggota['nama_anggota']; ?></h4>
+                                                    <span><?php echo $anggota['univ_anggota']; ?></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    <?php } ?>
                                 </div>
                             </div>
-                            <div class="row gy-4">
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Suhari Muharam, S.Pd</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Galih Restu Baihaqi, S.Kom., M.Kom., CIRP </h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Ainur Rahman</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Auliya Maulida Kasana</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-                            </div>
                         </div>
-                    </div>
+                    <?php
+                    }
+                    ?>
+                    <!-- End::Bagian Divisi Dengan Koordinator -->
 
-                    <!-- Slide 3: Divisi Internal dan Advokasi -->
-                    <div class="swiper-slide">
-                        <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Divisi</span> <span>Internal dan Advokasi</span> </p>
-                        </div>
-                        <div class="container">
-                            <div class="row gy-4 mb-3 d-flex justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Koordinator</span>
-                                            <h4>Ikhsan Ghani Rabbani</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gy-4 d-flex justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Citra Bunga Alfaritsa Nasution</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Sekar Wahyu Ningtyas </h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Salsabila Saifa Fitra Ichwany, S.Pd</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 4: Divisi Minat dan Bakat -->
-                    <div class="swiper-slide">
-                        <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Divisi</span> <span>Minat dan Bakat</span> </p>
-                        </div>
-                        <div class="container">
-                            <div class="row gy-4 mb-3 d-flex justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Koordinator</span>
-                                            <h4>Rafi Adli Suryatmaja</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gy-4 d-flex mt-2 justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Adhieanda Putra Abidin</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Moehammad Robith Nahdi, S.M</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 5: Divisi Hubungan Luar -->
-                    <div class="swiper-slide">
-                        <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Divisi</span> <span>Hubungan Luar</span> </p>
-                        </div>
-                        <div class="container">
-                            <div class="row gy-4 mb-3 d-flex justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Koordinator</span>
-                                            <h4>Ray Farandi</h4>
-                                            <span>Universitas Terbuka UPBJJ Malang</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gy-4 d-flex justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Mirel Imelda Sasella, S.Hum.</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Faruq Hidayat S.Pd</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Ade Putri Irfanda</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 6: Divisi Komunikasi, Media dan Desain -->
-                    <div class="swiper-slide">
-                        <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Divisi</span> <span>Komunikasi, Media dan Desain</span></p>
-                        </div>
-                        <div class="container">
-                            <div class="row gy-4 d-flex justify-content-center align-items-center mb-3">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Koordinator</span>
-                                            <h4>Putra Fahreza Aqila Akhmad</h4>
-                                            <span>Universitas Muhammadiyah Malang</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gy-4">
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Hena blessing</h4>
-                                            <span>Universitas PGRI Kanjuruhan Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Maharani Cintyaningsih</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="300">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-3.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Feresyta</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-4.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Immanuel Hamonangan Silalahi</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 6: Divisi Kewirausahaan -->
-                    <div class="swiper-slide">
-                        <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Divisi</span> <span>Kewirausahaan</span> </p>
-                        </div>
-                        <div class="container">
-                            <div class="row gy-4 mb-3 d-flex justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-2.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <span>Koordinator</span>
-                                            <h4>Syahla Intan Kemala</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row gy-4 d-flex mt-2 justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Muh. Rafiqul alam S.Tr.Pt</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 7: TIM Kesekretariatan -->
-                    <div class="swiper-slide">
+                    <!-- Slide 8: TIM Kesekretariatan -->
+                    <div class="carousel-item">
                         <div class="container section-title" data-aos="fade-up">
                             <p><span class="description-title">Tim</span> <span>Kesekretariatan</span> </p>
                         </div>
                         <div class="container">
-                            <div class="row gy-4 d-flex mt-2 justify-content-center align-items-center">
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
+                            <div class="row gy-4 justify-content-center">
+                                <?php while ($row = $ang_sekret->fetch_assoc()) { ?>
+                                    <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+                                        <div class="team-member">
+                                            <div class="member-img">
+                                                <img src="adminbu/assets/assets/pengurus/<?php echo $row['gambar']; ?>" class="img-fluid" alt="Anggota" style="width: 300px; height:300px">
+                                                <div class="social">
+                                                    <a href="<?php echo $row['instagram']; ?>"><i class="bi bi-instagram"></i></a>
+                                                    <a href="<?php echo $row['linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
+                                                </div>
+                                            </div>
+                                            <div class="member-info">
+                                                <h4><?php echo $row['nama_anggota']; ?></h4>
+                                                <span><?php echo $row['univ_anggota']; ?></span>
                                             </div>
                                         </div>
-                                        <div class="member-info">
-                                            <h4>Vivi Mauliza</h4>
-                                            <span>Universitas Brawijaya</span>
-                                        </div>
                                     </div>
-                                </div><!-- End Team Member -->
-
-                                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
-                                    <div class="team-member">
-                                        <div class="member-img">
-                                            <img src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                                            <div class="social">
-                                                <a href=""><i class="bi bi-twitter-x"></i></a>
-                                                <a href=""><i class="bi bi-facebook"></i></a>
-                                                <a href=""><i class="bi bi-instagram"></i></a>
-                                                <a href=""><i class="bi bi-linkedin"></i></a>
-                                            </div>
-                                        </div>
-                                        <div class="member-info">
-                                            <h4>Alfi Syahrin Siregar, S.Pd</h4>
-                                            <span>Universitas Negeri Malang</span>
-                                        </div>
-                                    </div>
-                                </div><!-- End Team Member -->
-
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
-                    <!-- Tambahkan slide lain sesuai kebutuhan -->
                 </div>
 
-                <!-- Tambahkan navigasi -->
-                <div class="swiper-pagination"></div>
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
+                <!-- Navigasi -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#teamCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#teamCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
 
 
@@ -770,23 +366,6 @@
 
     <!-- Main JS File -->
     <script src="assets/js/main.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const swiper = new Swiper('.swiper', {
-                loop: true, // Slider berputar tanpa akhir
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
-                spaceBetween: 20, // Jarak antar slide
-            });
-        });
-    </script>
-
 
 </body>
 

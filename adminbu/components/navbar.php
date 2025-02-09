@@ -1,7 +1,7 @@
 <!--begin::Sidebar Brand-->
 <div class="sidebar-brand">
     <!--begin::Brand Link-->
-    <a href="../index.html" class="brand-link">
+    <a href="index.php" class="brand-link">
         <!--begin::Brand Image-->
         <img
             src="assets/assets/img/AdminLTELogo.png"
@@ -45,7 +45,7 @@
                         <a href="#" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
                             <p>
-                                Kelola Program Kerja
+                                Program Kerja
                                 <i class="nav-arrow bi bi-chevron-right"></i>
                             </p>
                         </a>
@@ -53,7 +53,7 @@
                             <li class="nav-item">
                                 <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Tambah Data Proker</p>
+                                    <p>Tambah Data</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -67,14 +67,71 @@
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p>Keuangan</p>
+                            <p>
+                                Profil Pengurus
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/kelola-profil-pengurus.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/daftar-profil-pengurus.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Pengurus</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link">
+                        <a href="#" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p>Pertanggungjawaban</p>
+                            <p>
+                                Laporan Keuangan
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/daftar-proker.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Lapkeu</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>
+                                Laporan Pertanggungjawaban
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-profil/daftar-proker.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Pertanggungjawaban</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </li>
