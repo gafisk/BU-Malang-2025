@@ -25,7 +25,6 @@
         <li><a href="pages/aktivitas/events/events.php">Events</a></li>
         <li><a href="pages/aktivitas/prestasi/prestasi.php">Prestasi Awardee</a></li>
         <li><a href="pages/aktivitas/publikasi/publikasi.php">Publikasi Awardee</a></li>
-        <li><a href="#">Tips dan Trik</a></li>
       </ul>
     </li>
     <li class="dropdown"><a href="#"><span>Pelaporan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
