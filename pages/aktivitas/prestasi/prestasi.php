@@ -1,17 +1,21 @@
 <?php
+include '../../../connections/conn.php';
 // Data konten
-$contents = [
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-];
+$contents = [];
+
+$query = "SELECT * FROM prestasi ORDER BY waktu DESC";
+$result = $conn->query($query);
+
+while ($row = $result->fetch_assoc()) {
+    $contents[] = [
+        "id_prestasi" => $row['id_prestasi'],
+        "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
+        "nama_prestasi" => $row['nama_prestasi'],
+        "tingkat_prestasi" => $row['tingkat_prestasi'],
+        "nama_peraih" => $row['nama_peraih'],
+        "asal_univ" => $row['asal_univ'],
+    ];
+}
 
 // Pagination
 $perPage = 6; // Konten per halaman
@@ -91,12 +95,31 @@ $displayContents = array_slice($contents, $start, $perPage);
                         <?php foreach ($displayContents as $content): ?>
                             <div class="col-xl-6 col-lg-12" data-aos="fade-up">
                                 <div class="contents-item">
-                                    <h3><?= $content['title']; ?></h3>
-                                    <ul>
-                                        <h5><?= $content['items']; ?></h5>
-                                    </ul>
+                                    <h3><?= $content['waktu']; ?></h3>
+                                    <table class="table">
+                                        <tr>
+                                            <th class="text-start">Nama Prestasi</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['nama_prestasi']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-start">Tingkat</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['tingkat_prestasi']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-start">Peraih</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['nama_peraih']; ?></td>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-start">Asal Universitas</th>
+                                            <td>:</td>
+                                            <td class="text-start"><?= $content['asal_univ']; ?></td>
+                                        </tr>
+                                    </table>
                                     <div class="btn-wrap">
-                                        <a href="#" class="btn-buy">Check it</a>
+                                        <a href="pages/aktivitas/prestasi/pages-prestasi.php?id=<?= $content['id_prestasi']; ?>" class="btn btn-primary">Check it</a>
                                     </div>
                                 </div>
                             </div>

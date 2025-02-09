@@ -1,38 +1,50 @@
 <?php
-// Data konten
-$contents = [
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-];
+include '../../../connections/conn.php';
+// Pastikan koneksi database sudah ada di atas
 
-// Pagination
-$perPage = 6; // Konten per halaman
-$total = count($contents); // Total konten
-$totalPages = ceil($total / $perPage); // Total halaman
+// Periksa apakah 'id' ada di URL
+// Periksa apakah 'id' ada di URL
+if (isset($_GET['id'])) {
+    $id_prestasi = $_GET['id'];
 
-// Halaman aktif
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$page = max($page, 1);
-$page = min($page, $totalPages);
+    // Validasi ID harus berupa angka
+    if (!filter_var($id_prestasi, FILTER_VALIDATE_INT)) {
+        die("ID tidak valid!");
+    }
 
-// Konten yang ditampilkan
-$start = ($page - 1) * $perPage;
-$displayContents = array_slice($contents, $start, $perPage);
+    // Query untuk mengambil data berita berdasarkan id_proker
+    $stmt = $conn->prepare("SELECT * FROM prestasi WHERE id_prestasi = ?");
+    $stmt->bind_param("i", $id_prestasi);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Periksa apakah data ditemukan
+    if ($row = $result->fetch_assoc()) {
+        $nama_prestasi = htmlspecialchars($row['nama_prestasi']);
+        $tingkat_prestasi = htmlspecialchars($row['tingkat_prestasi']);
+        $nama_peraih = htmlspecialchars($row['nama_peraih']);
+        $asal_univ = htmlspecialchars($row['asal_univ']);
+        $tahun_awardee = htmlspecialchars($row['tahun_awardee']);
+        $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
+        $gambar = !empty($row['gambar']) ? htmlspecialchars($row['gambar']) : null; // Cek gambar
+    } else {
+        echo "<script>alert('Prestasi tidak ditemukan!'); window.location='prestasi.php';</script>";
+        exit;
+    }
+
+    $stmt->close();
+} else {
+    echo "<script>alert('ID tidak ditemukan!'); window.location='prestasi.php';</script>";
+    exit;
+}
+
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include '../../components/head.php' ?>
+<?php include '../../../components/head.php' ?>
 
 <body class="index-page">
 
@@ -56,7 +68,7 @@ $displayContents = array_slice($contents, $start, $perPage);
         <div class="branding d-flex align-items-cente">
 
             <div class="container position-relative d-flex align-items-center justify-content-between">
-                <?php include '../../components/navbar.php' ?>
+                <?php include '../../../components/navbar.php' ?>
             </div>
 
         </div>
@@ -64,75 +76,46 @@ $displayContents = array_slice($contents, $start, $perPage);
     </header>
 
     <main class="main">
-
-        <!-- Hero Section -->
-        <section id="hero" class="hero1 section light-background">
-
-            <div class="container">
-                <div class="row gy-4">
-                    <div class="col-lg-8 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-                        <h1>Berita</h1>
-                        <p>Insan Cerdas dan Kompetitif</p>
-                    </div>
-                </div>
-            </div>
-
-        </section><!-- /Hero Section -->
-
-        <!-- contents Section -->
         <section id="contents" class="contents section">
-            <div class="container section-title" data-aos="fade-up">
-                <p><span>Check Berita</span> <span class="description-title">BU Malang</span></p>
-            </div>
+            <div class="container mt-4">
+                <h1 class="mb-3">Prestasi Awardee Beasiswa Unggulan Malang</h1>
+                <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
-            <div class="container">
-                <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3><?= $content['title']; ?></h3>
-                                    <ul>
-                                        <h5><?= $content['items']; ?></h5>
-                                    </ul>
-                                    <div class="btn-wrap">
-                                        <a href="#" class="btn-buy">Check it</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                <div class="card p-4 shadow-sm">
+                    <!-- Tampilkan Gambar -->
+                    <?php if (!empty($gambar)) : ?>
+                        <img src="/BU-Malang-2025/adminbu/assets/assets/prestasi/<?= $gambar; ?>"
+                            alt="Gambar Berita" class="img-fluid mb-3" style="max-width: 30%; height: auto;">
+                    <?php endif; ?>
+
+                    <p><strong>Selamat dan Sukses! 🎉🏆</strong></p>
+
+                    <p>Kami dengan bangga mengucapkan selamat kepada <strong><?= $nama_peraih ?></strong> dari <strong><?= $asal_univ ?></strong> atas prestasi luar biasa sebagai <strong><?= $nama_prestasi ?></strong> pada tingkat <strong><?= $tingkat_prestasi ?></strong>.</p>
+
+                    <p>Keberhasilan ini menjadi bukti nyata dari dedikasi, kerja keras, dan bakat luar biasa yang telah diasah dengan penuh ketekunan. Lebih dari itu, pencapaian ini semakin istimewa karena <strong><?= $nama_peraih ?></strong> juga merupakan bagian dari <strong>Awardee Beasiswa Unggulan Malang Tahun <?= $tahun_awardee ?></strong>, komunitas unggul yang terdiri dari individu-individu berprestasi dengan semangat tinggi dalam mengembangkan diri dan berkontribusi bagi masyarakat.</p>
+
+                    <p>Prestasi ini bukan hanya kebanggaan pribadi, tetapi juga kebanggaan bagi almamater dan seluruh awardee Beasiswa Unggulan. Semoga pencapaian ini menjadi inspirasi bagi banyak orang untuk terus berusaha, berkarya, dan mengukir lebih banyak prestasi di masa depan.</p>
+
+                    <p>Sekali lagi, selamat atas keberhasilan ini! Teruslah menginspirasi, mengukir prestasi, dan membawa perubahan positif bagi lingkungan sekitar. 🚀✨👏</p>
+
+                    <!-- Tambahan Link -->
+                    <?php if (!empty($link)) : ?>
+                        <p class="mt-3">
+                            Baca berita terkait:
+                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
+                                <?= $judul_link ?: "Klik di sini"; ?>
+                            </a>
+                        </p>
+                    <?php endif; ?>
+
+                    <!-- Tombol Kembali -->
+                    <a href="javascript:history.back()" class="btn btn-secondary mt-3">
+                        <i class="bi bi-arrow-left"></i> Kembali
+                    </a>
                 </div>
-                <nav>
-                    <ul class="pagination justify-content-center pt-5">
-                        <!-- Tombol Previous -->
-                        <?php if ($page > 1): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $page - 1; ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-
-                        <!-- Nomor Halaman -->
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $i; ?>"><?= $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <!-- Tombol Next -->
-                        <?php if ($page < $totalPages): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $page + 1; ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
             </div>
-        </section><!-- /contents Section -->
+        </section>
+
 
     </main>
 
