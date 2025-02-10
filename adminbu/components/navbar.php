@@ -133,6 +133,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item">
+                        <a href="pages/kelola-profil/daftar-adart.php" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>AD/ART</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
