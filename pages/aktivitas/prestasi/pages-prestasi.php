@@ -80,37 +80,53 @@ if (isset($_GET['id'])) {
                 <h1 class="mb-3">Prestasi Awardee Beasiswa Unggulan Malang</h1>
                 <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
-                <div class="card p-4 shadow-sm">
-                    <!-- Tampilkan Gambar -->
-                    <?php if (!empty($gambar)) : ?>
-                        <img src="/BU-Malang-2025/adminbu/assets/assets/prestasi/<?= $gambar; ?>"
-                            alt="Gambar Berita" class="img-fluid mb-3" style="max-width: 30%; height: auto;">
-                    <?php endif; ?>
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-info text-white text-center py-4">
+                        <h3 class="fw-bold"><i class="bi bi-trophy-fill"></i> Selamat & Sukses!</h3>
+                        <p class="mb-0">Penghargaan atas prestasi luar biasa! 🏆✨</p>
+                    </div>
+                    <div class="card-body p-4">
 
-                    <p><strong>Selamat dan Sukses! 🎉🏆</strong></p>
+                        <!-- Tampilkan Gambar -->
+                        <?php if (!empty($gambar)) : ?>
+                            <div class="text-center mb-3">
+                                <img src="/BU-Malang-2025/adminbu/assets/assets/prestasi/<?= $gambar; ?>"
+                                    alt="Gambar Prestasi" class="img-fluid rounded shadow-sm"
+                                    style="max-width: 30%; height: auto;">
+                            </div>
+                        <?php endif; ?>
 
-                    <p>Kami dengan bangga mengucapkan selamat kepada <strong><?= $nama_peraih ?></strong> dari <strong><?= $asal_univ ?></strong> atas prestasi luar biasa sebagai <strong><?= $nama_prestasi ?></strong> pada tingkat <strong><?= $tingkat_prestasi ?></strong>.</p>
-
-                    <p>Keberhasilan ini menjadi bukti nyata dari dedikasi, kerja keras, dan bakat luar biasa yang telah diasah dengan penuh ketekunan. Lebih dari itu, pencapaian ini semakin istimewa karena <strong><?= $nama_peraih ?></strong> juga merupakan bagian dari <strong>Awardee Beasiswa Unggulan Malang Tahun <?= $tahun_awardee ?></strong>, komunitas unggul yang terdiri dari individu-individu berprestasi dengan semangat tinggi dalam mengembangkan diri dan berkontribusi bagi masyarakat.</p>
-
-                    <p>Prestasi ini bukan hanya kebanggaan pribadi, tetapi juga kebanggaan bagi almamater dan seluruh awardee Beasiswa Unggulan. Semoga pencapaian ini menjadi inspirasi bagi banyak orang untuk terus berusaha, berkarya, dan mengukir lebih banyak prestasi di masa depan.</p>
-
-                    <p>Sekali lagi, selamat atas keberhasilan ini! Teruslah menginspirasi, mengukir prestasi, dan membawa perubahan positif bagi lingkungan sekitar. 🚀✨👏</p>
-
-                    <!-- Tambahan Link -->
-                    <?php if (!empty($link)) : ?>
-                        <p class="mt-3">
-                            Baca berita terkait:
-                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
-                                <?= $judul_link ?: "Klik di sini"; ?>
-                            </a>
+                        <p class="fw-bold text-success text-center">
+                            🎉 Kami dengan bangga mengucapkan selamat kepada <strong><?= $nama_peraih ?></strong>! 🎉
                         </p>
-                    <?php endif; ?>
 
-                    <!-- Tombol Kembali -->
-                    <a href="javascript:history.back()" class="btn btn-secondary mt-3">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </a>
+                        <p class="text-center">
+                            <i class="bi bi-mortarboard-fill text-primary"></i> <strong>Asal Universitas:</strong> <?= $asal_univ ?>
+                            <br>
+                            <i class="bi bi-award text-warning"></i> <strong>Prestasi:</strong> <?= $nama_prestasi ?>
+                            <br>
+                            <i class="bi bi-globe text-danger"></i> <strong>Tingkat:</strong> <?= $tingkat_prestasi ?>
+                        </p>
+
+                        <div class="alert alert-info text-center">
+                            <i class="bi bi-lightbulb"></i> Prestasi ini menjadi bukti nyata dari kerja keras, dedikasi, dan ketekunan dalam mengasah bakat luar biasa.
+                            Semoga pencapaian ini menginspirasi banyak orang untuk terus berusaha dan berkarya!
+                        </div>
+
+                        <p class="text-center">
+                            <strong><?= $nama_peraih ?></strong> juga merupakan bagian dari <strong>Awardee Beasiswa Unggulan Malang Tahun <?= $tahun_awardee ?></strong>,
+                            komunitas unggul yang bersemangat dalam mengembangkan diri dan berkontribusi bagi masyarakat.
+                        </p>
+
+                        <p class="text-center fw-bold">🌟 Semoga prestasi ini menjadi langkah awal untuk keberhasilan yang lebih besar! 🚀</p>
+
+                        <!-- Tombol Kembali -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <a href="javascript:history.back()" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Kembali
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
