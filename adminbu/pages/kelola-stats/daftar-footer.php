@@ -2,80 +2,18 @@
 session_start();
 include '../../../connections/conn.php';
 
-// Cek apakah ini mode edit
-$id_kampus_awardee = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$nama_kampus = "";
-
-if ($id_kampus_awardee > 0) {
-  // Ambil data berita untuk ditampilkan di form jika sedang edit
-  $stmt = $conn->prepare("SELECT * FROM kampus_awardee WHERE id_kampus_awardee = ?");
-  $stmt->bind_param("i", $id_kampus_awardee);
-  $stmt->execute();
-  $result = $stmt->get_result();
-
-  if ($row = $result->fetch_assoc()) {
-    $nama_kampus = $row['nama_kampus'];
-  }
-  $stmt->close();
-}
-
-// Proses Simpan / Edit
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $nama_kampus = trim($_POST['nama_kampus']);
-
-  if (!empty($nama_kampus)) {
-    if ($id_kampus_awardee > 0) {
-      // Mode Edit (Hanya update judul dan isi, waktu tetap)
-      $stmt = $conn->prepare("UPDATE kampus_awardee SET nama_kampus = ? WHERE id_kampus_awardee = ?");
-      $stmt->bind_param("si", $nama_kampus, $id_kampus_awardee);
-      if ($stmt->execute()) {
-        $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
-      } else {
-        $_SESSION['notif_gagal'] = "Gagal memperbarui data.";
-      }
-      $stmt->close();
-    } else {
-      // Mode Tambah Baru (waktu otomatis NOW())
-      $gambar_nama = "";
-      if (!empty($_FILES['gambar']['name'])) {
-        $target_dir = "../../assets/assets/kampus/";
-        $file_extension = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-        $gambar_nama = time() . "." . $file_extension;
-        $target_file = $target_dir . $gambar_nama;
-
-        if (!move_uploaded_file($_FILES['gambar']['tmp_name'], $target_file)) {
-          $_SESSION['notif_gagal'] = "Gagal mengupload gambar.";
-          header("Location: daftar-kampus-awardee.php");
-          exit();
-        }
-      }
-
-      $stmt = $conn->prepare("INSERT INTO kampus_awardee (nama_kampus, gambar) VALUES (?, ?)");
-      $stmt->bind_param("ss", $nama_kampus, $gambar_nama);
-
-      if ($stmt->execute()) {
-        $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
-      } else {
-        $_SESSION['notif_gagal'] = "Data Gagal Disimpan.";
-      }
-      $stmt->close();
-    }
-  } else {
-    $_SESSION['notif_gagal'] = "Judul dan Isi Berita wajib diisi.";
-  }
-
-  header("Location: daftar-kampus-awardee.php");
-  exit();
-}
+// Ambil data untuk ditampilkan di tabel
+$query = "SELECT * FROM footer";
+$result = $conn->query($query);
+$no = 1;
 
 // Tutup koneksi database
 $conn->close();
 ?>
 
-
 <!doctype html>
 <html lang="en">
-<?php include '../../components/head.php' ?>
+<?php include '../../components/head.php'; ?>
 <!--begin::Body-->
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -112,17 +50,36 @@ $conn->close();
           <!--begin::Row-->
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Kelola Kampus Awardee</h3>
+              <h3 class="mb-0">Kelola Footer</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Kelola Kampus Awardee
+                  Kelola Footer
                 </li>
               </ol>
             </div>
           </div>
+          <!-- Tampilkan Notifikasi -->
+          <?php if (isset($_SESSION['notif_sukses'])) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Sukses!</strong> <?= $_SESSION['notif_sukses']; ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['notif_sukses']); // Hapus session setelah ditampilkan 
+            ?>
+          <?php endif; ?>
+
+          <?php if (isset($_SESSION['notif_gagal'])) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Gagal!</strong> <?= $_SESSION['notif_gagal']; ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['notif_gagal']); // Hapus session setelah ditampilkan 
+            ?>
+          <?php endif; ?>
+          <!--end::notifikasi-->
           <!--end::Row-->
         </div>
         <!--end::Container-->
@@ -135,34 +92,40 @@ $conn->close();
           <!-- Konten Disini -->
           <div class="col-md-12">
             <!--begin::Quick Example-->
-            <div class="card card-primary card-outline mb-4">
-              <!--begin::Header-->
-              <div class="card-header">
-                <div class="card-title"><?= ($id_kampus_awardee > 0) ? "Edit Data Kampus" : "Tambah Data Kampus"; ?></div>
-              </div>
-              <!--end::Header-->
-              <!--begin::Form-->
-              <!-- Form Input & Edit -->
-              <form method="POST" action="" enctype="multipart/form-data">
-                <div class="card-body">
-                  <?php if ($id_kampus_awardee == 0) : ?>
-                    <div class="mb-3">
-                      <label for="inputgambar" class="form-label">Input Gambar (.png)</label>
-                      <input type="file" class="form-control" name="gambar" id="inputgambar" accept="image/*" />
-                    </div>
-                  <?php endif; ?>
-
-                  <div class="mb-3">
-                    <label for="input_nama" class="form-label">Nama Kampus</label>
-                    <input type="text" class="form-control" name="nama_kampus" id="input_nama" value="<?= htmlspecialchars($nama_kampus); ?>" required />
-                  </div>
-                </div>
-                <div class="card-footer">
-                  <button type="submit" class="btn btn-primary"><?= ($id_kampus_awardee > 0) ? "Update" : "Simpan"; ?></button>
-                </div>
-              </form>
-              <!--end::Form-->
-            </div>
+            <table id="dataproker" class="table table-striped" style="width:100%">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Alamat</th>
+                  <th>Nomor</th>
+                  <th>Email</th>
+                  <th>Youtube</th>
+                  <th>IG</th>
+                  <th>Linkedin</th>
+                  <th>Pengembang</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($result as $row): ?>
+                  <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= htmlspecialchars($row['alamat_bu']); ?></td>
+                    <td><?= htmlspecialchars($row['nomor_bu']); ?></td>
+                    <td><?= htmlspecialchars($row['email_bu']); ?></td>
+                    <td><?= htmlspecialchars($row['youtube_bu']); ?></td>
+                    <td><?= htmlspecialchars($row['ig_bu']); ?></td>
+                    <td><?= htmlspecialchars($row['linkedin_bu']); ?></td>
+                    <td><?= htmlspecialchars($row['pengembang_bu']); ?></td>
+                    <td>
+                      <a href="/BU-MALANG-2025/adminbu/pages/kelola-stats/kelola-footer.php?id=<?= $row['id_footer']; ?>" class="btn btn-warning btn-sm">
+                        Update Footer</i>
+                      </a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
             <!--end::Quick Example-->
           </div>
 
@@ -227,7 +190,35 @@ $conn->close();
       }
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+  <script>
+    new DataTable('#dataproker', {
+      "language": {
+        "emptyTable": "Tidak ada data yang tersedia",
+        "lengthMenu": "Tampilkan _MENU_ data per halaman",
+        "zeroRecords": "Tidak ada data yang cocok ditemukan",
+        "info": "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+        "infoEmpty": "Menampilkan 0 - 0 dari 0 data",
+        "infoFiltered": "(disaring dari _MAX_ total data)",
+        "search": "Cari:",
+      },
+      "paging": true, // Aktifkan pagination otomatis
+      "searching": true, // Aktifkan fitur pencarian
+      "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data per halaman
+      "pageLength": 10 // Default jumlah data per halaman
+    });
+  </script>
   <!--end::OverlayScrollbars Configure-->
+  <!-- confirm delete -->
+  <script>
+    function confirmDelete() {
+      return confirm('Yakin ingin menghapus data ini?');
+    }
+  </script>
+  <!-- end::confirm delete -->
   <!--end::Script-->
 </body>
 <!--end::Body-->

@@ -363,6 +363,13 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="pages/kelola-stats/daftar-footer.php" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Kelola Footer</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

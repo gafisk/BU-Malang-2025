@@ -23,6 +23,24 @@ $total_kampus_awardee = $row_kampus['total'];
 $query_kampus = "SELECT gambar FROM kampus_awardee";
 $result_kampus = $conn->query($query_kampus);
 
+// footer
+$footer = [];
+
+$query = "SELECT * FROM footer";
+$result = $conn->query($query);
+
+$row = $result->fetch_assoc();
+$footer = [
+  "alamat_bu" => $row['alamat_bu'],
+  "nomor_bu" => $row['nomor_bu'],
+  "email_bu" => $row['email_bu'],
+  "youtube_bu" => $row['youtube_bu'],
+  "ig_bu" => $row['ig_bu'],
+  "linkedin_bu" => $row['linkedin_bu'],
+  "pengembang_bu" => $row['pengembang_bu'],
+];
+
+
 // Tutup koneksi
 $conn->close();
 ?>
@@ -31,6 +49,34 @@ $conn->close();
 <html lang="en">
 
 <?php include 'components/head.php' ?>
+
+<style>
+  .pricing-item {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .pricing-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .pricing-item h3 {
+    color: #007bff;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .icon-wrapper {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #28a745;
+    margin-bottom: 10px;
+  }
+</style>
 
 <body class="index-page">
   <audio id="bg-music" muted loop>
@@ -52,14 +98,13 @@ $conn->close();
     <div class="topbar d-flex align-items-center">
       <div class="container d-flex justify-content-center justify-content-md-between">
         <div class="contact-info d-flex align-items-center">
-          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
-          <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
+          <i class="bi bi-envelope d-flex align-items-center"><a href="<?= $footer['email_bu'] ?>"><?= $footer['email_bu'] ?></a></i>
+          <i class="bi bi-phone d-flex align-items-center ms-4"><span><?= $footer['nomor_bu'] ?></span></i>
         </div>
         <div class="social-links d-none d-md-flex align-items-center">
-          <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-          <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+          <a href="<?= $footer['youtube_bu'] ?>" class="youtube"><i class="bi bi-youtube"></i></a>
+          <a href="<?= $footer['ig_bu'] ?>" class="instagram"><i class="bi bi-instagram"></i></a>
+          <a href="<?= $footer['linkedin_bu'] ?>" class="linkedin"><i class="bi bi-linkedin"></i></a>
         </div>
       </div>
     </div><!-- End Top Bar -->
@@ -102,34 +147,42 @@ $conn->close();
 
       <div class="container">
 
-        <div class="row gy-3">
-
-          <div class="col-xl-6 col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="pricing-item">
-              <h3>Beasiswa Unggulan</h3>
-              <p style="text-align: justify;">
-                Beasiswa Unggulan atau BU ini telah digelar Kemendikbudristek sejak tahun 2006. Artinya, tahun 2024 ini, BU telah berlangsung selama 18 tahun. BU Kemendikbudristek ini terbagi dua kategori, yakni BU bagi pegawai Kemendikbudsristek dan BU bagi masyarakat berprestasi. BU bagi masyarakat berprestasi diberikan bagi masyarakat yang memiliki kemampuan intelektual, emosional, dan spiritual untuk melanjutkan pendidikan pada jenjang sarjana, magister, dan doktor yang diselenggarakan pada perguruan tinggi dalam negeri atau perguruan tinggi luar negeri.
+        <div class="row g-3">
+          <!-- Beasiswa Unggulan -->
+          <div class="col-xl-6 col-lg-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="pricing-item h-100 shadow-sm p-4 bg-white rounded-4">
+              <div class="icon-wrapper text-center">
+                <i class="bi bi-award-fill fs-1 text-primary"></i>
+              </div>
+              <h3 class="text-center text-primary">Beasiswa Unggulan</h3>
+              <p class="fs-5 text-muted" style="text-align: justify;">
+                Beasiswa Unggulan atau BU telah digelar Kemendikbudristek sejak tahun 2006. Artinya, pada tahun 2024 ini, BU telah berlangsung selama 18 tahun. BU Kemendikbudristek terbagi menjadi dua kategori, yakni BU bagi pegawai Kemendikbudristek dan BU bagi masyarakat berprestasi.
               </p>
-              <p style="text-align: justify;">
-                Sejak BU dikelola Pusat Layanan Pembiayaan Pendidikan (Puslapdik) tahun 2020 sampai dengan tahun 2023, jumlah penerima BU sebanyak 6.384 orang dan sampai awal tahun 2024, yaitu di akhir semester ganjil tahun akademik 2023-2024, mahasiswa penerima BU yang masih aktif berjumlah 4.259 orang. Dari sejumlah itu, jenjang S-1/D-4 sebanyak 2.275 orang, jenjang S-2 sebanyak 1.715 orang, dan jenjang S-3 sebanyak 269 orang. Dari sejumlah itu juga, ada 3 orang mahasiswa penyandang disabilitas dan 77 orang mahasiswa berstatus pegawai Kemendikbudristek.
-              </p>
-            </div>
-          </div><!-- End Pricing Item -->
-
-          <div class="col-xl-6 col-lg-6" data-aos="fade-up" data-aos-delay="400">
-            <div class="pricing-item">
-              <h3>Beasiswa Unggulan Malang</h3>
-              <p style="text-align: justify;">
-                Forum Awardee Beasiswa Unggulan (BU) Regional Malang Raya merupakan wadah bagi para awardee/penerima BU universitas di wilayah Malang Raya. Dibentuk di Universitas Negeri Malang pada 12 November 2016. Forum ini telah berlangsung selama 8 tahun sejak didirikan, dibentuk dengan tujuan menghimpun dan menjadi wadah silaturahmi, bersinergi, berkolaborasi dan saling menginspirasi antar Awardee/Penerima Beasiswa Unggulan Se-Malang Raya.
+              <p class="fs-5 text-muted" style="text-align: justify;">
+                Sejak dikelola oleh Pusat Layanan Pembiayaan Pendidikan (Puslapdik) tahun 2020 hingga 2023, jumlah penerima BU mencapai 6.384 orang. Hingga awal 2024, masih aktif sebanyak 4.259 mahasiswa, terdiri dari 2.275 jenjang S-1/D-4, 1.715 jenjang S-2, dan 269 jenjang S-3. Selain itu, terdapat 3 mahasiswa penyandang disabilitas serta 77 mahasiswa berstatus pegawai Kemendikbudristek.
               </p>
             </div>
-          </div><!-- End Pricing Item -->
+          </div>
 
+          <!-- Beasiswa Unggulan Malang -->
+          <div class="col-xl-6 col-lg-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="400">
+            <div class="pricing-item h-100 shadow-sm p-4 bg-white rounded-4">
+              <div class="icon-wrapper text-center">
+                <i class="bi bi-people-fill fs-1 text-success"></i>
+              </div>
+              <h3 class="text-center text-success">Beasiswa Unggulan Malang</h3>
+              <p class="fs-5 text-muted" style="text-align: justify;">
+                Forum Awardee Beasiswa Unggulan (BU) Regional Malang Raya merupakan wadah bagi penerima BU di universitas wilayah Malang Raya. Forum ini didirikan di Universitas Negeri Malang pada 12 November 2016 dan telah berjalan selama 8 tahun.
+              </p>
+              <p class="fs-5 text-muted" style="text-align: justify;">
+                Forum ini bertujuan untuk menjadi tempat silaturahmi, bersinergi, berkolaborasi, dan saling menginspirasi antar penerima Beasiswa Unggulan se-Malang Raya.
+              </p>
+            </div>
+          </div>
         </div>
-
+        <!-- end Row -->
       </div>
-
-    </section><!-- /Pricing Section -->
+    </section><!-- /Sejarah Section -->
 
     <!-- Lambang Section -->
     <section id="lambang" class="lambang section light-background">
@@ -142,102 +195,111 @@ $conn->close();
 
       <div class="container">
 
-        <div class="row gy-3">
-
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <img src="assets/img/Logo.png" alt="" class="img-fluid">
+        <div class="row gy-4 align-items-center">
+          <!-- Gambar Logo -->
+          <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-delay="100">
+            <img src="assets/img/Logo.png" alt="Logo BU Malang" class="img-fluid rounded shadow-lg">
           </div>
 
+          <!-- Deskripsi Arti Logo -->
           <div class="col-lg-6 d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="200">
-            <div class="about-content ps-0 ps-lg-3">
-              <h3>Launching Logo Tahun 2019</h3>
-              <ul>
-                <li>
-                  <!-- <i class="bi bi-diagram-3"></i> -->
+            <div class="about-content ps-0 ps-lg-4">
+              <h3 class="text-primary fw-bold">Launching Logo Tahun 2019</h3>
+              <ul class="list-unstyled">
+                <li class="d-flex align-items-start mb-3">
+                  <i class="bi bi-palette text-primary fs-4 me-3"></i>
                   <div>
-                    <h4>Warna Biru</h4>
-                    <p>Merupakan Lambang Pendidikan Indonesia</p>
+                    <h5 class="fw-semibold">Warna Biru</h5>
+                    <p class="text-muted mb-0">Merupakan Lambang Pendidikan Indonesia</p>
                   </div>
                 </li>
-                <li>
-                  <!-- <i class="bi bi-fullscreen-exit"></i> -->
+                <li class="d-flex align-items-start mb-3">
+                  <i class="bi bi-fire text-danger fs-4 me-3"></i>
                   <div>
-                    <h4>Api</h4>
-                    <p>Melambangkan Semangat Membara Awardee BU Malang</p>
+                    <h5 class="fw-semibold">Api</h5>
+                    <p class="text-muted mb-0">Melambangkan Semangat Membara Awardee BU Malang</p>
                   </div>
                 </li>
-                <li>
-                  <!-- <i class="bi bi-fullscreen-exit"></i> -->
+                <li class="d-flex align-items-start mb-3">
+                  <i class="bi bi-building text-dark fs-4 me-3"></i>
                   <div>
-                    <h4>Siluet Tugu Kota Malang</h4>
-                    <p>Melambangkan Indentitas Kota Malang</p>
+                    <h5 class="fw-semibold">Siluet Tugu Kota Malang</h5>
+                    <p class="text-muted mb-0">Melambangkan Identitas Kota Malang</p>
                   </div>
                 </li>
-                <li>
-                  <!-- <i class="bi bi-fullscreen-exit"></i> -->
+                <li class="d-flex align-items-start mb-3">
+                  <i class="bi bi-bookmark-star text-warning fs-4 me-3"></i>
                   <div>
-                    <h4>BU MALANG</h4>
-                    <p>Merupakan Singkatan Dari Beasiswa Unggulan Malang</p>
+                    <h5 class="fw-semibold">BU MALANG</h5>
+                    <p class="text-muted mb-0">Merupakan Singkatan Dari Beasiswa Unggulan Malang</p>
                   </div>
                 </li>
-                <li>
-                  <!-- <i class="bi bi-fullscreen-exit"></i> -->
+                <li class="d-flex align-items-start mb-3">
+                  <i class="bi bi-book text-success fs-4 me-3"></i>
                   <div>
-                    <h4>Buku</h4>
-                    <p>Melambangkan Jendela Ilmu Pengetahuan</p>
+                    <h5 class="fw-semibold">Buku</h5>
+                    <p class="text-muted mb-0">Melambangkan Jendela Ilmu Pengetahuan</p>
                   </div>
                 </li>
-                <li>
-                  <!-- <i class="bi bi-fullscreen-exit"></i> -->
+                <li class="d-flex align-items-start mb-3">
+                  <i class="bi bi-gem text-warning fs-4 me-3"></i>
                   <div>
-                    <h4>Warna Emas</h4>
-                    <p>Melambangkan Kesuksesan dan Prestasi</p>
+                    <h5 class="fw-semibold">Warna Emas</h5>
+                    <p class="text-muted mb-0">Melambangkan Kesuksesan dan Prestasi</p>
                   </div>
                 </li>
               </ul>
             </div>
           </div>
-          <p class="fst-italic">
-            Arti logo Forum BU Malang bukan hanya sekedar simbol, melainkan cerminan semangat kebersamaan, inovasi dan visi yang menyatukan para penerima beasiswa dalam tujuan yang sama. Setiap elemen dirancang dengan makna tersendiri, menggambarkan bagaimana kolaborasi dan sinergi diantara para awardee menjadi sebuah fondasi kokoh untuk menciptakan perubahan positif.
-          </p>
+
+          <!-- Paragraf Penjelasan -->
+          <div class="col-12 text-center">
+            <p class="fst-italic text-muted px-lg-5">
+              Arti logo Forum BU Malang bukan hanya sekadar simbol, melainkan cerminan semangat kebersamaan, inovasi, dan visi yang menyatukan para penerima beasiswa dalam tujuan yang sama. Setiap elemen dirancang dengan makna tersendiri, menggambarkan bagaimana kolaborasi dan sinergi di antara para awardee menjadi sebuah fondasi kokoh untuk menciptakan perubahan positif.
+            </p>
+          </div>
         </div>
+
 
       </div>
 
-    </section><!-- /About Section -->
+    </section><!-- /Lambang Section -->
 
     <!-- Visi & Misi Section -->
-    <section id="visimisi" class="pricing section">
+    <section id="visimisi" class="py-5 bg-light">
+      <div class="container" data-aos="fade-up">
+        <!-- Section Title -->
+        <div class="container section-title" data-aos="fade-up">
+          <h2>Visi & Misi</h2>
+          <p><span>Visi & Misi</span> <span class="description-title">BU Malang</span></p>
+        </div><!-- End Section Title -->
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Visi & Misi</h2>
-        <p><span>Visi & Misi</span> <span class="description-title">Beasiswa Unggulan Malang</span></p>
-      </div><!-- End Section Title -->
-
-      <div class="container">
-
-        <div class="row gy-3">
-
-          <div class="col-xl-12 col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <div class="pricing-item">
-              <p class="fs-4" style="text-align: justify;">
-                Terwujudnya Forum Awardee Beasiswa Unggulan Regional Malang Raya sebagai wadah pemberdayaan dan pengembangan potensi awardee yang informatif dan kontributif terhadap negeri.
+        <div class="row justify-content-center">
+          <!-- Card Visi & Misi-->
+          <div class="col-lg-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-4 h-100">
+              <h4 class="fw-bold text-center text-primary">🎯 Visi</h4>
+              <p class="fs-5 text-center text-muted">Terwujudnya Forum Awardee Beasiswa Unggulan Regional Malang Raya sebagai wadah pemberdayaan dan pengembangan potensi awardee yang informatif dan kontributif terhadap negeri.
               </p>
+            </div>
+          </div>
 
-              <ol class="fs4" style="text-align: justify;">
-                <li>Menguatkan sistem organisasi forum dan potensi awardee dengan memberikan dukungan pelatihan untuk mewujudkan awardee yang memiliki jiwa kepemimpinan dan unggul sesuai disiplin ilmunya.</li>
-                <li>Mensinergikan seluruh potensi awardee untuk memberikan dukungan mentorship dan sosialisasi Beasiswa Unggulan melalui program kerja forum yang berkelanjutan.</li>
-                <li>Memberikan informasi secara aktif kepada masyarakat luas dalam bidang pendidikan.</li>
-                <li>Membangun hubungan yang harmonis sesama awardee dan alumni.</li>
+          <div class="col-lg-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
+            <div class="card border-0 shadow-sm p-4 bg-white rounded-4 h-100">
+              <h4 class="fw-bold text-center text-primary">🚀 Misi</h4>
+              <ol class="fs-5 text-muted">
+                <li><i class="bi bi-person-lines-fill text-primary"></i> Menguatkan sistem organisasi forum dan potensi awardee dengan pelatihan kepemimpinan dan keunggulan akademik.</li>
+                <li><i class="bi bi-people text-success"></i> Mensinergikan seluruh potensi awardee untuk memberikan mentorship dan sosialisasi Beasiswa Unggulan.</li>
+                <li><i class="bi bi-info-circle text-danger"></i> Memberikan informasi secara aktif kepada masyarakat luas dalam bidang pendidikan.</li>
+                <li><i class="bi bi-handshake text-warning"></i> Membangun hubungan yang harmonis sesama awardee dan alumni.</li>
               </ol>
             </div>
-          </div><!-- End Pricing Item -->
+          </div>
+          <!-- End Card -->
         </div>
-
       </div>
-
-    </section><!-- /Pricing Section -->
+    </section>
+    <!-- /Visi & Misi Section -->
 
     <!-- Stats Section -->
     <section id="stats" class="stats section">
@@ -345,14 +407,7 @@ $conn->close();
       <div class="container">
         <div class="row justify-content-center text-center">
           <div class="col-lg-6">
-            <h4>Join Our Newsletter</h4>
-            <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-            <form action="forms/newsletter.php" method="post" class="php-email-form">
-              <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-              <div class="loading">Loading</div>
-              <div class="error-message"></div>
-              <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-            </form>
+            <h3>Forum Beasiswa Unggulan Malang</h5>
           </div>
         </div>
       </div>

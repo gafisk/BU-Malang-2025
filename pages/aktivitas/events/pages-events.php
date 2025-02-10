@@ -52,6 +52,22 @@ function formatNomorWA($nomor)
     return $nomor;
 }
 
+// footer
+$footer = [];
+$query = "SELECT * FROM footer";
+$result = $conn->query($query);
+$row = $result->fetch_assoc();
+$footer = [
+    "alamat_bu" => $row['alamat_bu'],
+    "nomor_bu" => $row['nomor_bu'],
+    "email_bu" => $row['email_bu'],
+    "youtube_bu" => $row['youtube_bu'],
+    "ig_bu" => $row['ig_bu'],
+    "linkedin_bu" => $row['linkedin_bu'],
+    "pengembang_bu" => $row['pengembang_bu'],
+];
+
+$conn->close();
 ?>
 
 
@@ -67,14 +83,13 @@ function formatNomorWA($nomor)
         <div class="topbar d-flex align-items-center">
             <div class="container d-flex justify-content-center justify-content-md-between">
                 <div class="contact-info d-flex align-items-center">
-                    <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">contact@example.com</a></i>
-                    <i class="bi bi-phone d-flex align-items-center ms-4"><span>+1 5589 55488 55</span></i>
+                    <i class="bi bi-envelope d-flex align-items-center"><a href="<?= $footer['email_bu'] ?>"><?= $footer['email_bu'] ?></a></i>
+                    <i class="bi bi-phone d-flex align-items-center ms-4"><span><?= $footer['nomor_bu'] ?></span></i>
                 </div>
                 <div class="social-links d-none d-md-flex align-items-center">
-                    <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a>
-                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                    <a href="<?= $footer['youtube_bu'] ?>" class="youtube"><i class="bi bi-youtube"></i></a>
+                    <a href="<?= $footer['ig_bu'] ?>" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="<?= $footer['linkedin_bu'] ?>" class="linkedin"><i class="bi bi-linkedin"></i></a>
                 </div>
             </div>
         </div><!-- End Top Bar -->
@@ -149,14 +164,7 @@ function formatNomorWA($nomor)
             <div class="container">
                 <div class="row justify-content-center text-center">
                     <div class="col-lg-6">
-                        <h4>Join Our Newsletter</h4>
-                        <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-                        <form action="forms/newsletter.php" method="post" class="php-email-form">
-                            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-                            <div class="loading">Loading</div>
-                            <div class="error-message"></div>
-                            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-                        </form>
+                        <h3>Forum Beasiswa Unggulan Malang</h5>
                     </div>
                 </div>
             </div>

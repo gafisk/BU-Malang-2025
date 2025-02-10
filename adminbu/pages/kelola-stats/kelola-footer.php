@@ -2,80 +2,71 @@
 session_start();
 include '../../../connections/conn.php';
 
-// Cek apakah ini mode edit
-$id_kampus_awardee = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$nama_kampus = "";
+// Ambil ID jika ada (untuk edit)
+$id_footer = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$alamat_bu = "";
+$nomor_bu = "";
+$email_bu = "";
+$youtube_bu = "";
+$ig_bu = "";
+$linkedin_bu = "";
+$pengembang_bu = "";
 
-if ($id_kampus_awardee > 0) {
-  // Ambil data berita untuk ditampilkan di form jika sedang edit
-  $stmt = $conn->prepare("SELECT * FROM kampus_awardee WHERE id_kampus_awardee = ?");
-  $stmt->bind_param("i", $id_kampus_awardee);
+// Jika ID ada, ambil data dari database untuk diedit
+if ($id_footer > 0) {
+  $stmt = $conn->prepare("SELECT * FROM footer WHERE id_footer = ?");
+  $stmt->bind_param("i", $id_footer);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($row = $result->fetch_assoc()) {
-    $nama_kampus = $row['nama_kampus'];
+    $alamat_bu = $row['alamat_bu'];
+    $nomor_bu = $row['nomor_bu'];
+    $email_bu = $row['email_bu'];
+    $youtube_bu = $row['youtube_bu'];
+    $ig_bu = $row['ig_bu'];
+    $linkedin_bu = $row['linkedin_bu'];
+    $pengembang_bu = $row['pengembang_bu'];
   }
   $stmt->close();
 }
 
 // Proses Simpan / Edit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $nama_kampus = trim($_POST['nama_kampus']);
+  $alamat_bu = trim($_POST['alamat_bu']);
+  $nomor_bu = trim($_POST['nomor_bu']);
+  $email_bu = trim($_POST['email_bu']);
+  $youtube_bu = trim($_POST['youtube_bu']);
+  $ig_bu = trim($_POST['ig_bu']);
+  $linkedin_bu = trim($_POST['linkedin_bu']);
+  $pengembang_bu = trim($_POST['pengembang_bu']);
 
-  if (!empty($nama_kampus)) {
-    if ($id_kampus_awardee > 0) {
-      // Mode Edit (Hanya update judul dan isi, waktu tetap)
-      $stmt = $conn->prepare("UPDATE kampus_awardee SET nama_kampus = ? WHERE id_kampus_awardee = ?");
-      $stmt->bind_param("si", $nama_kampus, $id_kampus_awardee);
+  if (!empty($alamat_bu) && !empty($nomor_bu) && !empty($email_bu) && !empty($youtube_bu) && !empty($ig_bu) && !empty($linkedin_bu) && !empty($pengembang_bu)) {
+    if ($id_footer > 0) {
+      // Mode Edit
+      $stmt = $conn->prepare("UPDATE footer SET alamat_bu = ?, nomor_bu = ?, email_bu = ?, youtube_bu = ?, ig_bu = ?, linkedin_bu = ?, pengembang_bu = ? WHERE id_footer = ?");
+      $stmt->bind_param("sssssssi", $alamat_bu, $nomor_bu, $email_bu, $youtube_bu, $ig_bu, $linkedin_bu, $pengembang_bu, $id_footer);
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
       } else {
         $_SESSION['notif_gagal'] = "Gagal memperbarui data.";
       }
       $stmt->close();
-    } else {
-      // Mode Tambah Baru (waktu otomatis NOW())
-      $gambar_nama = "";
-      if (!empty($_FILES['gambar']['name'])) {
-        $target_dir = "../../assets/assets/kampus/";
-        $file_extension = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-        $gambar_nama = time() . "." . $file_extension;
-        $target_file = $target_dir . $gambar_nama;
-
-        if (!move_uploaded_file($_FILES['gambar']['tmp_name'], $target_file)) {
-          $_SESSION['notif_gagal'] = "Gagal mengupload gambar.";
-          header("Location: daftar-kampus-awardee.php");
-          exit();
-        }
-      }
-
-      $stmt = $conn->prepare("INSERT INTO kampus_awardee (nama_kampus, gambar) VALUES (?, ?)");
-      $stmt->bind_param("ss", $nama_kampus, $gambar_nama);
-
-      if ($stmt->execute()) {
-        $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
-      } else {
-        $_SESSION['notif_gagal'] = "Data Gagal Disimpan.";
-      }
-      $stmt->close();
     }
   } else {
-    $_SESSION['notif_gagal'] = "Judul dan Isi Berita wajib diisi.";
+    $_SESSION['notif_gagal'] = "Form wajib diisi.";
   }
 
-  header("Location: daftar-kampus-awardee.php");
+  header("Location: daftar-footer.php");
   exit();
 }
 
 // Tutup koneksi database
 $conn->close();
 ?>
-
-
 <!doctype html>
 <html lang="en">
-<?php include '../../components/head.php' ?>
+<?php include '../../components/head.php'; ?>
 <!--begin::Body-->
 
 <body class="layout-fixed sidebar-expand-lg bg-body-tertiary">
@@ -112,13 +103,13 @@ $conn->close();
           <!--begin::Row-->
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Kelola Kampus Awardee</h3>
+              <h3 class="mb-0">Kelola Jumlah Awardee</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Kelola Kampus Awardee
+                  Kelola Footer
                 </li>
               </ol>
             </div>
@@ -138,29 +129,52 @@ $conn->close();
             <div class="card card-primary card-outline mb-4">
               <!--begin::Header-->
               <div class="card-header">
-                <div class="card-title"><?= ($id_kampus_awardee > 0) ? "Edit Data Kampus" : "Tambah Data Kampus"; ?></div>
+                <div class="card-title"><?= ($id_footer > 0) ? "Edit Data" : "Tambah Data"; ?></div>
               </div>
               <!--end::Header-->
               <!--begin::Form-->
-              <!-- Form Input & Edit -->
-              <form method="POST" action="" enctype="multipart/form-data">
+              <form method="POST" action="">
                 <div class="card-body">
-                  <?php if ($id_kampus_awardee == 0) : ?>
-                    <div class="mb-3">
-                      <label for="inputgambar" class="form-label">Input Gambar (.png)</label>
-                      <input type="file" class="form-control" name="gambar" id="inputgambar" accept="image/*" />
-                    </div>
-                  <?php endif; ?>
+                  <div class="mb-3">
+                    <label for="input_alamat" class="form-label">Alamat BU Malang</label>
+                    <input type="text" class="form-control" name="alamat_bu" id="input_alamat" value="<?= htmlspecialchars($alamat_bu); ?>" required />
+                  </div>
 
                   <div class="mb-3">
-                    <label for="input_nama" class="form-label">Nama Kampus</label>
-                    <input type="text" class="form-control" name="nama_kampus" id="input_nama" value="<?= htmlspecialchars($nama_kampus); ?>" required />
+                    <label for="input_nomor" class="form-label">Nomor BU Malang</label>
+                    <input type="text" class="form-control" name="nomor_bu" id="input_nomor" value="<?= htmlspecialchars($nomor_bu); ?>" required />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="input_email" class="form-label">Email BU Malang</label>
+                    <input type="email" class="form-control" name="email_bu" id="input_email" value="<?= htmlspecialchars($email_bu); ?>" required />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="input_youtube" class="form-label">Link Youtube BU Malang</label>
+                    <input type="url" class="form-control" name="youtube_bu" id="input_youtube" value="<?= htmlspecialchars($youtube_bu); ?>" required />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="input_ig" class="form-label">Link Instagram BU Malang</label>
+                    <input type="url" class="form-control" name="ig_bu" id="input_ig" value="<?= htmlspecialchars($ig_bu); ?>" required />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="input_linkedin" class="form-label">Link Linkedin BU Malang</label>
+                    <input type="url" class="form-control" name="linkedin_bu" id="input_linkedin" value="<?= htmlspecialchars($linkedin_bu); ?>" required />
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="input_pengembang" class="form-label">Nomor WA Pengembang</label>
+                    <input type="text" class="form-control" name="pengembang_bu" id="input_pengembang" value="<?= htmlspecialchars($pengembang_bu); ?>" placeholder="Pakai 6281..." required />
                   </div>
                 </div>
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary"><?= ($id_kampus_awardee > 0) ? "Update" : "Simpan"; ?></button>
+                  <button type="submit" class="btn btn-primary"><?= ($id_footer > 0) ? "Update" : "Simpan"; ?></button>
                 </div>
               </form>
+
               <!--end::Form-->
             </div>
             <!--end::Quick Example-->

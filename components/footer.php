@@ -1,45 +1,26 @@
 <div class="row gy-4">
-    <div class="col-lg-4 col-md-6 footer-about">
+    <div class="col-lg-6 col-md-12 footer-about">
         <a href="index.html" class="d-flex align-items-center">
-            <span class="sitename">BizLand</span>
+            <span class="sitename">Forum Beasiswa Unggulan Malang</span>
         </a>
         <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p><?= $footer['alamat_bu'] ?></p>
+            <p>Kota Malang, Jawa Timur</p>
+            <p class="mt-3"><strong>Phone:</strong> <span><?= $footer['nomor_bu'] ?></span></p>
+            <p><strong>Email:</strong> <span><?= $footer['email_bu'] ?></span></p>
         </div>
     </div>
 
-    <div class="col-lg-2 col-md-3 footer-links">
-        <h4>Useful Links</h4>
-        <ul>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Home</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">About us</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Services</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Terms of service</a></li>
-        </ul>
-    </div>
-
-    <div class="col-lg-2 col-md-3 footer-links">
-        <h4>Our Services</h4>
-        <ul>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Design</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Web Development</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Product Management</a></li>
-            <li><i class="bi bi-chevron-right"></i> <a href="#">Marketing</a></li>
-        </ul>
-    </div>
-
-    <div class="col-lg-4 col-md-12">
+    <div class="col-lg-6 col-md-12">
         <h4>Follow Us</h4>
-        <p>Cras fermentum odio eu feugiat lide par naso tierra videa magna derita valies</p>
+        <p>Ikuti sosial media kami</p>
         <div class="social-links d-flex">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+            <a href="<?= $footer['youtube_bu'] ?>" target="_blank"><i class="bi bi-youtube"></i></a>
+            <a href="<?= $footer['ig_bu'] ?>" target="_blank"><i class="bi bi-instagram"></i></a>
+            <a href="<?= $footer['linkedin_bu'] ?>" target="_blank"><i class="bi bi-linkedin"></i></a>
         </div>
+        <br>
+        <p>kritik & saran pengembangan Website: <a href="https://wa.me/<?= $footer['pengembang_bu'] ?>" target="_blank">Pengembang</a> </p>
     </div>
 
 </div>

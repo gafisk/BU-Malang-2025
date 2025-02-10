@@ -6,6 +6,9 @@ include '../../../connections/conn.php';
 $query = "SELECT * FROM stats_awardee";
 $result = $conn->query($query);
 $no = 1;
+
+// Tutup koneksi database
+$conn->close();
 ?>
 
 <!doctype html>

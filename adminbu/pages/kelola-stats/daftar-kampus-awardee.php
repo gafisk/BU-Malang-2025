@@ -48,6 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_PO
 $query = "SELECT * FROM kampus_awardee";
 $result = $conn->query($query);
 $no = 1;
+
+// Tutup koneksi database
+$conn->close();
 ?>
 
 <!doctype html>
