@@ -8,9 +8,9 @@
     <li><a href="index.php" class="active">Beranda</a></li>
     <li class="dropdown"><a href="#"><span>Profil</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
       <ul>
-        <li><a href="#">Sejarah</a></li>
+        <li><a href="#sejarah">Sejarah</a></li>
         <li><a href="#">Struktur Organisasi</a></li>
-        <li><a href="#">Makna dan Lambang</a></li>
+        <li><a href="#lambang">Makna dan Lambang</a></li>
         <li><a href="#">Visi dan Misi</a></li>
         <li><a href="pages/profil/profil/profil-pengurus.php">Profil Pengurus</a></li>
         <li><a href="pages/profil/proker/program-kerja.php">Program Kerja</a></li>

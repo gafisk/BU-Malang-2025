@@ -242,6 +242,47 @@
                     </li>
                 </ul>
             </li>
+
+            <!-- Bagian Kelola Stats -->
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon bi bi-diagram-3-fill"></i>
+                    <p>
+                        Kelola Status
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="pages/kelola-stats/daftar-stats.php" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>Kelola Jumlah Awardee</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>
+                                Kelola Kampus Awardee
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-stats/kelola-kampus-awardee.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-stats/daftar-kampus-awardee.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Kampus Awardee</p>
+                                </a>
+                            </li>
+                        </ul>
+                </ul>
+            </li>
         </ul>
         <!--end::Sidebar Menu-->
     </nav>
