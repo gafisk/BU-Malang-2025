@@ -11,7 +11,8 @@ while ($row = $result->fetch_assoc()) {
     $contents[] = [
         "id_lap_keuangan" => $row['id_lap_keuangan'],
         "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
-        "nama_laporan" => $row['nama_laporan']
+        "kabinet" => $row['kabinet'],
+        "tahun" => $row['tahun']
     ];
 }
 
@@ -111,7 +112,7 @@ $conn->close();
                                 <div class="contents-item">
                                     <h3><?= $content['waktu']; ?></h3>
                                     <ul>
-                                        <h5><?= $content['nama_laporan']; ?></h5>
+                                        <h5>Laporan Keuangan Kabinet <strong><?= $content['kabinet']; ?></strong> <br> Tahun <?= $content['tahun'] ?></h5>
                                     </ul>
                                     <div class="btn-wrap">
                                         <a href="pages/profil/lapkeu/pages-laporan-keuangan.php?id=<?= $content['id_lap_keuangan']; ?>" class="btn-buy">Check it</a>
