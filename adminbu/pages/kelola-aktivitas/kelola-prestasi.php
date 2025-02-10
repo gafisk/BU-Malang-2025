@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                   <div class="mb-3">
                     <label for="input_tahun" class="form-label">Tahun Awardee</label>
-                    <input type="text" class="form-control" name="tahun_awardee" id="input_tahun" value="<?= htmlspecialchars($tahun_awardee); ?>" required />
+                    <input type="number" class="form-control" name="tahun_awardee" id="input_tahun" value="<?= htmlspecialchars($tahun_awardee); ?>" required />
                   </div>
 
 
