@@ -2,50 +2,15 @@
 session_start();
 include '../../../connections/conn.php';
 
-// Ambil ID jika ada (untuk edit)
-$id_pelaporan = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$link_adart = "";
-
-// Jika ID ada, ambil data dari database untuk diedit
-if ($id_pelaporan > 0) {
-  $stmt = $conn->prepare("SELECT * FROM pelaporan WHERE id_pelaporan = ?");
-  $stmt->bind_param("i", $id_pelaporan);
-  $stmt->execute();
-  $result = $stmt->get_result();
-
-  if ($row = $result->fetch_assoc()) {
-    $link_adart = $row['link_adart'];
-  }
-  $stmt->close();
-}
-
-// Proses Simpan / Edit
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $link_adart = trim($_POST['link_adart']);
-
-  if (!empty($link_adart)) {
-    if ($id_pelaporan > 0) {
-      // Mode Edit
-      $stmt = $conn->prepare("UPDATE pelaporan SET link_adart = ?  WHERE id_pelaporan = ?");
-      $stmt->bind_param("si", $link_adart, $id_pelaporan);
-      if ($stmt->execute()) {
-        $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
-      } else {
-        $_SESSION['notif_gagal'] = "Gagal memperbarui data.";
-      }
-      $stmt->close();
-    }
-  } else {
-    $_SESSION['notif_gagal'] = "Form wajib diisi.";
-  }
-
-  header("Location: daftar-adart.php");
-  exit();
-}
+// Ambil data untuk ditampilkan di tabel
+$query = "SELECT * FROM pelaporan";
+$result = $conn->query($query);
+$no = 1;
 
 // Tutup koneksi database
 $conn->close();
 ?>
+
 <!doctype html>
 <html lang="en">
 <?php include '../../components/head.php'; ?>
@@ -85,17 +50,36 @@ $conn->close();
           <!--begin::Row-->
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Kelola Pelaporan AD/ART</h3>
+              <h3 class="mb-0">Kelola Pelaporan Prestasi</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Kelola AD/ART
+                  Kelola Prestasi
                 </li>
               </ol>
             </div>
           </div>
+          <!-- Tampilkan Notifikasi -->
+          <?php if (isset($_SESSION['notif_sukses'])) : ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+              <strong>Sukses!</strong> <?= $_SESSION['notif_sukses']; ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['notif_sukses']); // Hapus session setelah ditampilkan 
+            ?>
+          <?php endif; ?>
+
+          <?php if (isset($_SESSION['notif_gagal'])) : ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Gagal!</strong> <?= $_SESSION['notif_gagal']; ?>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <?php unset($_SESSION['notif_gagal']); // Hapus session setelah ditampilkan 
+            ?>
+          <?php endif; ?>
+          <!--end::notifikasi-->
           <!--end::Row-->
         </div>
         <!--end::Container-->
@@ -108,27 +92,28 @@ $conn->close();
           <!-- Konten Disini -->
           <div class="col-md-12">
             <!--begin::Quick Example-->
-            <div class="card card-primary card-outline mb-4">
-              <!--begin::Header-->
-              <div class="card-header">
-                <div class="card-title"><?= ($id_pelaporan > 0) ? "Edit Data" : "Tambah Data"; ?></div>
-              </div>
-              <!--end::Header-->
-              <!--begin::Form-->
-              <form method="POST" action="">
-                <div class="card-body">
-                  <div class="mb-3">
-                    <label for="input_adart" class="form-label">Link GDrive AR/ART</label>
-                    <input type="url" class="form-control" name="link_adart" id="input_adart" value="<?= htmlspecialchars($link_adart); ?>" required />
-                  </div>
-                </div>
-                <div class="card-footer">
-                  <button type="submit" class="btn btn-primary"><?= ($id_pelaporan > 0) ? "Update" : "Simpan"; ?></button>
-                </div>
-              </form>
-
-              <!--end::Form-->
-            </div>
+            <table id="dataproker" class="table table-striped" style="width:100%">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Link Pelaporan Prestasi</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php foreach ($result as $row): ?>
+                  <tr>
+                    <td><?= $no++ ?></td>
+                    <td><?= htmlspecialchars($row['link_prestasi']); ?></td>
+                    <td>
+                      <a href="/BU-MALANG-2025/adminbu/pages/kelola-pelaporan/kelola-pelaporan-prestasi.php?id=<?= $row['id_pelaporan']; ?>" class="btn btn-warning btn-sm">
+                        Update Link</i>
+                      </a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
             <!--end::Quick Example-->
           </div>
 
@@ -193,7 +178,35 @@ $conn->close();
       }
     });
   </script>
+  <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.bootstrap5.js"></script>
+  <script>
+    new DataTable('#dataproker', {
+      "language": {
+        "emptyTable": "Tidak ada data yang tersedia",
+        "lengthMenu": "Tampilkan _MENU_ data per halaman",
+        "zeroRecords": "Tidak ada data yang cocok ditemukan",
+        "info": "Menampilkan _START_ - _END_ dari _TOTAL_ data",
+        "infoEmpty": "Menampilkan 0 - 0 dari 0 data",
+        "infoFiltered": "(disaring dari _MAX_ total data)",
+        "search": "Cari:",
+      },
+      "paging": true, // Aktifkan pagination otomatis
+      "searching": true, // Aktifkan fitur pencarian
+      "lengthMenu": [5, 10, 25, 50, 100], // Pilihan jumlah data per halaman
+      "pageLength": 10 // Default jumlah data per halaman
+    });
+  </script>
   <!--end::OverlayScrollbars Configure-->
+  <!-- confirm delete -->
+  <script>
+    function confirmDelete() {
+      return confirm('Yakin ingin menghapus data ini?');
+    }
+  </script>
+  <!-- end::confirm delete -->
   <!--end::Script-->
 </body>
 <!--end::Body-->

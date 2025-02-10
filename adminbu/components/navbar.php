@@ -260,27 +260,10 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="pages/kelola-pelaporan/daftar-pelaporan-prestasi.php" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p>
-                                Pelaporan Prestasi
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
+                            <p>Pelaporan Prestasi</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="pages/kelola-aktivitas/kelola-events.php" class="nav-link">
-                                    <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Tambah Data</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/kelola-aktivitas/daftar-events.php" class="nav-link">
-                                    <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Daftar Pengumuman</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
@@ -306,27 +289,10 @@
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="pages/kelola-pelaporan/daftar-pelaporan-alumni.php" class="nav-link">
                             <i class="nav-icon bi bi-circle"></i>
-                            <p>
-                                Alumni
-                                <i class="nav-arrow bi bi-chevron-right"></i>
-                            </p>
+                            <p>Pelaporan Alumni</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="pages/kelola-aktivitas/kelola-publikasi.php" class="nav-link">
-                                    <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Tambah Data</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/kelola-aktivitas/daftar-publikasi.php" class="nav-link">
-                                    <i class="nav-icon bi bi-record-circle-fill"></i>
-                                    <p>Daftar Pengumuman</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                 </ul>
             </li>

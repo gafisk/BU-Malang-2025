@@ -4,7 +4,7 @@ include '../../../connections/conn.php';
 
 // Ambil ID jika ada (untuk edit)
 $id_pelaporan = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$link_adart = "";
+$link_alumni = "";
 
 // Jika ID ada, ambil data dari database untuk diedit
 if ($id_pelaporan > 0) {
@@ -14,20 +14,20 @@ if ($id_pelaporan > 0) {
   $result = $stmt->get_result();
 
   if ($row = $result->fetch_assoc()) {
-    $link_adart = $row['link_adart'];
+    $link_alumni = $row['link_alumni'];
   }
   $stmt->close();
 }
 
 // Proses Simpan / Edit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $link_adart = trim($_POST['link_adart']);
+  $link_alumni = trim($_POST['link_alumni']);
 
-  if (!empty($link_adart)) {
+  if (!empty($link_alumni)) {
     if ($id_pelaporan > 0) {
       // Mode Edit
-      $stmt = $conn->prepare("UPDATE pelaporan SET link_adart = ?  WHERE id_pelaporan = ?");
-      $stmt->bind_param("si", $link_adart, $id_pelaporan);
+      $stmt = $conn->prepare("UPDATE pelaporan SET link_alumni = ?  WHERE id_pelaporan = ?");
+      $stmt->bind_param("si", $link_alumni, $id_pelaporan);
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
       } else {
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['notif_gagal'] = "Form wajib diisi.";
   }
 
-  header("Location: daftar-adart.php");
+  header("Location: daftar-pelaporan-alumni.php");
   exit();
 }
 
@@ -85,13 +85,13 @@ $conn->close();
           <!--begin::Row-->
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Kelola Pelaporan AD/ART</h3>
+              <h3 class="mb-0">Kelola Pelaporan Alumni</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Kelola AD/ART
+                  Kelola Alumni
                 </li>
               </ol>
             </div>
@@ -118,8 +118,8 @@ $conn->close();
               <form method="POST" action="">
                 <div class="card-body">
                   <div class="mb-3">
-                    <label for="input_adart" class="form-label">Link GDrive AR/ART</label>
-                    <input type="url" class="form-control" name="link_adart" id="input_adart" value="<?= htmlspecialchars($link_adart); ?>" required />
+                    <label for="input_form" class="form-label">Link GForm Alumni</label>
+                    <input type="url" class="form-control" name="link_alumni" id="input_form" value="<?= htmlspecialchars($link_alumni); ?>" required />
                   </div>
                 </div>
                 <div class="card-footer">
