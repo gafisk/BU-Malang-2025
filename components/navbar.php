@@ -11,7 +11,7 @@
         <li><a href="#sejarah">Sejarah</a></li>
         <li><a href="#">Struktur Organisasi</a></li>
         <li><a href="#lambang">Makna dan Lambang</a></li>
-        <li><a href="#">Visi dan Misi</a></li>
+        <li><a href="#visimisi">Visi dan Misi</a></li>
         <li><a href="pages/profil/profil/profil-pengurus.php">Profil Pengurus</a></li>
         <li><a href="pages/profil/proker/program-kerja.php">Program Kerja</a></li>
         <li><a href="pages/profil/lapkeu/laporan-keuangan.php">Laporan Keuangan</a></li>

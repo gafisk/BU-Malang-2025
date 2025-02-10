@@ -91,7 +91,7 @@ $conn->close();
 
     </section><!-- /Hero Section -->
 
-    <!-- Pricing Section -->
+    <!-- Sejarah Section -->
     <section id="sejarah" class="pricing section">
 
       <!-- Section Title -->
@@ -131,7 +131,7 @@ $conn->close();
 
     </section><!-- /Pricing Section -->
 
-    <!-- About Section -->
+    <!-- Lambang Section -->
     <section id="lambang" class="lambang section light-background">
 
       <!-- Section Title -->
@@ -205,6 +205,39 @@ $conn->close();
       </div>
 
     </section><!-- /About Section -->
+
+    <!-- Visi & Misi Section -->
+    <section id="visimisi" class="pricing section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Visi & Misi</h2>
+        <p><span>Visi & Misi</span> <span class="description-title">Beasiswa Unggulan Malang</span></p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-3">
+
+          <div class="col-xl-12 col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="pricing-item">
+              <p class="fs-4" style="text-align: justify;">
+                Terwujudnya Forum Awardee Beasiswa Unggulan Regional Malang Raya sebagai wadah pemberdayaan dan pengembangan potensi awardee yang informatif dan kontributif terhadap negeri.
+              </p>
+
+              <ol class="fs4" style="text-align: justify;">
+                <li>Menguatkan sistem organisasi forum dan potensi awardee dengan memberikan dukungan pelatihan untuk mewujudkan awardee yang memiliki jiwa kepemimpinan dan unggul sesuai disiplin ilmunya.</li>
+                <li>Mensinergikan seluruh potensi awardee untuk memberikan dukungan mentorship dan sosialisasi Beasiswa Unggulan melalui program kerja forum yang berkelanjutan.</li>
+                <li>Memberikan informasi secara aktif kepada masyarakat luas dalam bidang pendidikan.</li>
+                <li>Membangun hubungan yang harmonis sesama awardee dan alumni.</li>
+              </ol>
+            </div>
+          </div><!-- End Pricing Item -->
+        </div>
+
+      </div>
+
+    </section><!-- /Pricing Section -->
 
     <!-- Stats Section -->
     <section id="stats" class="stats section">
