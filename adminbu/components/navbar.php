@@ -243,6 +243,88 @@
                 </ul>
             </li>
 
+            <!-- Bagian Kelola Pelaporan -->
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon bi bi-megaphone-fill"></i>
+                    <p>
+                        Kelola Pelaporan
+                        <i class="nav-arrow bi bi-chevron-right"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>
+                                Pelaporan Prestasi
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-aktivitas/kelola-events.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-aktivitas/daftar-events.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Pengumuman</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>
+                                Pelaporan Awardee
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-pelaporan/kelola-pelaporan-awardee.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-pelaporan/daftar-pelaporan-awardee.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Pengumuman</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon bi bi-circle"></i>
+                            <p>
+                                Alumni
+                                <i class="nav-arrow bi bi-chevron-right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/kelola-aktivitas/kelola-publikasi.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Tambah Data</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/kelola-aktivitas/daftar-publikasi.php" class="nav-link">
+                                    <i class="nav-icon bi bi-record-circle-fill"></i>
+                                    <p>Daftar Pengumuman</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+
             <!-- Bagian Kelola Stats -->
             <li class="nav-item">
                 <a href="#" class="nav-link">

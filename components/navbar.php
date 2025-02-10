@@ -30,7 +30,7 @@
     <li class="dropdown"><a href="#"><span>Pelaporan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
       <ul>
         <li><a href="#">Pelaporan Prestasi</a></li>
-        <li><a href="#">Pelaporan Awardee Baru</a></li>
+        <li><a href="pages/pelaporan/pel-awardee/pelaporan-awardee.php">Pelaporan Awardee Baru</a></li>
         <li><a href="#">Pelaporan Alumni</a></li>
       </ul>
     </li>
