@@ -4,54 +4,36 @@ include '../../../connections/conn.php';
 
 // Periksa apakah 'id' ada di URL
 if (isset($_GET['id'])) {
-    $id_event = $_GET['id'];
+    $id_lapkeu = $_GET['id'];
 
     // Validasi ID harus berupa angka
-    if (!filter_var($id_event, FILTER_VALIDATE_INT)) {
+    if (!filter_var($id_lapkeu, FILTER_VALIDATE_INT)) {
         die("ID tidak valid!");
     }
 
     // Query untuk mengambil data berita berdasarkan id_proker
-    $stmt = $conn->prepare("SELECT * FROM event WHERE id_event = ?");
-    $stmt->bind_param("i", $id_event);
+    $stmt = $conn->prepare("SELECT nama_laporan, isi_berita, waktu, judul_link, link FROM lap_keuangan WHERE id_lap_keuangan = ?");
+    $stmt->bind_param("i", $id_lapkeu);
     $stmt->execute();
     $result = $stmt->get_result();
 
     // Periksa apakah data ditemukan
     if ($row = $result->fetch_assoc()) {
-        $nama_event = htmlspecialchars($row['nama_event']);
-        $pemateri = htmlspecialchars($row['pemateri']);
-        $lokasi = htmlspecialchars($row['lokasi']);
-        $link_pendaftaran = htmlspecialchars($row['link_pendaftaran']);
-        $link_meet = htmlspecialchars($row['link_meet']);
-        $isi_berita = htmlspecialchars($row['isi_berita']);
-        $tanggal_event = date('l, d F Y - h:i A', strtotime($row['tanggal_event'])); // Format tanggal
+        $nama_laporan = htmlspecialchars($row['nama_laporan']);
+        $isi_berita = nl2br(htmlspecialchars($row['isi_berita'])); // Menjaga format paragraf
         $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
-        $narahubung = htmlspecialchars($row['narahubung']);
+        $judul_link = htmlspecialchars($row['judul_link']);
+        $link = htmlspecialchars($row['link']);
     } else {
-        echo "<script>alert('Berita tidak ditemukan!'); window.location='berita.php';</script>";
+        echo "<script>alert('Berita tidak ditemukan!'); window.location='pages-laporan-keuangan.php';</script>";
         exit;
     }
 
     $stmt->close();
 } else {
-    echo "<script>alert('ID tidak ditemukan!'); window.location='berita.php';</script>";
+    echo "<script>alert('ID tidak ditemukan!'); window.location='pages-laporan-keuangan.php';</script>";
     exit;
 }
-
-function formatNomorWA($nomor)
-{
-    // Hapus semua karakter selain angka
-    $nomor = preg_replace('/[^0-9]/', '', $nomor);
-
-    // Jika nomor diawali dengan 0, ubah menjadi 62
-    if (substr($nomor, 0, 1) === '0') {
-        $nomor = '62' . substr($nomor, 1);
-    }
-
-    return $nomor;
-}
-
 ?>
 
 
@@ -90,39 +72,25 @@ function formatNomorWA($nomor)
     </header>
 
     <main class="main">
+        <!-- HTML untuk Menampilkan Detail Berita -->
         <section id="contents" class="contents section">
             <div class="container mt-4">
-                <h1 class="mb-3"><?= $nama_event; ?></h1>
+                <h1 class="mb-3"><?= $nama_laporan; ?></h1>
                 <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
                 <div class="card p-4 shadow-sm">
-                    <p>🌟 Halo, Sobat Event! 🌟 </p>
-                    <p>
+                    <p><?= $isi_berita; ?></p>
 
-                        Apa kabar? Semoga kalian semua dalam keadaan baik dan penuh semangat! Kami punya kabar gembira nih—sebuah acara menarik yang sayang banget kalau dilewatkan! dengan senang hati mengundang kalian untuk ikut serta dalam "<strong><?= $nama_event; ?></strong>" 🎉.
-                        <br>
-                        <br>
-                        Acara ini akan berlangsung pada <strong><?= $tanggal_event ?></strong>, dan pastinya bakal jadi momen yang seru dan bermanfaat. Jadi, siapkan diri kalian untuk pengalaman yang menginspirasi dan penuh wawasan!
-                        <br>
-                        <br>
-                        <i class="bi bi-info-circle"></i> <strong>Detail Event:</strong> <br>
-                        <i class="bi bi-calendar-event"></i> <strong>Tanggal & Waktu:</strong> <?= $tanggal_event ?> <br>
-                        <i class="bi bi-geo-alt"></i> <strong>Lokasi:</strong> <?= $lokasi ?> <br>
-                        <i class="bi bi-person-badge"></i> <strong>Pemateri:</strong> <?= !empty($pemateri) ? $pemateri : 'Akan Diumumkan'; ?> <br>
-                        <i class="bi bi-box-arrow-in-right"></i> <strong>Link Pendaftaran:</strong> <?= ($link_pendaftaran == '-') ? '-' : '<a href="' . htmlspecialchars($link_pendaftaran) . '" target="_blank">Klik di sini untuk daftar</a>'; ?>
-                        <br>
-                        <i class="bi bi-camera-video"></i> <strong>Link Meet:</strong> <?= ($link_meet == '-') ? '-' : '<a href="' . htmlspecialchars($link_meet) . '" target="_blank">Gabung di sini</a>'; ?>
-                        <br>
-                        <i class="bi bi-chat-square-text"></i> <strong>Topik Pembahasan:</strong> <?= !empty($isi_berita) ? $isi_berita : '-'; ?> <br>
-                        <br>
-                        <br>
-                        Kami berharap acara ini bisa menjadi wadah bagi kita semua untuk bertemu, berdiskusi, dan belajar bersama. Baik kamu yang ingin menambah wawasan, mencari inspirasi baru, atau sekadar ingin menikmati suasana acara yang menyenangkan ini adalah tempat yang tepat!
+                    <!-- Tambahan Link -->
+                    <?php if (!empty($link)) : ?>
+                        <p class="mt-3">
+                            Baca berita terkait:
+                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
+                                <?= $judul_link ?: "Klik di sini"; ?>
+                            </a>
+                        </p>
+                    <?php endif; ?>
 
-                        <br>
-                        <br>
-                        📞 Narahubung:
-                        <?= ($narahubung == '-' || empty($narahubung)) ? '-' : '<a href="https://wa.me/' . formatNomorWA($narahubung) . '" target="_blank">Hubungi via WhatsApp</a>'; ?>
-                    </p>
                     <!-- Tombol Kembali -->
                     <a href="javascript:history.back()" class="btn btn-secondary mt-3">
                         <i class="bi bi-arrow-left"></i> Kembali
@@ -130,8 +98,6 @@ function formatNomorWA($nomor)
                 </div>
             </div>
         </section>
-
-
     </main>
 
     <footer id="footer" class="footer">

@@ -1,17 +1,19 @@
 <?php
+
+include '../../../connections/conn.php';
 // Data konten
-$contents = [
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-    ["title" => "Senin, 29 Juli 2001", "items" => "Berita Terbaruuu"],
-];
+$contents = [];
+
+$query = "SELECT * FROM lap_keuangan ORDER BY waktu DESC";
+$result = $conn->query($query);
+
+while ($row = $result->fetch_assoc()) {
+    $contents[] = [
+        "id_lap_keuangan" => $row['id_lap_keuangan'],
+        "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
+        "nama_laporan" => $row['nama_laporan']
+    ];
+}
 
 // Pagination
 $perPage = 6; // Konten per halaman
@@ -91,12 +93,12 @@ $displayContents = array_slice($contents, $start, $perPage);
                         <?php foreach ($displayContents as $content): ?>
                             <div class="col-xl-6 col-lg-12" data-aos="fade-up">
                                 <div class="contents-item">
-                                    <h3><?= $content['title']; ?></h3>
+                                    <h3><?= $content['waktu']; ?></h3>
                                     <ul>
-                                        <h5><?= $content['items']; ?></h5>
+                                        <h5><?= $content['nama_laporan']; ?></h5>
                                     </ul>
                                     <div class="btn-wrap">
-                                        <a href="#" class="btn-buy">Check it</a>
+                                        <a href="pages/profil/lapkeu/pages-laporan-keuangan.php?id=<?= $content['id_lap_keuangan']; ?>" class="btn-buy">Check it</a>
                                     </div>
                                 </div>
                             </div>

@@ -97,13 +97,13 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
+                                <a href="pages/kelola-profil/kelola-laporan-keuangan.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
                                     <p>Tambah Data</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/kelola-profil/daftar-proker.php" class="nav-link">
+                                <a href="pages/kelola-profil/daftar-laporan-keuangan.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
                                     <p>Daftar Lapkeu</p>
                                 </a>
@@ -120,13 +120,13 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="pages/kelola-profil/kelola-proker.php" class="nav-link">
+                                <a href="pages/kelola-profil/kelola-laporan-pertanggungjawaban.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
                                     <p>Tambah Data</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/kelola-profil/daftar-proker.php" class="nav-link">
+                                <a href="pages/kelola-profil/daftar-laporan-pertanggungjawaban.php" class="nav-link">
                                     <i class="nav-icon bi bi-record-circle-fill"></i>
                                     <p>Daftar Pertanggungjawaban</p>
                                 </a>
