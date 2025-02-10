@@ -95,38 +95,48 @@ function formatNomorWA($nomor)
                 <h1 class="mb-3"><?= $nama_event; ?></h1>
                 <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
-                <div class="card p-4 shadow-sm">
-                    <p>🌟 Halo, Sobat Event! 🌟 </p>
-                    <p>
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-primary text-white text-center py-4">
+                        <h3 class="fw-bold"><i class="bi bi-megaphone-fill"></i> Pengumuman Event</h3>
+                        <p class="mb-0">Jangan sampai ketinggalan acara seru ini! 🎉</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="fw-bold text-primary">🌟 Halo, Sobat Event! 🌟</p>
+                        <p>
+                            Apa kabar? Semoga kalian semua dalam keadaan baik dan penuh semangat! Kami punya kabar gembira nih—sebuah acara menarik yang sayang banget kalau dilewatkan! Dengan senang hati, kami mengundang kalian untuk ikut serta dalam event <strong><?= $nama_event; ?></strong> 🎉.
+                        </p>
 
-                        Apa kabar? Semoga kalian semua dalam keadaan baik dan penuh semangat! Kami punya kabar gembira nih—sebuah acara menarik yang sayang banget kalau dilewatkan! dengan senang hati mengundang kalian untuk ikut serta dalam "<strong><?= $nama_event; ?></strong>" 🎉.
-                        <br>
-                        <br>
-                        Acara ini akan berlangsung pada <strong><?= $tanggal_event ?></strong>, dan pastinya bakal jadi momen yang seru dan bermanfaat. Jadi, siapkan diri kalian untuk pengalaman yang menginspirasi dan penuh wawasan!
-                        <br>
-                        <br>
-                        <i class="bi bi-info-circle"></i> <strong>Detail Event:</strong> <br>
-                        <i class="bi bi-calendar-event"></i> <strong>Tanggal & Waktu:</strong> <?= $tanggal_event ?> <br>
-                        <i class="bi bi-geo-alt"></i> <strong>Lokasi:</strong> <?= $lokasi ?> <br>
-                        <i class="bi bi-person-badge"></i> <strong>Pemateri:</strong> <?= !empty($pemateri) ? $pemateri : 'Akan Diumumkan'; ?> <br>
-                        <i class="bi bi-box-arrow-in-right"></i> <strong>Link Pendaftaran:</strong> <?= ($link_pendaftaran == '-') ? '-' : '<a href="' . htmlspecialchars($link_pendaftaran) . '" target="_blank">Klik di sini untuk daftar</a>'; ?>
-                        <br>
-                        <i class="bi bi-camera-video"></i> <strong>Link Meet:</strong> <?= ($link_meet == '-') ? '-' : '<a href="' . htmlspecialchars($link_meet) . '" target="_blank">Gabung di sini</a>'; ?>
-                        <br>
-                        <i class="bi bi-chat-square-text"></i> <strong>Topik Pembahasan:</strong> <?= !empty($isi_berita) ? $isi_berita : '-'; ?> <br>
-                        <br>
-                        <br>
-                        Kami berharap acara ini bisa menjadi wadah bagi kita semua untuk bertemu, berdiskusi, dan belajar bersama. Baik kamu yang ingin menambah wawasan, mencari inspirasi baru, atau sekadar ingin menikmati suasana acara yang menyenangkan ini adalah tempat yang tepat!
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><i class="bi bi-calendar-event text-success"></i> <strong>Tanggal & Waktu:</strong> <?= $tanggal_event; ?></p>
+                                <p><i class="bi bi-geo-alt text-danger"></i> <strong>Lokasi:</strong> <?= $lokasi; ?></p>
+                                <p><i class="bi bi-person-badge text-info"></i> <strong>Pemateri:</strong> <?= !empty($pemateri) ? $pemateri : 'Akan Diumumkan'; ?></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><i class="bi bi-box-arrow-in-right text-warning"></i><strong>Link Pendaftaran:</strong>
+                                    <?= ($link_pendaftaran == '-') ? '-' : '<a href="' . htmlspecialchars($link_pendaftaran) . '" target="_blank" class="text-decoration-none">Klik di sini untuk daftar</a>'; ?>
+                                </p>
+                                <p><i class="bi bi-camera-video text-primary"></i> <strong>Link Meet:</strong>
+                                    <?= ($link_meet == '-') ? '-' : '<a href="' . htmlspecialchars($link_meet) . '" target="_blank" class="text-decoration-none">Gabung di sini</a>'; ?>
+                                </p>
+                                <p><i class="bi bi-chat-square-text text-secondary"></i> <strong>Catatan Tambahan:</strong> <?= !empty($isi_berita) ? $isi_berita : '-'; ?></p>
+                            </div>
+                        </div>
 
-                        <br>
-                        <br>
-                        📞 Narahubung:
-                        <?= ($narahubung == '-' || empty($narahubung)) ? '-' : '<a href="https://wa.me/' . formatNomorWA($narahubung) . '" target="_blank">Hubungi via WhatsApp</a>'; ?>
-                    </p>
-                    <!-- Tombol Kembali -->
-                    <a href="javascript:history.back()" class="btn btn-secondary mt-3">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </a>
+                        <div class="alert alert-info mt-3">
+                            <i class="bi bi-lightbulb"></i> Kami berharap acara ini bisa menjadi wadah bagi kita semua untuk bertemu, berdiskusi, dan belajar bersama. Baik kamu yang ingin menambah wawasan, mencari inspirasi baru, atau sekadar ingin menikmati suasana acara yang menyenangkan, ini adalah tempat yang tepat!
+                        </div>
+
+                        <p><i class="bi bi-telephone-fill text-success"></i> <strong>Narahubung:</strong>
+                            <?= ($narahubung == '-' || empty($narahubung)) ? '-' : '<a href="https://wa.me/' . formatNomorWA($narahubung) . '" target="_blank" class="text-decoration-none">Hubungi via WhatsApp</a>'; ?>
+                        </p>
+
+                        <div class="d-flex justify-content-between">
+                            <a href="javascript:history.back()" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Kembali
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
