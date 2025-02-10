@@ -1,38 +1,19 @@
 <?php
-include '../../../connections/conn.php';
-// Pastikan koneksi database sudah ada di atas
+include '../../connections/conn.php';
+// Data konten
+$query = "SELECT link_adart FROM pelaporan LIMIT 1"; // Batasi hanya satu baris
+$result = $conn->query($query);
 
-// Periksa apakah 'id' ada di URL
-if (isset($_GET['id'])) {
-    $id_proker = $_GET['id'];
-
-    // Validasi ID harus berupa angka
-    if (!filter_var($id_proker, FILTER_VALIDATE_INT)) {
-        die("ID tidak valid!");
-    }
-
-    // Query untuk mengambil data berita berdasarkan id_proker
-    $stmt = $conn->prepare("SELECT * FROM proker WHERE id_proker = ?");
-    $stmt->bind_param("i", $id_proker);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    // Periksa apakah data ditemukan
-    if ($row = $result->fetch_assoc()) {
-        $kabinet = htmlspecialchars($row['kabinet']);
-        $waktu = date('l, d F Y', strtotime($row['waktu']));
-        $tahun = htmlspecialchars($row['tahun']);
-        $link = htmlspecialchars($row['link']);
-    } else {
-        echo "<script>alert('Berita tidak ditemukan!'); window.location='program-kerja.php';</script>";
-        exit;
-    }
-
-    $stmt->close();
-} else {
-    echo "<script>alert('ID tidak ditemukan!'); window.location='program-kerja.php';</script>";
-    exit;
+$contents = [];
+if ($result && $row = $result->fetch_assoc()) {
+    $contents = [
+        "link_adart" => $row['link_adart'],
+    ];
 }
+$drive_url = $contents['link_adart'];
+preg_match('/\/d\/([^\/]+)/', $drive_url, $match);
+$file_id = $match[1] ?? '';
+
 
 // footer
 $footer = [];
@@ -50,13 +31,14 @@ $footer = [
 ];
 
 $conn->close();
+
 ?>
 
 
 <!DOCTYPE html>
 <html lang="en">
 
-<?php include '../../../components/head.php' ?>
+<?php include '../../components/head.php' ?>
 
 <body class="index-page">
 
@@ -79,7 +61,7 @@ $conn->close();
         <div class="branding d-flex align-items-cente">
 
             <div class="container position-relative d-flex align-items-center justify-content-between">
-                <?php include '../../../components/navbar.php' ?>
+                <?php include '../../components/navbar.php' ?>
             </div>
 
         </div>
@@ -87,80 +69,62 @@ $conn->close();
     </header>
 
     <main class="main">
-        <!-- HTML untuk Menampilkan Detail Berita -->
-        <section id="contents" class="contents section">
-            <div class="container mt-4">
-                <h2 class="mb-3">Program Kerja Kabinet <?= $kabinet; ?> tahun <?= $tahun ?></h2>
-                <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
-                <div class="card p-4 shadow-sm">
-                    <div class="card-body">
-                        <h4 class="card-title fw-bold text-primary">
-                            <i class="bi bi-megaphone-fill"></i> Proker Forum BU Malang Kabinet <?= $kabinet ?>
-                        </h4>
-                        <p class="card-text text-muted">
-                            Sebagai bagian dari komitmen kami dalam membangun komunitas yang lebih solid dan berdampak,
-                            <strong>Forum Beasiswa Unggulan Malang Kabinet <?= $kabinet ?> Tahun <?= $tahun ?></strong> dengan bangga mempersembahkan program kerja yang telah kami rancang.
-                            Program ini dirancang untuk memberikan kontribusi nyata dalam pengembangan akademik, sosial, dan profesional para awardee.
-                        </p>
+        <!-- Hero Section -->
+        <section id="hero" class="hero1 section light-background">
 
-                        <p class="card-text text-muted">
-                            Kami percaya bahwa kolaborasi dan partisipasi aktif dari seluruh awardee akan membawa perubahan yang lebih besar.
-                            Oleh karena itu, kami mengundang Anda untuk menjelajahi dan memahami setiap inisiatif yang telah kami jalankan.
-                        </p>
-
-                        <div class="alert alert-info d-flex align-items-center" role="alert">
-                            <i class="bi bi-lightbulb-fill me-2"></i>
-                            Program ini mencakup kegiatan pengembangan keterampilan, pelatihan, serta kesempatan berjejaring dengan calon awardee, awardee, alumni dan profesional di berbagai bidang.
-                        </div>
-
-                        <!-- Tambahan Link -->
-                        <?php if (!empty($link)) : ?>
-                            <p class="mt-4">
-                            <div class="card border-0 shadow-sm p-3 bg-light">
-                                <div class="d-flex align-items-center">
-                                    <div class="me-3">
-                                        <i class="bi bi-file-earmark-text-fill text-primary fs-3"></i>
-                                    </div>
-                                    <div>
-                                        <span class="fw-bold text-dark">Dokumen Program Kerja:</span>
-                                        <?php if (strpos($link, 'drive.google.com') !== false) : ?>
-                                            <!-- Jika link Google Drive (PDF) -->
-                                            <a href="#" class="d-block text-primary fw-bold text-decoration-none"
-                                                data-bs-toggle="modal" data-bs-target="#pdfModal">
-                                                Lihat Program Kerja<i class="bi bi-eye-fill"></i>
-                                            </a>
-                                        <?php else : ?>
-                                            <!-- Jika bukan Google Drive (buka tab baru) -->
-                                            <a href="<?= $link; ?>" target="_blank" class="d-block text-primary fw-bold text-decoration-none">
-                                                Lihat Program Kerja<i class="bi bi-box-arrow-up-right"></i>
-                                            </a>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            </p>
-                        <?php endif; ?>
+            <div class="container">
+                <div class="row gy-4">
+                    <div class="col-lg-8 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
+                        <h1>Anggaran Dasar & Anggaran Rumah Tangga</h1>
+                        <p>Insan Cerdas dan Kompetitif</p>
                     </div>
-                    <!-- Tombol Kembali -->
-                    <a href="javascript:history.back()" class="btn btn-secondary mt-3">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </a>
                 </div>
             </div>
-        </section>
 
-        <!-- Modal PDF -->
-        <?php if (!empty($link) && strpos($link, 'drive.google.com') !== false) : ?>
-            <?php
-            preg_match('/\/d\/([^\/]+)/', $link, $match);
-            $file_id = $match[1] ?? '';
-            ?>
+        </section><!-- /Hero Section -->
+
+        <!-- contents Section -->
+        <section id="contents" class="contents section">
+            <div class="container section-title" data-aos="fade-up">
+                <p><span>AD/ART</span> <span class="description-title">BU Malang</span></p>
+            </div>
+
+            <div class="container text-center py-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold">
+                            <i class="bi bi-file-earmark-text-fill text-primary"></i> Kenali dan Pahami AD/ART Forum BU Malang!
+                        </h4>
+                        <p class="card-text text-muted">
+                            Anggaran Dasar dan Anggaran Rumah Tangga (AD/ART) adalah pedoman utama dalam menjalankan organisasi <strong>Forum Beasiswa Unggulan Malang</strong>.
+                            Dokumen ini mengatur landasan, struktur organisasi, serta hak dan kewajiban anggota dalam membangun komunitas yang lebih solid,
+                            transparan, dan berkelanjutan.
+                        </p>
+                        <p class="card-text text-muted">
+                            Dengan memahami AD/ART, setiap anggota dapat lebih aktif berkontribusi dan memastikan bahwa kegiatan organisasi berjalan sesuai dengan visi dan misi yang telah ditetapkan.
+                            Mari bersama-sama menjaga komitmen dan profesionalisme dalam setiap langkah yang kita ambil.
+                        </p>
+                        <p class="card-text fw-bold">
+                            Akses dan pelajari AD/ART kami dengan mengklik tombol di bawah ini.
+                        </p>
+
+                        <!-- Tombol untuk membuka modal -->
+                        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#pdfModal">
+                            <i class="bi bi-file-earmark-pdf"></i> Baca AD/ART Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal AD/ART -->
             <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="pdfModalLabel">Program Kerja Kabinet <?= $kabinet ?></h5>
+                            <h5 class="modal-title fw-bold" id="pdfModalLabel">
+                                <i class="bi bi-file-earmark-pdf-fill text-danger"></i> AD/ART Forum BU Malang
+                            </h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -177,7 +141,9 @@ $conn->close();
                     </div>
                 </div>
             </div>
-        <?php endif; ?>
+
+
+        </section><!-- /contents Section -->
 
     </main>
 
@@ -194,7 +160,7 @@ $conn->close();
 
         <div class="container footer-top">
 
-            <?php include '../../../components/footer.php' ?>
+            <?php include '../../components/footer.php' ?>
         </div>
 
         <div class="container copyright text-center mt-4">

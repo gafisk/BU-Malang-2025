@@ -28,6 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_PO
 $query = "SELECT * FROM proker ORDER BY waktu DESC";
 $result = $conn->query($query);
 $no = 1;
+
+$conn->close();
 ?>
 
 <!doctype html>
@@ -116,9 +118,8 @@ $no = 1;
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Judul Proker</th>
-                  <th>Isi Berita</th>
-                  <th>Judul Link</th>
+                  <th>Nama Kabinet</th>
+                  <th>Tahun</th>
                   <th>Link</th>
                   <th>Waktu</th>
                   <th>Aksi</th>
@@ -128,14 +129,8 @@ $no = 1;
                 <?php foreach ($result as $row): ?>
                   <tr>
                     <td><?= $no++ ?></td>
-                    <td><?= htmlspecialchars($row['judul_proker']); ?></td>
-                    <td>
-                      <?php
-                      $words = explode(' ', $row['isi_berita']);
-                      echo htmlspecialchars(implode(' ', array_slice($words, 0, 10))) . (count($words) > 10 ? '...' : '');
-                      ?>
-                    </td>
-                    <td><?= htmlspecialchars($row['judul_link']); ?></td>
+                    <td><?= htmlspecialchars($row['kabinet']); ?></td>
+                    <td><?= htmlspecialchars($row['tahun']); ?></td>
                     <td>
                       <a href="<?= htmlspecialchars($row['link']); ?>" target="_blank">
                         <?= htmlspecialchars($row['link']); ?>

@@ -4,22 +4,20 @@ include '../../../connections/conn.php';
 
 // Ambil ID jika ada (untuk edit)
 $id_proker = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$judul_proker = "";
-$isi_berita = "";
-$judul_link = "";
+$kabinet = "";
+$tahun = "";
 $link = "";
 
 // Jika ID ada, ambil data dari database untuk diedit
 if ($id_proker > 0) {
-  $stmt = $conn->prepare("SELECT judul_proker, isi_berita, judul_link, link FROM proker WHERE id_proker = ?");
+  $stmt = $conn->prepare("SELECT * FROM proker WHERE id_proker = ?");
   $stmt->bind_param("i", $id_proker);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($row = $result->fetch_assoc()) {
-    $judul_proker = $row['judul_proker'];
-    $isi_berita = $row['isi_berita'];
-    $judul_link = $row['judul_link'];
+    $kabinet = $row['kabinet'];
+    $tahun = $row['tahun'];
     $link = $row['link'];
   }
   $stmt->close();
@@ -27,16 +25,15 @@ if ($id_proker > 0) {
 
 // Proses Simpan / Edit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $judul_proker = trim($_POST['judul_proker']);
-  $isi_berita = trim($_POST['isi_berita']);
-  $judul_link = trim($_POST['judul_link']);
+  $kabinet = trim($_POST['kabinet']);
+  $tahun = trim($_POST['tahun']);
   $link = trim($_POST['link']);
 
-  if (!empty($judul_proker) && !empty($isi_berita)) {
+  if (!empty($kabinet) && !empty($tahun) && !empty($link)) {
     if ($id_proker > 0) {
       // Mode Edit
-      $stmt = $conn->prepare("UPDATE proker SET judul_proker = ?, isi_berita = ?, judul_link = ?, link = ?, waktu = NOW() WHERE id_proker = ?");
-      $stmt->bind_param("ssssi", $judul_proker, $isi_berita, $judul_link, $link, $id_proker);
+      $stmt = $conn->prepare("UPDATE proker SET kabinet = ?, tahun = ?, link = ?, waktu = NOW() WHERE id_proker = ?");
+      $stmt->bind_param("sssi", $kabinet, $tahun, $link, $id_proker);
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
       } else {
@@ -45,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt->close();
     } else {
       // Mode Tambah Baru
-      $stmt = $conn->prepare("INSERT INTO proker (waktu, judul_proker, isi_berita, judul_link, link) VALUES (NOW(), ?, ?, ?, ?)");
-      $stmt->bind_param("ssss", $judul_proker, $isi_berita, $judul_link, $link);
+      $stmt = $conn->prepare("INSERT INTO proker (waktu, kabinet, tahun, link) VALUES (NOW(), ?, ?, ?)");
+      $stmt->bind_param("sss", $kabinet, $tahun, $link);
 
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
@@ -56,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt->close();
     }
   } else {
-    $_SESSION['notif_gagal'] = "Judul Program Kerja dan Isi Berita wajib diisi.";
+    $_SESSION['notif_gagal'] = "Seluruh Form wajib diisi.";
   }
 
   header("Location: daftar-proker.php");
@@ -138,24 +135,18 @@ $conn->close();
               <form method="POST" action="">
                 <div class="card-body">
                   <div class="mb-3">
-                    <label for="inputjudul" class="form-label">Judul Program Kerja</label>
-                    <input type="text" class="form-control" name="judul_proker" id="inputjudul" value="<?= htmlspecialchars($judul_proker); ?>" />
+                    <label for="inputjudul" class="form-label">Nama Kabinet</label>
+                    <input type="text" class="form-control" name="kabinet" id="inputjudul" value="<?= htmlspecialchars($kabinet); ?>" required />
                   </div>
+
                   <div class="mb-3">
-                    <label for="inputberita" class="form-label">Isi Berita</label>
-                    <textarea class="form-control" name="isi_berita" id="inputberita"><?= htmlspecialchars($isi_berita); ?></textarea>
+                    <label for="input_tahun" class="form-label">Tahun</label>
+                    <input type="number" class="form-control" name="tahun" id="input_tahun" value="<?= htmlspecialchars($tahun); ?>" required />
                   </div>
+
                   <div class="mb-3">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <label for="judullink" class="form-label">Judul Link</label>
-                        <input type="text" class="form-control" name="judul_link" id="judullink" value="<?= htmlspecialchars($judul_link); ?>" />
-                      </div>
-                      <div class="col-md-6">
-                        <label for="linkdrive" class="form-label">Link Google Drive</label>
-                        <input type="text" class="form-control" name="link" id="linkdrive" value="<?= htmlspecialchars($link); ?>" />
-                      </div>
-                    </div>
+                    <label for="input_link" class="form-label">Link Gdrive PDF</label>
+                    <input type="url" class="form-control" name="link" id="input_link" value="<?= htmlspecialchars($link); ?>" required />
                   </div>
                 </div>
                 <div class="card-footer">

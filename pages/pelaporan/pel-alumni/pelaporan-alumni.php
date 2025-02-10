@@ -1,34 +1,16 @@
 <?php
-
 include '../../../connections/conn.php';
 // Data konten
-$contents = [];
-
-$query = "SELECT id_proker, waktu, kabinet, tahun FROM proker ORDER BY waktu DESC";
+$query = "SELECT link_alumni FROM pelaporan LIMIT 1"; // Batasi hanya satu baris
 $result = $conn->query($query);
 
-while ($row = $result->fetch_assoc()) {
-    $contents[] = [
-        "id_proker" => $row['id_proker'],
-        "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
-        "kabinet" => $row['kabinet'],
-        "tahun" => $row['tahun']
+$contents = [];
+if ($result && $row = $result->fetch_assoc()) {
+    $contents = [
+        "link_alumni" => $row['link_alumni'],
     ];
 }
 
-// Pagination
-$perPage = 6; // Konten per halaman
-$total = count($contents); // Total konten
-$totalPages = ceil($total / $perPage); // Total halaman
-
-// Halaman aktif
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$page = max($page, 1);
-$page = min($page, $totalPages);
-
-// Konten yang ditampilkan
-$start = ($page - 1) * $perPage;
-$displayContents = array_slice($contents, $start, $perPage);
 
 // footer
 $footer = [];
@@ -45,7 +27,21 @@ $footer = [
     "pengembang_bu" => $row['pengembang_bu'],
 ];
 
+function formatNomorWA($nomor)
+{
+    // Hapus semua karakter selain angka
+    $nomor = preg_replace('/[^0-9]/', '', $nomor);
+
+    // Jika nomor diawali dengan 0, ubah menjadi 62
+    if (substr($nomor, 0, 1) === '0') {
+        $nomor = '62' . substr($nomor, 1);
+    }
+
+    return $nomor;
+}
+
 $conn->close();
+
 ?>
 
 
@@ -90,7 +86,7 @@ $conn->close();
             <div class="container">
                 <div class="row gy-4">
                     <div class="col-lg-8 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-                        <h1>Program Kerja</h1>
+                        <h1>Pelaporan Alumni</h1>
                         <p>Insan Cerdas dan Kompetitif</p>
                     </div>
                 </div>
@@ -101,56 +97,38 @@ $conn->close();
         <!-- contents Section -->
         <section id="contents" class="contents section">
             <div class="container section-title" data-aos="fade-up">
-                <p><span>Cek Program Kerja</span> <span class="description-title">BU Malang</span></p>
+                <p><span>Pelaporan Alumni</span> <span class="description-title">BU Malang</span></p>
             </div>
 
-            <div class="container">
-                <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3><?= $content['waktu']; ?></h3>
-                                    <ul>
-                                        <h5>Program Kerja Kabinet <strong><?= $content['kabinet']; ?></strong> <br> Tahun <?= $content['tahun'] ?></h5>
-                                    </ul>
-                                    <div class="btn-wrap">
-                                        <a href="pages/profil/proker/pages-program-kerja.php?id=<?= $content['id_proker']; ?>" class="btn-buy">Check it</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+            <div class="container text-center py-4">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold">
+                            <i class="bi bi-megaphone-fill text-primary"></i> Kontribusikan Data Alumni untuk Masa Depan yang Lebih Baik!
+                        </h4>
+                        <p class="card-text text-muted">
+                            Kami mengundang seluruh alumni <strong>Awardee Beasiswa Unggulan Malang</strong> untuk berpartisipasi dalam pembaruan data alumni. Dengan melaporkan informasi terbaru Anda,
+                            Anda turut serta dalam membangun jejaring profesional yang lebih kuat serta membuka peluang kolaborasi dengan sesama alumni.
+                            Data ini juga membantu dalam pengembangan program dan kebijakan yang lebih baik untuk generasi penerus, terutama bagi Awarde Beasiswa Unggulan Region Malang.
+                        </p>
+                        <p class="card-text fw-bold">
+                            Mari jadi bagian dari perubahan! Klik tombol di bawah untuk melaporkan data Anda.
+                        </p>
+                        <a href="<?= $contents['link_alumni']; ?>" class="btn btn-primary mb-3" target="_blank">
+                            <i class="bi bi-box-arrow-up-right"></i> Laporkan Sekarang
+                        </a>
+                        <div class="mt-3">
+                            <p class="text-muted mb-1">
+                                <i class="bi bi-info-circle-fill text-warning"></i> Ada pertanyaan atau kendala? Hubungi kami melalui WhatsApp!
+                            </p>
+                            <a href="https://wa.me/<?= formatNomorWA($footer['nomor_bu']) ?>" class="btn btn-success" target="_blank">
+                                <i class="bi bi-whatsapp"></i> Hubungi Narahubung
+                            </a>
+                        </div>
                     </div>
                 </div>
-                <nav>
-                    <ul class="pagination justify-content-center pt-5">
-                        <!-- Tombol Previous -->
-                        <?php if ($page > 1): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $page - 1; ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-
-                        <!-- Nomor Halaman -->
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $i; ?>"><?= $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <!-- Tombol Next -->
-                        <?php if ($page < $totalPages): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $page + 1; ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
             </div>
+
         </section><!-- /contents Section -->
 
     </main>

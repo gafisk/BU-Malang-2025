@@ -9,14 +9,14 @@
     <li class="dropdown"><a href="#"><span>Profil</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
       <ul>
         <li><a href="#sejarah">Sejarah</a></li>
-        <li><a href="#">Struktur Organisasi</a></li>
+        <!-- <li><a href="#">Struktur Organisasi</a></li> -->
         <li><a href="#lambang">Makna dan Lambang</a></li>
         <li><a href="#visimisi">Visi dan Misi</a></li>
         <li><a href="pages/profil/profil/profil-pengurus.php">Profil Pengurus</a></li>
         <li><a href="pages/profil/proker/program-kerja.php">Program Kerja</a></li>
         <li><a href="pages/profil/lapkeu/laporan-keuangan.php">Laporan Keuangan</a></li>
         <li><a href="pages/profil/lapper/laporan-pertanggungjawaban.php">Laporan Pertanggungjawaban</a></li>
-        <li><a href="#">Anggaran Dasar dan Anggaran Rumah Tangga</a></li>
+        <li><a href="pages/profil/adart.php">Anggaran Dasar dan Anggaran Rumah Tangga</a></li>
       </ul>
     </li>
     <li><a href="pages/berita/berita.php">Berita</a></li>
@@ -29,9 +29,9 @@
     </li>
     <li class="dropdown"><a href="#"><span>Pelaporan</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
       <ul>
-        <li><a href="#">Pelaporan Prestasi</a></li>
+        <li><a href="pages/pelaporan/pel-prestasi/pelaporan-prestasi.php">Pelaporan Prestasi</a></li>
         <li><a href="pages/pelaporan/pel-awardee/pelaporan-awardee.php">Pelaporan Awardee Baru</a></li>
-        <li><a href="#">Pelaporan Alumni</a></li>
+        <li><a href="pages/pelaporan/pel-alumni/pelaporan-alumni.php">Pelaporan Alumni</a></li>
       </ul>
     </li>
     <li><a href="#footer">Kontak</a></li>
