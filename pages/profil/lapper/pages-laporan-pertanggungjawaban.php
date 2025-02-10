@@ -1,33 +1,39 @@
 <?php
-
 include '../../../connections/conn.php';
-// Data konten
-$contents = [];
+// Pastikan koneksi database sudah ada di atas
 
-$query = "SELECT * FROM lap_pertanggungjawaban ORDER BY waktu DESC";
-$result = $conn->query($query);
+// Periksa apakah 'id' ada di URL
+if (isset($_GET['id'])) {
+    $id_lapper = $_GET['id'];
 
-while ($row = $result->fetch_assoc()) {
-    $contents[] = [
-        "id_lap_pertanggungjawaban" => $row['id_lap_pertanggungjawaban'],
-        "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
-        "nama_laporan" => $row['nama_laporan']
-    ];
+    // Validasi ID harus berupa angka
+    if (!filter_var($id_lapper, FILTER_VALIDATE_INT)) {
+        die("ID tidak valid!");
+    }
+
+    // Query untuk mengambil data berita berdasarkan id_proker
+    $stmt = $conn->prepare("SELECT nama_laporan, isi_berita, waktu, judul_link, link FROM lap_pertanggungjawaban WHERE id_lap_pertanggungjawaban = ?");
+    $stmt->bind_param("i", $id_lapper);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    // Periksa apakah data ditemukan
+    if ($row = $result->fetch_assoc()) {
+        $nama_laporan = htmlspecialchars($row['nama_laporan']);
+        $isi_berita = nl2br(htmlspecialchars($row['isi_berita'])); // Menjaga format paragraf
+        $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
+        $judul_link = htmlspecialchars($row['judul_link']);
+        $link = htmlspecialchars($row['link']);
+    } else {
+        echo "<script>alert('Berita tidak ditemukan!'); window.location='pages-laporan-pertanggungjawaban.php';</script>";
+        exit;
+    }
+
+    $stmt->close();
+} else {
+    echo "<script>alert('ID tidak ditemukan!'); window.location='pages-laporan-pertanggungjawaban.php';</script>";
+    exit;
 }
-
-// Pagination
-$perPage = 6; // Konten per halaman
-$total = count($contents); // Total konten
-$totalPages = ceil($total / $perPage); // Total halaman
-
-// Halaman aktif
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-$page = max($page, 1);
-$page = min($page, $totalPages);
-
-// Konten yang ditampilkan
-$start = ($page - 1) * $perPage;
-$displayContents = array_slice($contents, $start, $perPage);
 ?>
 
 
@@ -66,85 +72,32 @@ $displayContents = array_slice($contents, $start, $perPage);
     </header>
 
     <main class="main">
-
-        <!-- Hero Section -->
-        <section id="hero" class="hero1 section light-background">
-
-            <div class="container">
-                <div class="row gy-4">
-                    <div class="col-lg-8 order-2 order-lg-1 d-flex flex-column justify-content-center" data-aos="zoom-out">
-                        <h1 class="h1pt">Laporan Pertanggungjawaban</h1>
-                        <p>Insan Cerdas dan Kompetitif</p>
-                    </div>
-                </div>
-            </div>
-
-            <style>
-                @media (max-width: 768px) {
-                    .h1pt {
-                        font-size: 2rem !important;
-                        /* Ukuran lebih kecil untuk HP, tapi tetap jelas */
-                    }
-                }
-            </style>
-
-        </section><!-- /Hero Section -->
-
-        <!-- contents Section -->
+        <!-- HTML untuk Menampilkan Detail Berita -->
         <section id="contents" class="contents section">
-            <div class="container section-title" data-aos="fade-up">
-                <p><span>Cek Laporan Pertanggungjawaban</span> <span class="description-title">BU Malang</span></p>
-            </div>
+            <div class="container mt-4">
+                <h1 class="mb-3"><?= $nama_laporan; ?></h1>
+                <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
-            <div class="container">
-                <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3><?= $content['waktu']; ?></h3>
-                                    <ul>
-                                        <h5><?= $content['nama_laporan']; ?></h5>
-                                    </ul>
-                                    <div class="btn-wrap">
-                                        <a href="pages/profil/lapper/pages-laporan-pertanggungjawaban.php?id=<?= $content['id_lap_pertanggungjawaban']; ?>" class="btn-buy">Check it</a>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
+                <div class="card p-4 shadow-sm">
+                    <p><?= $isi_berita; ?></p>
+
+                    <!-- Tambahan Link -->
+                    <?php if (!empty($link)) : ?>
+                        <p class="mt-3">
+                            Baca berita terkait:
+                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
+                                <?= $judul_link ?: "Klik di sini"; ?>
+                            </a>
+                        </p>
+                    <?php endif; ?>
+
+                    <!-- Tombol Kembali -->
+                    <a href="javascript:history.back()" class="btn btn-secondary mt-3">
+                        <i class="bi bi-arrow-left"></i> Kembali
+                    </a>
                 </div>
-                <nav>
-                    <ul class="pagination justify-content-center pt-5">
-                        <!-- Tombol Previous -->
-                        <?php if ($page > 1): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $page - 1; ?>" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-
-                        <!-- Nomor Halaman -->
-                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <li class="page-item <?= $i == $page ? 'active' : ''; ?>">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $i; ?>"><?= $i; ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <!-- Tombol Next -->
-                        <?php if ($page < $totalPages): ?>
-                            <li class="page-item">
-                                <a class="page-link" href="<?= $_SERVER['PHP_SELF']; ?>?page=<?= $page + 1; ?>" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
             </div>
-        </section><!-- /contents Section -->
-
+        </section>
     </main>
 
     <footer id="footer" class="footer">

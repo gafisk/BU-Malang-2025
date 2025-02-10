@@ -3,12 +3,12 @@ session_start();
 include '../../../connections/conn.php';
 
 // Proses hapus jika ada request POST dengan ID yang dikirim
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_POST['id_lap_keuangan'])) {
-  $id_lapkeu = intval($_POST['id_lap_keuangan']);
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_POST['id_lap_pertanggungjawaban'])) {
+  $id_lapper = intval($_POST['id_lap_pertanggungjawaban']);
 
   // Hapus data dari database
-  $stmt = $conn->prepare("DELETE FROM lap_keuangan WHERE id_lap_keuangan = ?");
-  $stmt->bind_param("i", $id_lapkeu);
+  $stmt = $conn->prepare("DELETE FROM lap_pertanggungjawaban WHERE id_lap_pertanggungjawaban = ?");
+  $stmt->bind_param("i", $id_lapper);
   $stmt->execute();
 
   if ($stmt->affected_rows > 0) {
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_PO
 }
 
 // Ambil data untuk ditampilkan di tabel
-$query = "SELECT * FROM lap_keuangan ORDER BY waktu DESC";
+$query = "SELECT * FROM lap_pertanggungjawaban ORDER BY waktu DESC";
 $result = $conn->query($query);
 $no = 1;
 ?>
@@ -69,14 +69,14 @@ $no = 1;
           <!--begin::Row-->
           <div class="row">
             <div class="col-sm-6">
-              <h3 class="mb-0">Daftar Laporan Keuangan</h3>
+              <h3 class="mb-0">Daftar Laporan Pertanggungjawaban</h3>
             </div>
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="pages/kelola-profil/kelola-laporan-keuangan.php">Kelola Laporan Keuangan</a></li>
+                <li class="breadcrumb-item"><a href="pages/kelola-profil/kelola-laporan-pertanggungjawaban.php">Kelola Laporan Pertanggungjawaban</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Daftar Laporan Keuangan
+                  Daftar Laporan Pertanggungjawaban
                 </li>
               </ol>
             </div>
@@ -143,11 +143,11 @@ $no = 1;
                     </td>
                     <td><?= date('d-m-Y H:i', strtotime($row['waktu'])); ?></td>
                     <td>
-                      <a href="/BU-MALANG-2025/adminbu/pages/kelola-profil/kelola-laporan-keuangan.php?id=<?= $row['id_lap_keuangan']; ?>" class="btn btn-warning btn-sm">
+                      <a href="/BU-MALANG-2025/adminbu/pages/kelola-profil/kelola-laporan-pertanggungjawaban.php?id=<?= $row['id_lap_pertanggungjawaban']; ?>" class="btn btn-warning btn-sm">
                         <i class="bi bi-pencil-square"></i>
                       </a>
                       <form method="POST" style="display:inline;" onsubmit="return confirmDelete();">
-                        <input type="hidden" name="id_lap_keuangan" value="<?= $row['id_lap_keuangan']; ?>">
+                        <input type="hidden" name="id_lap_pertanggungjawaban" value="<?= $row['id_lap_pertanggungjawaban']; ?>">
                         <button type="submit" name="hapus" class="btn btn-danger btn-sm">
                           <i class="bi bi-trash"></i>
                         </button>
