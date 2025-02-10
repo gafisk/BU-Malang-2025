@@ -12,26 +12,25 @@ if (isset($_GET['id'])) {
     }
 
     // Query untuk mengambil data berita berdasarkan id_proker
-    $stmt = $conn->prepare("SELECT nama_laporan, isi_berita, waktu, judul_link, link FROM lap_pertanggungjawaban WHERE id_lap_pertanggungjawaban = ?");
+    $stmt = $conn->prepare("SELECT * FROM lap_pertanggungjawaban WHERE id_lap_pertanggungjawaban = ?");
     $stmt->bind_param("i", $id_lapper);
     $stmt->execute();
     $result = $stmt->get_result();
 
     // Periksa apakah data ditemukan
     if ($row = $result->fetch_assoc()) {
-        $nama_laporan = htmlspecialchars($row['nama_laporan']);
-        $isi_berita = nl2br(htmlspecialchars($row['isi_berita'])); // Menjaga format paragraf
-        $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
-        $judul_link = htmlspecialchars($row['judul_link']);
+        $kabinet = htmlspecialchars($row['kabinet']);
+        $tahun = htmlspecialchars($row['tahun']);
+        $waktu = date('l, d F Y', strtotime($row['waktu']));
         $link = htmlspecialchars($row['link']);
     } else {
-        echo "<script>alert('Berita tidak ditemukan!'); window.location='pages-laporan-pertanggungjawaban.php';</script>";
+        echo "<script>alert('Berita tidak ditemukan!'); window.location='laporan-pertanggungjawaban.php';</script>";
         exit;
     }
 
     $stmt->close();
 } else {
-    echo "<script>alert('ID tidak ditemukan!'); window.location='pages-laporan-pertanggungjawaban.php';</script>";
+    echo "<script>alert('ID tidak ditemukan!'); window.location='laporan-pertanggungjawaban.php';</script>";
     exit;
 }
 
@@ -91,22 +90,58 @@ $conn->close();
         <!-- HTML untuk Menampilkan Detail Berita -->
         <section id="contents" class="contents section">
             <div class="container mt-4">
-                <h1 class="mb-3"><?= $nama_laporan; ?></h1>
+                <h2 class="mb-3">Laporan Pertanggungjawaban Kabinet <?= $kabinet; ?> tahun <?= $tahun ?></h2>
                 <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
 
                 <div class="card p-4 shadow-sm">
-                    <p><?= $isi_berita; ?></p>
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold text-primary">
+                            <i class="bi bi-journal-check"></i> Laporan Pertanggungjawaban Forum BU Malang Kabinet <?= $kabinet ?>
+                        </h4>
 
-                    <!-- Tambahan Link -->
-                    <?php if (!empty($link)) : ?>
-                        <p class="mt-3">
-                            Baca berita terkait:
-                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
-                                <?= $judul_link ?: "Klik di sini"; ?>
-                            </a>
+                        <p class="card-text text-muted">
+                            Sebagai bentuk transparansi dan akuntabilitas,
+                            <strong>Forum Beasiswa Unggulan Malang Kabinet <?= $kabinet ?> Tahun <?= $tahun ?></strong> menyampaikan Laporan Pertanggungjawaban (LPJ) yang mencakup seluruh kegiatan yang telah dilaksanakan selama masa kepengurusan.
                         </p>
-                    <?php endif; ?>
 
+                        <p class="card-text text-muted">
+                            Laporan ini mencerminkan capaian, evaluasi, serta rekomendasi untuk pengembangan program di masa mendatang.
+                            Kami berharap laporan ini dapat menjadi bahan refleksi bersama guna meningkatkan efektivitas dan efisiensi organisasi.
+                        </p>
+
+                        <div class="alert alert-info d-flex align-items-center" role="alert">
+                            <i class="bi bi-lightbulb-fill me-2"></i>
+                            LPJ ini mencakup laporan kegiatan, realisasi program kerja, serta evaluasi kendala dan solusi yang telah dilakukan.
+                        </div>
+
+                        <!-- Tambahan Link -->
+                        <?php if (!empty($link)) : ?>
+                            <p class="mt-4">
+                            <div class="card border-0 shadow-sm p-3 bg-light">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        <i class="bi bi-file-earmark-text-fill text-primary fs-3"></i>
+                                    </div>
+                                    <div>
+                                        <span class="fw-bold text-dark">Dokumen Laporan Pertanggungjawaban:</span>
+                                        <?php if (strpos($link, 'drive.google.com') !== false) : ?>
+                                            <!-- Jika link Google Drive (PDF) -->
+                                            <a href="#" class="d-block text-primary fw-bold text-decoration-none"
+                                                data-bs-toggle="modal" data-bs-target="#pdfModal">
+                                                Lihat Laporan Pertanggungjawaban<i class="bi bi-eye-fill"></i>
+                                            </a>
+                                        <?php else : ?>
+                                            <!-- Jika bukan Google Drive (buka tab baru) -->
+                                            <a href="<?= $link; ?>" target="_blank" class="d-block text-primary fw-bold text-decoration-none">
+                                                Lihat Laporan Pertanggungjawaban<i class="bi bi-box-arrow-up-right"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            </p>
+                        <?php endif; ?>
+                    </div>
                     <!-- Tombol Kembali -->
                     <a href="javascript:history.back()" class="btn btn-secondary mt-3">
                         <i class="bi bi-arrow-left"></i> Kembali
@@ -114,6 +149,36 @@ $conn->close();
                 </div>
             </div>
         </section>
+
+        <!-- Modal PDF -->
+        <?php if (!empty($link) && strpos($link, 'drive.google.com') !== false) : ?>
+            <?php
+            preg_match('/\/d\/([^\/]+)/', $link, $match);
+            $file_id = $match[1] ?? '';
+            ?>
+            <div class="modal fade" id="pdfModal" tabindex="-1" aria-labelledby="pdfModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="pdfModalLabel">Laporan Pertanggungjawaban Kabinet <?= $kabinet ?></h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <iframe src="https://drive.google.com/file/d/<?= $file_id; ?>/preview" width="100%" height="500px"></iframe>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="https://drive.google.com/file/d/<?= $file_id; ?>/view" target="_blank" class="btn btn-danger">
+                                <i class="bi bi-box-arrow-up-right"></i> Buka di Tab Baru
+                            </a>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                <i class="bi bi-x-circle"></i> Tutup
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
     </main>
 
     <footer id="footer" class="footer">

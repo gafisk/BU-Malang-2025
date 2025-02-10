@@ -4,22 +4,20 @@ include '../../../connections/conn.php';
 
 // Ambil ID jika ada (untuk edit)
 $id_lapper = isset($_GET['id']) ? intval($_GET['id']) : 0;
-$nama_laporan = "";
-$isi_berita = "";
-$judul_link = "";
+$kabinet = "";
+$tahun = "";
 $link = "";
 
 // Jika ID ada, ambil data dari database untuk diedit
 if ($id_lapper > 0) {
-  $stmt = $conn->prepare("SELECT nama_laporan, isi_berita, judul_link, link FROM lap_pertanggungjawaban WHERE id_lap_pertanggungjawaban = ?");
+  $stmt = $conn->prepare("SELECT * FROM lap_pertanggungjawaban WHERE id_lap_pertanggungjawaban = ?");
   $stmt->bind_param("i", $id_lapper);
   $stmt->execute();
   $result = $stmt->get_result();
 
   if ($row = $result->fetch_assoc()) {
-    $nama_laporan = $row['nama_laporan'];
-    $isi_berita = $row['isi_berita'];
-    $judul_link = $row['judul_link'];
+    $kabinet = $row['kabinet'];
+    $tahun = $row['tahun'];
     $link = $row['link'];
   }
   $stmt->close();
@@ -27,16 +25,15 @@ if ($id_lapper > 0) {
 
 // Proses Simpan / Edit
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  $nama_laporan = trim($_POST['nama_laporan']);
-  $isi_berita = trim($_POST['isi_berita']);
-  $judul_link = trim($_POST['judul_link']);
+  $kabinet = trim($_POST['kabinet']);
+  $tahun = trim($_POST['tahun']);
   $link = trim($_POST['link']);
 
-  if (!empty($nama_laporan) && !empty($isi_berita) && !empty($judul_link) && !empty($link)) {
+  if (!empty($kabinet) && !empty($tahun) && !empty($link)) {
     if ($id_lapper > 0) {
       // Mode Edit
-      $stmt = $conn->prepare("UPDATE lap_pertanggungjawaban SET nama_laporan = ?, isi_berita = ?, judul_link = ?, link = ?, waktu = NOW() WHERE id_lap_pertanggungjawaban = ?");
-      $stmt->bind_param("ssssi", $nama_laporan, $isi_berita, $judul_link, $link, $id_lapper);
+      $stmt = $conn->prepare("UPDATE lap_pertanggungjawaban SET kabinet = ?, tahun = ?, link = ?, waktu = NOW() WHERE id_lap_pertanggungjawaban = ?");
+      $stmt->bind_param("sssi", $kabinet, $tahun, $link, $id_lapper);
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
       } else {
@@ -45,8 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $stmt->close();
     } else {
       // Mode Tambah Baru
-      $stmt = $conn->prepare("INSERT INTO lap_pertanggungjawaban (waktu, nama_laporan, isi_berita, judul_link, link) VALUES (NOW(), ?, ?, ?, ?)");
-      $stmt->bind_param("ssss", $nama_laporan, $isi_berita, $judul_link, $link);
+      $stmt = $conn->prepare("INSERT INTO lap_pertanggungjawaban (waktu, kabinet, tahun, link) VALUES (NOW(), ?, ?, ?)");
+      $stmt->bind_param("sss", $kabinet, $tahun, $link);
 
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
@@ -138,25 +135,20 @@ $conn->close();
               <form method="POST" action="">
                 <div class="card-body">
                   <div class="mb-3">
-                    <label for="input_namalaporan" class="form-label">Nama Laporan</label>
-                    <input type="text" class="form-control" name="nama_laporan" id="input_namalaporan" value="<?= htmlspecialchars($nama_laporan); ?>" placeholder="Laporan Keuangan ....." required />
+                    <label for="input_kabinet" class="form-label">Nama Kabinet</label>
+                    <input type="text" class="form-control" name="kabinet" id="input_kabinet" value="<?= htmlspecialchars($kabinet); ?>" placeholder="Nama Kabinet ....." required />
                   </div>
+
                   <div class="mb-3">
-                    <label for="inputberita" class="form-label">Isi Berita</label>
-                    <textarea class="form-control" name="isi_berita" id="inputberita" required><?= htmlspecialchars($isi_berita); ?></textarea>
+                    <label for="input_tahun" class="form-label">Tahun</label>
+                    <input type="number" class="form-control" name="tahun" id="input_tahun" value="<?= htmlspecialchars($tahun); ?>" placeholder="Tahun Kabinet ....." required />
                   </div>
+
                   <div class="mb-3">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <label for="judullink" class="form-label">Judul Link</label>
-                        <input type="text" class="form-control" name="judul_link" id="judullink" value="<?= htmlspecialchars($judul_link); ?>" placeholder="Kata untuk ditampilkan pada link" required />
-                      </div>
-                      <div class="col-md-6">
-                        <label for="linkdrive" class="form-label">Link Google Drive</label>
-                        <input type="text" class="form-control" name="link" id="linkdrive" value="<?= htmlspecialchars($link); ?>" placeholder="Link G-Drive Laporan" required />
-                      </div>
-                    </div>
+                    <label for="input_link" class="form-label">Link GDrive PDF</label>
+                    <input type="url" class="form-control" name="link" id="input_link" value="<?= htmlspecialchars($link); ?>" placeholder="Link PDF GDrive ....." required />
                   </div>
+
                 </div>
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary"><?= ($id_lapper > 0) ? "Update" : "Simpan"; ?></button>

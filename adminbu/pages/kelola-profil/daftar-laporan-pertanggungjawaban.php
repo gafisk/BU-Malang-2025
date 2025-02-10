@@ -28,6 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_PO
 $query = "SELECT * FROM lap_pertanggungjawaban ORDER BY waktu DESC";
 $result = $conn->query($query);
 $no = 1;
+
+$conn->close();
 ?>
 
 <!doctype html>
@@ -74,9 +76,9 @@ $no = 1;
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="pages/kelola-profil/kelola-laporan-pertanggungjawaban.php">Kelola Laporan Pertanggungjawaban</a></li>
+                <li class="breadcrumb-item"><a href="pages/kelola-profil/kelola-laporan-pertanggungjawaban.php">Kelola Laporan</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
-                  Daftar Laporan Pertanggungjawaban
+                  Daftar Laporan
                 </li>
               </ol>
             </div>
@@ -116,9 +118,8 @@ $no = 1;
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Nama Laporan</th>
-                  <th>Isi Berita</th>
-                  <th>Judul Link</th>
+                  <th>Nama Kabinet</th>
+                  <th>Tahun Kabinet</th>
                   <th>Link</th>
                   <th>Waktu</th>
                   <th>Aksi</th>
@@ -128,14 +129,8 @@ $no = 1;
                 <?php foreach ($result as $row): ?>
                   <tr>
                     <td><?= $no++ ?></td>
-                    <td><?= htmlspecialchars($row['nama_laporan']); ?></td>
-                    <td>
-                      <?php
-                      $words = explode(' ', $row['isi_berita']);
-                      echo htmlspecialchars(implode(' ', array_slice($words, 0, 10))) . (count($words) > 10 ? '...' : '');
-                      ?>
-                    </td>
-                    <td><?= htmlspecialchars($row['judul_link']); ?></td>
+                    <td><?= htmlspecialchars($row['kabinet']); ?></td>
+                    <td><?= htmlspecialchars($row['tahun']); ?></td>
                     <td>
                       <a href="<?= htmlspecialchars($row['link']); ?>" target="_blank">
                         <?= htmlspecialchars($row['link']); ?>
