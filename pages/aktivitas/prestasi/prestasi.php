@@ -108,8 +108,8 @@ $conn->close();
             <div class="container">
                 <div class="row gy-3">
                     <?php foreach ($displayContents as $content): ?>
-                        <div class="col-xl-6 col-lg-12" data-aos="fade-up">
-                            <div class="contents-item">
+                        <div class="col-xl-6 col-lg-12 align-items-stretch" data-aos="fade-up">
+                            <div class="contents-item h-100 d-flex flex-column">
                                 <h3><?= $content['waktu']; ?></h3>
                                 <table class="table">
                                     <tr>
@@ -133,13 +133,14 @@ $conn->close();
                                         <td class="text-start"><?= $content['asal_univ']; ?></td>
                                     </tr>
                                 </table>
-                                <div class="btn-wrap">
+                                <div class="mt-auto btn-wrap">
                                     <a href="pages/aktivitas/prestasi/pages-prestasi.php?id=<?= $content['id_prestasi']; ?>" class="btn btn-primary">Check it</a>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+
                 <nav>
                     <ul class="pagination justify-content-center pt-5">
                         <!-- Tombol Previous -->

@@ -72,6 +72,33 @@ $backup_sql .= "SET FOREIGN_KEY_CHECKS=1;\n\n";
 // Output langsung ke browser (file akan terunduh otomatis)
 echo $backup_sql;
 
+
+$rootPath = realpath('../../'); // Ambil direktori saat ini
+
+$zip = new ZipArchive();
+$zipFileName = 'backup_file.zip';
+
+if ($zip->open($zipFileName, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+    $files = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($rootPath),
+        RecursiveIteratorIterator::LEAVES_ONLY
+    );
+
+    foreach ($files as $name => $file) {
+        if (!$file->isDir()) {
+            $filePath = $file->getRealPath();
+            $relativePath = substr($filePath, strlen($rootPath) + 1);
+            $zip->addFile($filePath, $relativePath);
+        }
+    }
+
+    $zip->close();
+    echo "ZIP file created: <a href='$zipFileName'>$zipFileName</a>";
+} else {
+    echo "Failed to create ZIP file.";
+}
+
+
 // Tutup koneksi
 $conn->close();
 exit;
