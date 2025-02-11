@@ -24,6 +24,7 @@
             data-lte-toggle="treeview"
             role="menu"
             data-accordion="false">
+            <!-- Bagian Dashboard -->
             <li class="nav-item">
                 <a href="index.php" class="nav-link">
                     <i class="nav-icon bi bi-house-door-fill"></i>
@@ -343,6 +344,14 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+
+            <!-- Bagian Backup -->
+            <li class="nav-item">
+                <a href="pages/backup.php" onclick="return confirm('Anda Akan Membackup Data?')" class="nav-link">
+                    <i class="nav-icon bi bi-cloud-arrow-down"></i>
+                    <p>Backup Data</p>
+                </a>
             </li>
         </ul>
         <!--end::Sidebar Menu-->
