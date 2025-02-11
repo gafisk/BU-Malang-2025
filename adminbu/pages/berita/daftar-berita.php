@@ -1,6 +1,34 @@
 <?php
 session_start(); // Pastikan ini di baris pertama sebelum output apapun
 
+// Set session timeout duration (10 minutes)
+$timeout_duration = 10 * 60; // 10 minutes in seconds
+
+// Check if 'username' session is set
+if (!isset($_SESSION['username'])) {
+  // If the session is not set, redirect to login page
+  echo "<script>
+            alert('Anda Dilarang Mengakses Halaman ini!!!');
+            window.location.href = '../../login.php';
+          </script>";
+  exit;
+}
+
+// Check if the session has expired
+if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
+  // Session has expired, unset and destroy the session
+  session_unset();  // Unset all session variables
+  session_destroy();  // Destroy the session
+  echo "<script>
+            alert('Session Anda Telah Kadaluarsa. Silakan Login Kembali.');
+            window.location.href = '../../login.php';
+          </script>";
+  exit;
+}
+
+// Update last activity timestamp
+$_SESSION['last_activity'] = time();
+
 include '../../../connections/conn.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_POST['id_berita'])) {

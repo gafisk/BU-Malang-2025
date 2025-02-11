@@ -47,6 +47,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 ?>
 
+<script>
+  // Set a timeout of 1 minute (60000 milliseconds) to redirect the user
+  setTimeout(function() {
+    // Redirect the user to ../index.php after 20 Detik
+    alert('Anda Terlalu Lama di Halaman Login!!!');
+    window.location.href = '../index.php';
+  }, 20000); // 60000 milliseconds = 1 minute
+</script>
 
 <!doctype html>
 <html lang="en">
