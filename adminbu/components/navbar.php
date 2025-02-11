@@ -24,6 +24,7 @@
             data-lte-toggle="treeview"
             role="menu"
             data-accordion="false">
+
             <!-- Bagian Dashboard -->
             <li class="nav-item">
                 <a href="index.php" class="nav-link">
@@ -351,6 +352,14 @@
                 <a href="pages/backup.php" onclick="return confirm('Anda Akan Membackup Data?')" class="nav-link">
                     <i class="nav-icon bi bi-cloud-arrow-down"></i>
                     <p>Backup Data</p>
+                </a>
+            </li>
+
+            <!-- Bagian Logout -->
+            <li class="nav-item">
+                <a href="logout.php" onclick="return confirm('Anda Akan Logout?')" class="nav-link">
+                    <i class="nav-icon bi bi-toggle2-off"></i>
+                    <p>Logout</p>
                 </a>
             </li>
         </ul>
