@@ -109,8 +109,8 @@ $conn->close();
                         </div>
                     <?php endif; ?>
 
-                    <p class="fs-5" style="text-align: justify;">
-                        <?= nl2br(preg_replace('/(\s*\n\s*){2,}/', "\n", trim($isi_berita))); ?>
+                    <p style="text-align: justify;">
+                        <?= $isi_berita; ?>
                     </p>
 
 

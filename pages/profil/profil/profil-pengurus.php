@@ -277,7 +277,7 @@ $conn->close();
                     <!-- Slide 8: TIM Kesekretariatan -->
                     <div class="carousel-item">
                         <div class="container section-title" data-aos="fade-up">
-                            <p><span class="description-title">Tim</span> <span>Kesekretariatan</span> </p>
+                            <p><span class="description-title">Tim</span> <span>Kesekretariatan & Kebendaharaan</span> </p>
                         </div>
                         <div class="container">
                             <div class="row gy-4 justify-content-center">

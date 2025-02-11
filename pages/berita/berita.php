@@ -107,26 +107,35 @@ $conn->close();
             </div>
 
             <div class="container">
-                <div class="row gy-3">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
                     <?php foreach ($displayContents as $content): ?>
-                        <div class="col-md-4">
-                            <div class="card mb-4">
+                        <div class="col">
+                            <div class="card h-100 d-flex flex-column">
+                                <!-- Gambar -->
                                 <?php if (!empty($content['gambar'])): ?>
                                     <img src="/BU-Malang-2025/adminbu/assets/assets/berita/<?= htmlspecialchars($content['gambar']); ?>"
-                                        class="card-img-top" alt="Gambar Berita" style="width: 100%; height: 200px; object-fit: cover; padding: 15px">
+                                        class="card-img-top" alt="Gambar Berita"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
                                 <?php else: ?>
                                     <div class="text-center p-4 text-muted">Tidak ada gambar</div>
                                 <?php endif; ?>
 
-                                <div class="card-body">
+                                <!-- Konten -->
+                                <div class="card-body d-flex flex-column">
                                     <h5 class="card-title"><?= htmlspecialchars($content['judul_berita']); ?></h5>
                                     <p class="card-text"><small class="text-muted"><?= $content['waktu']; ?></small></p>
-                                    <a href="pages/berita/pages-berita.php?id=<?= $content['id_berita']; ?>" class="btn btn-primary">Baca Selengkapnya</a>
+
+                                    <!-- Tombol di bagian bawah -->
+                                    <div class="mt-auto">
+                                        <a href="pages/berita/pages-berita.php?id=<?= $content['id_berita']; ?>"
+                                            class="btn btn-primary w-100">Baca Selengkapnya</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
                 </div>
+
                 <nav>
                     <ul class="pagination justify-content-center pt-5">
                         <!-- Tombol Previous -->
