@@ -196,7 +196,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                   <div class="mb-3">
                     <label for="input_link_form" class="form-label">Link G-Form</label>
-                    <input type="url" class="form-control" name="link_form" id="input_link_form" value="<?= htmlspecialchars($link_form); ?>" placeholder="Diisi - jika tidak ada" />
+                    <input type="text" class="form-control" name="link_form" id="input_link_form" value="<?= htmlspecialchars($link_form); ?>" placeholder="Diisi - jika tidak ada" />
                   </div>
                 </div>
 
