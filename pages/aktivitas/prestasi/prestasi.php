@@ -107,40 +107,38 @@ $conn->close();
 
             <div class="container">
                 <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3><?= $content['waktu']; ?></h3>
-                                    <table class="table">
-                                        <tr>
-                                            <th class="text-start">Nama Prestasi</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['nama_prestasi']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Tingkat</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['tingkat_prestasi']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Peraih</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['nama_peraih']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Asal Universitas</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['asal_univ']; ?></td>
-                                        </tr>
-                                    </table>
-                                    <div class="btn-wrap">
-                                        <a href="pages/aktivitas/prestasi/pages-prestasi.php?id=<?= $content['id_prestasi']; ?>" class="btn btn-primary">Check it</a>
-                                    </div>
+                    <?php foreach ($displayContents as $content): ?>
+                        <div class="col-xl-6 col-lg-12" data-aos="fade-up">
+                            <div class="contents-item">
+                                <h3><?= $content['waktu']; ?></h3>
+                                <table class="table">
+                                    <tr>
+                                        <th class="text-start">Nama Prestasi</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['nama_prestasi']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Tingkat</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['tingkat_prestasi']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Peraih</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['nama_peraih']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Asal Universitas</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['asal_univ']; ?></td>
+                                    </tr>
+                                </table>
+                                <div class="btn-wrap">
+                                    <a href="pages/aktivitas/prestasi/pages-prestasi.php?id=<?= $content['id_prestasi']; ?>" class="btn btn-primary">Check it</a>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <nav>
                     <ul class="pagination justify-content-center pt-5">

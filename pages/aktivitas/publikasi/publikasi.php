@@ -109,45 +109,43 @@ $conn->close();
 
             <div class="container">
                 <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-12 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3><?= $content['waktu']; ?></h3>
-                                    <table class="table">
-                                        <tr>
-                                            <th class="text-start">Judul Publikasi</th>
-                                            <td>:</td>
-                                            <td class="text-start text-capitalize"><?= $content['judul_publikasi']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Kategori Publikasi</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['kategori_publikasi']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Penulis</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['penulis']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Asal Universitas</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['asal_univ']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Awardee BU</th>
-                                            <td>:</td>
-                                            <td class="text-start">Tahun <?= $content['tahun_awardee']; ?></td>
-                                        </tr>
-                                    </table>
-                                    <div class="btn-wrap">
-                                        <a href="<?= $content['link']; ?>" class="btn btn-primary" target="_blank">Check it</a>
-                                    </div>
+                    <?php foreach ($displayContents as $content): ?>
+                        <div class="col-xl-12 col-lg-12" data-aos="fade-up">
+                            <div class="contents-item">
+                                <h3><?= $content['waktu']; ?></h3>
+                                <table class="table">
+                                    <tr>
+                                        <th class="text-start">Judul Publikasi</th>
+                                        <td>:</td>
+                                        <td class="text-start text-capitalize"><?= $content['judul_publikasi']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Kategori Publikasi</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['kategori_publikasi']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Penulis</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['penulis']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Asal Universitas</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['asal_univ']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Awardee BU</th>
+                                        <td>:</td>
+                                        <td class="text-start">Tahun <?= $content['tahun_awardee']; ?></td>
+                                    </tr>
+                                </table>
+                                <div class="btn-wrap">
+                                    <a href="<?= $content['link']; ?>" class="btn btn-primary" target="_blank">Check it</a>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <nav>
                     <ul class="pagination justify-content-center pt-5">

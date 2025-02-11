@@ -112,50 +112,48 @@ $conn->close();
 
             <div class="container">
                 <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-12 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3 class="d-flex justify-content-between">
-                                        <span><?= $content['waktu']; ?></span>
-                                        <span class="btn btn-sm 
-        <?php
-                            if ($content['status'] == 'Upcoming') echo 'btn-warning';
-                            elseif ($content['status'] == 'Canceled') echo 'btn-danger';
-                            elseif ($content['status'] == 'Completed') echo 'btn-success';
-        ?>">
-                                            <?= $content['status']; ?>
-                                        </span>
-                                    </h3>
-                                    <table class="table">
-                                        <tr>
-                                            <th class="text-start">Nama Event</th>
-                                            <td>:</td>
-                                            <td class="text-start text-capitalize"><?= $content['nama_event']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Tanggal & Waktu Event</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['tanggal_event']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Pemateri</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['pemateri']; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <th class="text-start">Jenis Event</th>
-                                            <td>:</td>
-                                            <td class="text-start"><?= $content['jenis']; ?></td>
-                                        </tr>
-                                    </table>
-                                    <div class="btn-wrap">
-                                        <a href="pages/aktivitas/events/pages-events.php?id=<?= $content['id_event']; ?>" class="btn btn-primary">Check it</a>
-                                    </div>
+                    <?php foreach ($displayContents as $content): ?>
+                        <div class="col-xl-12 col-lg-12" data-aos="fade-up">
+                            <div class="contents-item">
+                                <h3 class="d-flex justify-content-between">
+                                    <span><?= $content['waktu']; ?></span>
+                                    <span class="btn btn-sm 
+                                        <?php
+                                        if ($content['status'] == 'Upcoming') echo 'btn-warning';
+                                        elseif ($content['status'] == 'Canceled') echo 'btn-danger';
+                                        elseif ($content['status'] == 'Completed') echo 'btn-success';
+                                        ?>">
+                                        <?= $content['status']; ?>
+                                    </span>
+                                </h3>
+                                <table class="table">
+                                    <tr>
+                                        <th class="text-start">Nama Event</th>
+                                        <td>:</td>
+                                        <td class="text-start text-capitalize"><?= $content['nama_event']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Tanggal & Waktu Event</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['tanggal_event']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Pemateri</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['pemateri']; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-start">Jenis Event</th>
+                                        <td>:</td>
+                                        <td class="text-start"><?= $content['jenis']; ?></td>
+                                    </tr>
+                                </table>
+                                <div class="btn-wrap">
+                                    <a href="pages/aktivitas/events/pages-events.php?id=<?= $content['id_event']; ?>" class="btn btn-primary">Check it</a>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <nav>
                     <ul class="pagination justify-content-center pt-5">

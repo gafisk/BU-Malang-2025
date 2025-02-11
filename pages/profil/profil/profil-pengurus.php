@@ -161,7 +161,7 @@ $conn->close();
                                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                                         <div class="team-member">
                                             <div class="member-img">
-                                                <img src="adminbu/assets/assets/pengurus/<?= $bphi_data['Ketua']['gambar']; ?>" class="img-fluid" alt="BPHI" style="width: 300px; height:300px">
+                                                <img src="adminbu/assets/assets/pengurus/<?= $bphi_data['Ketua']['gambar']; ?>" class="img-fluid" alt="BPHI">
                                                 <div class="social">
                                                     <a href="<?= $bphi_data['Ketua']['instagram'] ?>"><i class="bi bi-instagram"></i></a>
                                                     <a href="<?= $bphi_data['Ketua']['linkedin'] ?>"><i class="bi bi-linkedin"></i></a>
@@ -193,7 +193,7 @@ $conn->close();
                                         <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="200">
                                             <div class="team-member">
                                                 <div class="member-img">
-                                                    <img src="adminbu/assets/assets/pengurus/<?= $bphi_data[$key]['gambar']; ?>" class="img-fluid" alt="BPHI" style="width: 300px; height:300px">
+                                                    <img src="adminbu/assets/assets/pengurus/<?= $bphi_data[$key]['gambar']; ?>" class="img-fluid" alt="BPHI">
                                                     <div class="social">
                                                         <?php if (!empty($bphi_data[$key]['instagram'])): ?>
                                                             <a href="<?= $bphi_data[$key]['instagram'] ?>"><i class="bi bi-instagram"></i></a>
@@ -232,7 +232,7 @@ $conn->close();
                                         <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                                             <div class="team-member">
                                                 <div class="member-img">
-                                                    <img src="adminbu/assets/assets/pengurus/<?php echo $koor['gambar']; ?>" class="img-fluid" alt="Koordinator" style="width: 300px; height:300px">
+                                                    <img src="adminbu/assets/assets/pengurus/<?php echo $koor['gambar']; ?>" class="img-fluid" alt="Koordinator">
                                                     <div class="social">
                                                         <a href="<?php echo $koor['instagram']; ?>"><i class="bi bi-instagram"></i></a>
                                                         <a href="<?php echo $koor['linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
@@ -253,7 +253,7 @@ $conn->close();
                                         <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                                             <div class="team-member">
                                                 <div class="member-img">
-                                                    <img src="adminbu/assets/assets/pengurus/<?php echo $anggota['gambar']; ?>" class="img-fluid" alt="Anggota" style="width: 300px; height:300px">
+                                                    <img src="adminbu/assets/assets/pengurus/<?php echo $anggota['gambar']; ?>" class="img-fluid" alt="Anggota">
                                                     <div class="social">
                                                         <a href="<?php echo $anggota['instagram']; ?>"><i class="bi bi-instagram"></i></a>
                                                         <a href="<?php echo $anggota['linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
@@ -285,7 +285,7 @@ $conn->close();
                                     <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="100">
                                         <div class="team-member">
                                             <div class="member-img">
-                                                <img src="adminbu/assets/assets/pengurus/<?php echo $row['gambar']; ?>" class="img-fluid" alt="Anggota" style="width: 300px; height:300px">
+                                                <img src="adminbu/assets/assets/pengurus/<?php echo $row['gambar']; ?>" class="img-fluid" alt="Anggota">
                                                 <div class="social">
                                                     <a href="<?php echo $row['instagram']; ?>"><i class="bi bi-instagram"></i></a>
                                                     <a href="<?php echo $row['linkedin']; ?>"><i class="bi bi-linkedin"></i></a>
