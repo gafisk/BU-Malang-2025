@@ -35,10 +35,11 @@ include '../../../connections/conn.php';
 $id_berita = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $judul_berita = "";
 $isi_berita = "";
+$link_form = "";
 
 if ($id_berita > 0) {
   // Ambil data berita untuk ditampilkan di form jika sedang edit
-  $stmt = $conn->prepare("SELECT judul_berita, isi_berita FROM berita WHERE id_berita = ?");
+  $stmt = $conn->prepare("SELECT * FROM berita WHERE id_berita = ?");
   $stmt->bind_param("i", $id_berita);
   $stmt->execute();
   $result = $stmt->get_result();
@@ -46,6 +47,7 @@ if ($id_berita > 0) {
   if ($row = $result->fetch_assoc()) {
     $judul_berita = $row['judul_berita'];
     $isi_berita = $row['isi_berita'];
+    $link_form = $row['link_form'];
   }
   $stmt->close();
 }
@@ -54,12 +56,13 @@ if ($id_berita > 0) {
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $judul_berita = trim($_POST['judul_berita']);
   $isi_berita = trim($_POST['isi_berita']);
+  $link_form = trim($_POST['link_form']);
 
   if (!empty($judul_berita) && !empty($isi_berita)) {
     if ($id_berita > 0) {
       // Mode Edit (Hanya update judul dan isi, waktu tetap)
-      $stmt = $conn->prepare("UPDATE berita SET judul_berita = ?, isi_berita = ?, waktu = NOW() WHERE id_berita = ?");
-      $stmt->bind_param("ssi", $judul_berita, $isi_berita, $id_berita);
+      $stmt = $conn->prepare("UPDATE berita SET judul_berita = ?, isi_berita = ?, link_form = ?, waktu = NOW() WHERE id_berita = ?");
+      $stmt->bind_param("sssi", $judul_berita, $isi_berita, $link_form, $id_berita);
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data berhasil diperbarui!";
       } else {
@@ -82,8 +85,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
       }
 
-      $stmt = $conn->prepare("INSERT INTO berita (waktu, judul_berita, isi_berita, gambar) VALUES (NOW(), ?, ?, ?)");
-      $stmt->bind_param("sss", $judul_berita, $isi_berita, $gambar_nama);
+      $stmt = $conn->prepare("INSERT INTO berita (waktu, judul_berita, isi_berita, link_form, gambar) VALUES (NOW(), ?, ?, ?, ?)");
+      $stmt->bind_param("ssss", $judul_berita, $isi_berita, $link_form, $gambar_nama);
 
       if ($stmt->execute()) {
         $_SESSION['notif_sukses'] = "Data Berhasil Disimpan.";
@@ -189,6 +192,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                   <div class="mb-3">
                     <label for="inputberita" class="form-label">Isi Berita</label>
                     <textarea class="form-control" name="isi_berita" id="inputberita" required><?= htmlspecialchars($isi_berita); ?></textarea>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="input_link_form" class="form-label">Link G-Form</label>
+                    <input type="url" class="form-control" name="judul_berita" id="input_link_form" value="<?= htmlspecialchars($link_form); ?>" placeholder="Diisi - jika tidak ada" />
                   </div>
                 </div>
 

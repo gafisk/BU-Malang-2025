@@ -4,7 +4,7 @@ include '../../connections/conn.php';
 // Data konten
 $contents = [];
 
-$query = "SELECT id_berita, waktu, judul_berita, isi_berita, gambar FROM berita ORDER BY waktu DESC";
+$query = "SELECT * FROM berita ORDER BY waktu DESC";
 $result = $conn->query($query);
 
 while ($row = $result->fetch_assoc()) {
@@ -13,7 +13,8 @@ while ($row = $result->fetch_assoc()) {
         "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
         "judul_berita" => $row['judul_berita'],
         "isi_berita" => $row['isi_berita'],
-        "gambar" => $row['gambar']
+        "gambar" => $row['gambar'],
+        "link_form" => $row['link_form']
     ];
 }
 

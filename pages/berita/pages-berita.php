@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
     }
 
     // Query untuk mengambil data berita berdasarkan id_proker
-    $stmt = $conn->prepare("SELECT judul_berita, isi_berita, waktu, gambar FROM berita WHERE id_berita = ?");
+    $stmt = $conn->prepare("SELECT * FROM berita WHERE id_berita = ?");
     $stmt->bind_param("i", $id_berita);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -21,6 +21,7 @@ if (isset($_GET['id'])) {
     // Periksa apakah data ditemukan
     if ($row = $result->fetch_assoc()) {
         $judul_berita = htmlspecialchars($row['judul_berita']);
+        $link_form = htmlspecialchars($row['link_form']);
         $isi_berita = nl2br(htmlspecialchars($row['isi_berita'])); // Menjaga format paragraf
         $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
         $gambar = !empty($row['gambar']) ? htmlspecialchars($row['gambar']) : null; // Cek gambar
@@ -90,37 +91,47 @@ $conn->close();
     <main class="main">
         <section id="contents" class="contents section">
             <div class="container mt-4">
-                <h1 class="mb-3"><?= $judul_berita; ?></h1>
-                <p class="text-muted"><i class="bi bi-calendar"></i> <?= $waktu; ?></p>
+                <!-- Judul Berita -->
+                <h1 class="mb-3 text-center fw-bold border-bottom pb-2"><?= $judul_berita; ?></h1>
 
-                <div class="card p-4 shadow-sm">
+                <!-- Tanggal Berita -->
+                <p class="text-muted text-center">
+                    <i class="bi bi-calendar me-2"></i> <?= $waktu; ?>
+                </p>
+
+                <div class="card p-4 shadow-lg border-0">
                     <!-- Tampilkan Gambar -->
                     <?php if (!empty($gambar)) : ?>
-                        <img src="/BU-Malang-2025/adminbu/assets/assets/berita/<?= $gambar; ?>"
-                            alt="Gambar Berita" class="img-fluid mb-3" style="max-width: 30%; height: auto;">
+                        <div class="text-center mb-3">
+                            <img src="/BU-Malang-2025/adminbu/assets/assets/berita/<?= $gambar; ?>"
+                                alt="Gambar Berita" class="img-fluid rounded shadow"
+                                style="max-width: 60%; height: auto;">
+                        </div>
                     <?php endif; ?>
 
-                    <p><?= $isi_berita; ?></p>
+                    <p class="fs-5" style="text-align: justify;">
+                        <?= nl2br(preg_replace('/(\s*\n\s*){2,}/', "\n", trim($isi_berita))); ?>
+                    </p>
 
-                    <!-- Tambahan Link -->
-                    <?php if (!empty($link)) : ?>
-                        <p class="mt-3">
-                            Baca berita terkait:
-                            <a href="<?= $link; ?>" target="_blank" class="text-primary fw-bold">
-                                <?= $judul_link ?: "Klik di sini"; ?>
+
+                    <!-- Link Pendaftaran (jika ada) -->
+                    <?php if (!empty($link_form) && $link_form !== "-") : ?>
+                        <div class="text-center mt-4">
+                            <a href="<?= $link_form; ?>" class="btn btn-primary btn-lg fw-bold shadow-sm">
+                                <i class="bi bi-pencil-square me-2"></i> Link Pendaftaran: Klik di sini
                             </a>
-                        </p>
+                        </div>
                     <?php endif; ?>
 
                     <!-- Tombol Kembali -->
-                    <a href="javascript:history.back()" class="btn btn-secondary mt-3">
-                        <i class="bi bi-arrow-left"></i> Kembali
-                    </a>
+                    <div class="text-center mt-4">
+                        <a href="javascript:history.back()" class="btn btn-outline-secondary btn-lg shadow-sm">
+                            <i class="bi bi-arrow-left me-2"></i> Kembali
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
-
-
     </main>
 
     <footer id="footer" class="footer">

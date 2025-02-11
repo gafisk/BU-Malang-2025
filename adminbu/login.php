@@ -17,10 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     exit;
   }
 
-  // Debugging: Check if username and password are being posted correctly
-  echo "Username: $username <br>";
-  echo "Password: $password <br>";
-
   // Check if the username exists in the allowed_users array
   if (isset($allowed_users[$username])) {
     // Debugging: Check if password_verify is working

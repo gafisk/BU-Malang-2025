@@ -76,6 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_PO
 $query = "SELECT * FROM berita ORDER BY waktu DESC";
 $result = $conn->query($query);
 $no = 1;
+
+$conn->close();
 ?>
 
 <!doctype html>
@@ -164,6 +166,7 @@ $no = 1;
                   <th>#</th>
                   <th>Judul Berita</th>
                   <th>Isi Berita</th>
+                  <th>Link GForm</th>
                   <th>Gambar</th>
                   <th>Waktu</th>
                   <th>Aksi</th>
@@ -180,6 +183,11 @@ $no = 1;
                       $words = explode(' ', $row['isi_berita']);
                       echo htmlspecialchars(implode(' ', array_slice($words, 0, 10))) . (count($words) > 10 ? '...' : '');
                       ?>
+                    </td>
+                    <td>
+                      <a href="<?= htmlspecialchars($row['link_form']); ?>" target="_blank">
+                        <?= htmlspecialchars($row['link_form']); ?>
+                      </a>
                     </td>
                     <td>
                       <?php if (!empty($row['gambar'])): ?>
