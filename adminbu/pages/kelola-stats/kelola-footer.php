@@ -219,10 +219,10 @@ $conn->close();
       <!--end::To the end-->
       <!--begin::Copyright-->
       <strong>
-        Copyright &copy; 2014-2024&nbsp;
-        <a href="https://adminlte.io" class="text-decoration-none">AdminLTE.io</a>.
+        Copyright &copy; BU Malang 2025&nbsp;
+        <a href="https://wa.me/6281939301705" class="text-decoration-none">Pengembang</a>.
       </strong>
-      All rights reserved.
+      Jika ada Kendala
       <!--end::Copyright-->
     </footer>
     <!--end::Footer-->
