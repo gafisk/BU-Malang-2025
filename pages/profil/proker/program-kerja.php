@@ -106,21 +106,19 @@ $conn->close();
 
             <div class="container">
                 <div class="row gy-3">
-                    <div class="row gy-3">
-                        <?php foreach ($displayContents as $content): ?>
-                            <div class="col-xl-6 col-lg-12" data-aos="fade-up">
-                                <div class="contents-item">
-                                    <h3><?= $content['waktu']; ?></h3>
-                                    <ul>
-                                        <h5>Program Kerja Kabinet <strong><?= $content['kabinet']; ?></strong> <br> Tahun <?= $content['tahun'] ?></h5>
-                                    </ul>
-                                    <div class="btn-wrap">
-                                        <a href="pages/profil/proker/pages-program-kerja.php?id=<?= $content['id_proker']; ?>" class="btn-buy">Check it</a>
-                                    </div>
+                    <?php foreach ($displayContents as $content): ?>
+                        <div class="col-xl-6 col-lg-12" data-aos="fade-up">
+                            <div class="contents-item">
+                                <h3><?= $content['waktu']; ?></h3>
+                                <ul>
+                                    <h5>Program Kerja Kabinet <strong><?= $content['kabinet']; ?></strong> <br> Tahun <?= $content['tahun'] ?></h5>
+                                </ul>
+                                <div class="btn-wrap">
+                                    <a href="pages/profil/proker/pages-program-kerja.php?id=<?= $content['id_proker']; ?>" class="btn-buy">Check it</a>
                                 </div>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
                 <nav>
                     <ul class="pagination justify-content-center pt-5">
