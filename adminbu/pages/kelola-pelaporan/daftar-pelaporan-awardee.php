@@ -100,7 +100,7 @@ $no = 1;
             <div class="col-sm-6">
               <ol class="breadcrumb float-sm-end">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item"><a href="pages/kelola-aktivitas/kelola-events.php">Kelola Pelaporan Awardee</a></li>
+                <li class="breadcrumb-item"><a href="pages/kelola-pelaporan/kelola-pelaporan-awardee.php">Kelola Pelaporan Awardee</a></li>
                 <li class="breadcrumb-item active" aria-current="page">
                   Daftar Pengumuman
                 </li>

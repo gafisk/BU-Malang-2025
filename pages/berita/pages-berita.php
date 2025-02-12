@@ -118,7 +118,7 @@ $conn->close();
                     <?php if (!empty($link_form) && $link_form !== "-") : ?>
                         <div class="text-center mt-4">
                             <a href="<?= $link_form; ?>" class="btn btn-primary btn-lg fw-bold shadow-sm">
-                                <i class="bi bi-pencil-square me-2"></i> Link Pendaftaran: Klik di sini
+                                <i class="bi bi-pencil-square me-2"></i> Link: Klik di sini
                             </a>
                         </div>
                     <?php endif; ?>

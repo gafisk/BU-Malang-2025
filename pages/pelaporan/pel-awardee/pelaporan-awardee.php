@@ -4,7 +4,7 @@ include '../../../connections/conn.php';
 // Data konten
 $contents = [];
 
-$query = "SELECT * FROM pel_awardee ORDER BY waktu DESC";
+$query = "SELECT * FROM pel_awardee ORDER BY tahun_awardee DESC";
 $result = $conn->query($query);
 
 while ($row = $result->fetch_assoc()) {

@@ -113,7 +113,7 @@ $conn->close();
                     <p class="fs-5 text-justify">
                         <i class="bi bi-info-circle-fill text-info"></i>
                         Kepada seluruh penerima <strong>Beasiswa Unggulan Tahun <?= $tahun_awardee ?></strong>,
-                        kami mengimbau untuk segera melakukan pelaporan guna memperbarui data penerima Beasiswa Unggulan Region Malang Tahun 2025.
+                        kami mengimbau untuk segera melakukan pelaporan guna memperbarui data penerima <strong>Beasiswa Unggulan Region Malang Tahun <?= $tahun_awardee ?></strong>.
                     </p>
 
                     <h4 class="mt-4 text-success">
