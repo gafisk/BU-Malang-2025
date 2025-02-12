@@ -348,12 +348,15 @@
             </li>
 
             <!-- Bagian Backup -->
-            <li class="nav-item">
-                <a href="pages/backup.php" onclick="return confirm('Anda Akan Membackup Data?')" class="nav-link">
-                    <i class="nav-icon bi bi-cloud-arrow-down"></i>
-                    <p>Backup Data</p>
-                </a>
-            </li>
+            <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'gafisk') : ?>
+                <li class="nav-item">
+                    <a href="pages/backup.php" onclick="return confirm('Anda Akan Membackup Data?')" class="nav-link">
+                        <i class="nav-icon bi bi-cloud-arrow-down"></i>
+                        <p>Backup Data</p>
+                    </a>
+                </li>
+            <?php endif; ?>
+
 
             <!-- Bagian Logout -->
             <li class="nav-item">
