@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                   <div class="mb-3">
                     <label for="inputberita" class="form-label">Isi Berita</label>
-                    <textarea class="form-control" name="isi_berita" id="inputberita" required><?= htmlspecialchars($isi_berita); ?></textarea>
+                    <textarea class="form-control" id="isi_berita" name="isi_berita" id="inputberita" required><?= htmlspecialchars($isi_berita); ?></textarea>
                   </div>
 
                   <div class="mb-3">
@@ -271,6 +271,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     });
   </script>
   <!--end::OverlayScrollbars Configure-->
+  <script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+  <script>
+    ClassicEditor
+      .create(document.querySelector('#isi_berita'))
+      .catch(error => {
+        console.error(error);
+      });
+  </script>
   <!--end::Script-->
 </body>
 <!--end::Body-->
