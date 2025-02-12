@@ -1,11 +1,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Redirect semua halaman ke index.html, kecuali jika sudah berada di index.html
+    # RewriteCond %{REQUEST_URI} !^/maintenance.html$ [NC]
+    # RewriteRule ^.*$ /maintenance.html [L]
+
+    # Proteksi Query String dari serangan SQL Injection
     RewriteCond %{QUERY_STRING} [<>'"{}()] [NC,OR]
     RewriteCond %{QUERY_STRING} (union.*select|select.*from|insert.*into|delete.*from|update.*set|drop.*table|show.*tables|alter.*table|truncate.*table|exec|execute|concat|../|--) [NC]
-    RewriteRule ^.*$ /maintenance.html [L]
-    # RewriteRule .* - [F,L]
+    RewriteRule .* - [F,L]
 
 </IfModule>
 
+# Mencegah akses langsung ke direktori
 Options -Indexes

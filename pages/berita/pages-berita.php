@@ -13,7 +13,7 @@ if (isset($_GET['id'])) {
     }
 
     // Query untuk mengambil data berita berdasarkan id_proker
-    $stmt = $conn->prepare("SELECT * FROM berita WHERE id_berita = ?");
+    $stmt = $conn->prepare("SELECT * FROM berita WHERE id_berita = ? AND status = 'Published'");
     $stmt->bind_param("i", $id_berita);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -21,8 +21,7 @@ if (isset($_GET['id'])) {
     // Periksa apakah data ditemukan
     if ($row = $result->fetch_assoc()) {
         $judul_berita = htmlspecialchars($row['judul_berita']);
-        $link_form = htmlspecialchars($row['link_form']);
-        $isi_berita = nl2br(htmlspecialchars($row['isi_berita'])); // Menjaga format paragraf
+        $isi_berita = $row['isi_berita']; // Menjaga format paragraf
         $waktu = date('l, d F Y', strtotime($row['waktu'])); // Format tanggal
         $gambar = !empty($row['gambar']) ? htmlspecialchars($row['gambar']) : null; // Cek gambar
     } else {
@@ -109,19 +108,7 @@ $conn->close();
                         </div>
                     <?php endif; ?>
 
-                    <p style="text-align: justify;">
-                        <?= $isi_berita; ?>
-                    </p>
-
-
-                    <!-- Link Pendaftaran (jika ada) -->
-                    <?php if (!empty($link_form) && $link_form !== "-") : ?>
-                        <div class="text-center mt-4">
-                            <a href="<?= $link_form; ?>" class="btn btn-primary btn-lg fw-bold shadow-sm">
-                                <i class="bi bi-pencil-square me-2"></i> Link: Klik di sini
-                            </a>
-                        </div>
-                    <?php endif; ?>
+                    <?= $isi_berita; ?>
 
                     <!-- Tombol Kembali -->
                     <div class="text-center mt-4">

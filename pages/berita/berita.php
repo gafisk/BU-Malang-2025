@@ -4,7 +4,7 @@ include '../../connections/conn.php';
 // Data konten
 $contents = [];
 
-$query = "SELECT * FROM berita ORDER BY waktu DESC";
+$query = "SELECT * FROM berita WHERE status = 'Published' ORDER BY waktu DESC";
 $result = $conn->query($query);
 
 while ($row = $result->fetch_assoc()) {
@@ -13,8 +13,7 @@ while ($row = $result->fetch_assoc()) {
         "waktu" => date('l, d F Y', strtotime($row['waktu'])), // Format tanggal: Senin, 29 Juli 2001
         "judul_berita" => $row['judul_berita'],
         "isi_berita" => $row['isi_berita'],
-        "gambar" => $row['gambar'],
-        "link_form" => $row['link_form']
+        "gambar" => $row['gambar']
     ];
 }
 
@@ -117,7 +116,9 @@ $conn->close();
                                         class="card-img-top" alt="Gambar Berita"
                                         style="width: 100%; height: 200px; object-fit: cover;">
                                 <?php else: ?>
-                                    <div class="text-center p-4 text-muted">Tidak ada gambar</div>
+                                    <img src="/BU-Malang-2025/adminbu/assets/assets/berita/temp_berita.jpg"
+                                        class="card-img-top" alt="Gambar Berita"
+                                        style="width: 100%; height: 200px; object-fit: cover;">
                                 <?php endif; ?>
 
                                 <!-- Konten -->

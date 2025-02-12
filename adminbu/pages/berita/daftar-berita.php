@@ -72,6 +72,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['hapus']) && isset($_PO
   exit; // Hentikan eksekusi setelah redirect
 }
 
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update_status']) && isset($_POST['id_berita'])) {
+  $id_berita = intval($_POST['id_berita']);
+
+  // Ambil status saat ini dari database
+  $stmt = $conn->prepare("SELECT status FROM berita WHERE id_berita = ?");
+  $stmt->bind_param("i", $id_berita);
+  $stmt->execute();
+  $result = $stmt->get_result();
+
+  if ($row = $result->fetch_assoc()) {
+    $current_status = $row['status'];
+    $new_status = ($current_status === 'Draft') ? 'Published' : 'Draft'; // Toggle status
+
+    // Update status berita
+    $stmt = $conn->prepare("UPDATE berita SET status = ? WHERE id_berita = ?");
+    $stmt->bind_param("si", $new_status, $id_berita);
+    $stmt->execute();
+
+    if ($stmt->affected_rows > 0) {
+      $_SESSION['notif_sukses'] = "Status berita berhasil diperbarui menjadi $new_status!";
+    } else {
+      $_SESSION['notif_gagal'] = "Gagal memperbarui status berita!";
+    }
+  }
+  $stmt->close();
+  $conn->close(); // Tutup koneksi database
+
+  // Redirect kembali ke halaman utama
+  header("Location: " . $_SERVER['PHP_SELF']);
+  exit; // Hentikan eksekusi setelah redirect
+}
+
 // Ambil data berita
 $query = "SELECT * FROM berita ORDER BY waktu DESC";
 $result = $conn->query($query);
@@ -166,7 +198,6 @@ $conn->close();
                   <th>#</th>
                   <th>Judul Berita</th>
                   <th>Isi Berita</th>
-                  <th>Link GForm</th>
                   <th>Gambar</th>
                   <th>Waktu</th>
                   <th>Aksi</th>
@@ -178,28 +209,35 @@ $conn->close();
                     <td><?= $no++; ?></td>
                     <td><?= htmlspecialchars($row['judul_berita']); ?></td>
                     <td>
-                      <?php
-                      // Potong isi berita menjadi 10 kata pertama
-                      $words = explode(' ', $row['isi_berita']);
-                      echo htmlspecialchars(implode(' ', array_slice($words, 0, 10))) . (count($words) > 10 ? '...' : '');
-                      ?>
-                    </td>
-                    <td>
-                      <a href="<?= htmlspecialchars($row['link_form']); ?>" target="_blank">
-                        <?= htmlspecialchars($row['link_form']); ?>
-                      </a>
+                      Klik Edit Untuk Melihat Isi Berita ....
                     </td>
                     <td>
                       <?php if (!empty($row['gambar'])): ?>
-                        <img src="/BU-Malang-2025/adminbu/assets/assets/berita/<?= htmlspecialchars($row['gambar']); ?>" alt="Gambar Berita" width="100">
+                        <img src="/BU-Malang-2025/adminbu/assets/assets/berita/<?= htmlspecialchars($row['gambar']); ?>" alt="Gambar Berita" height="60" width="100">
                       <?php else: ?>
                         <span class="text-muted">Tidak ada gambar</span>
                       <?php endif; ?>
                     </td>
                     <td><?= date('d-m-Y H:i', strtotime($row['waktu'])); ?></td>
                     <td>
+                      <form method="POST" action="" style="display:inline;" onsubmit="return confirmStatusChange();">
+                        <input type="hidden" name="id_berita" value="<?= $row['id_berita']; ?>">
+                        <input type="hidden" name="update_status" value="1">
+                        <?php if ($row['status'] === 'Draft') : ?>
+                          <button type="submit" class="btn btn-primary btn-sm" style="width: 100px;">
+                            <i class="bi bi-dash-circle"> Draft</i>
+                          </button>
+                        <?php else : ?>
+                          <button type="submit" class="btn btn-success btn-sm" style="width: 100px;">
+                            <i class="bi bi-check-circle"> Published</i>
+                          </button>
+                        <?php endif; ?>
+                      </form>
+
                       <a href="/BU-Malang-2025/adminbu/pages/berita/kelola-berita.php?id=<?= $row['id_berita']; ?>" class="btn btn-warning btn-sm">
-                        <i class="bi bi-pencil"></i> </a>
+                        <i class="bi bi-pencil"></i>
+                      </a>
+
                       <form method="POST" style="display:inline;" onsubmit="return confirmDelete();">
                         <input type="hidden" name="id_berita" value="<?= $row['id_berita']; ?>">
                         <button type="submit" name="hapus" class="btn btn-danger btn-sm">
@@ -300,7 +338,11 @@ $conn->close();
   <!-- confirm delete -->
   <script>
     function confirmDelete() {
-      return confirm('Yakin ingin menghapus data ini?');
+      return confirm('Yakin ingin menghapus Data ini?');
+    }
+
+    function confirmStatusChange() {
+      return confirm("Apakah Anda yakin ingin mengubah status berita ini?");
     }
   </script>
   <!-- end::confirm delete -->
